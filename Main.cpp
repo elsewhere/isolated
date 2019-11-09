@@ -28,7 +28,7 @@
 //#include "scenes/mountain.h"
 
 
-#include "scenes/ikuisuus.h"
+#include "scenes/tyhjyys.h"
 
 
 democore::Debugger g_debug;
@@ -90,28 +90,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 		Math::init();
 		g_postProcess->init();
-/*
-		static_cast<Demo*>(context)->addScene("sigiltest", new SigilTest());
-		static_cast<Demo*>(context)->addScene("test", new Test());
-		static_cast<Demo*>(context)->addScene("lightingtest", new LightingTest());
-		static_cast<Demo*>(context)->addScene("huuru", new Huuru());
-		static_cast<Demo*>(context)->addScene("postprocesstesti", new PostProcessTesti());
-		static_cast<Demo*>(context)->addScene("cubemaptesti", new CubemapTesti());
-		static_cast<Demo*>(context)->addScene("cubemaptesti2", new CubemapTesti2());
-		static_cast<Demo*>(context)->addScene("particletesti2", new ParticleTesti2());
-		static_cast<Demo*>(context)->addScene("postprocesstesti2", new PostProcessTesti2());
-		static_cast<Demo*>(context)->addScene("particletesti2", new ParticleTesti2());
-		static_cast<Demo*>(context)->addScene("particletesti3", new ParticleTesti3());
-*/
-//		static_cast<Demo*>(context)->addScene("postprocesstesti2", new PostProcessTesti2());
-//		static_cast<Demo*>(context)->addScene("computetest", new ComputeTest());
-//		static_cast<Demo*>(context)->addScene("computetest2", new ComputeTest2());
-
-//		static_cast<Demo*>(context)->addScene("rivers", new Rivers());
-//		static_cast<Demo*>(context)->addScene("mountain", new Mountain());
-//		static_cast<Demo*>(context)->addScene("fjara", new Fjara());
-//		static_cast<Demo*>(context)->addScene("midaftann", new Midaftann());
-		static_cast<Demo*>(context)->addScene("ikuisuus", new Ikuisuus());
+		static_cast<Demo*>(context)->addScene("tyhjyys", new Tyhjyys());
 
 		//init the prodand play
 		g_textures->createTextures();
@@ -157,17 +136,6 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 					g_screenText.draw();
 				}
 			}
-
-
-
-/*
-			g_renderDebug->drawTexture("post1", 0, 0, 256.f);
-			g_renderDebug->drawTexture("post2", 256, 0, 256.f);
-			g_renderDebug->drawTexture("downscale1", 512, 0, 256.f);
-			g_renderDebug->drawTexture("downscale2", 768, 0, 256.f);
-			g_renderDebug->drawTexture("downscale3", 1024, 0, 256.f);
-			g_renderDebug->drawTexture("downscale3_2", 1280, 0, 256.f);
-*/
 			g_system->swapBuffers();
 			if (g_system->exitRequested() || context->isExitRequested())
 				running = false;

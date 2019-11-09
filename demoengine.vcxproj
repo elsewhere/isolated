@@ -179,7 +179,6 @@
     <ClInclude Include="fx\Cloth.h" />
     <ClInclude Include="fx\CPUParticleSystem.h" />
     <ClInclude Include="fx\GPUParticleSystem.h" />
-    <ClInclude Include="fx\LensFlare.h" />
     <ClInclude Include="fx_test\computetest.h" />
     <ClInclude Include="fx_test\computetest2.h" />
     <ClInclude Include="fx_test\cubemaptesti.h" />
@@ -223,12 +222,7 @@
     <ClInclude Include="render\TextureManager.h" />
     <ClInclude Include="render\TextureParameters.h" />
     <ClInclude Include="resources\resource.h" />
-    <ClInclude Include="scenes\fjara.h" />
-    <ClInclude Include="scenes\huuru.h" />
-    <ClInclude Include="scenes\ikuisuus.h" />
-    <ClInclude Include="scenes\midaftann.h" />
-    <ClInclude Include="scenes\mountain.h" />
-    <ClInclude Include="scenes\rivers.h" />
+    <ClInclude Include="scenes\tyhjyys.h" />
     <ClInclude Include="util\StringUtils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -260,7 +254,6 @@
     <ClCompile Include="fx\Cloth.cpp" />
     <ClCompile Include="fx\CPUParticleSystem.cpp" />
     <ClCompile Include="fx\GPUParticleSystem.cpp" />
-    <ClCompile Include="fx\LensFlare.cpp" />
     <ClCompile Include="fx_test\computetest.cpp" />
     <ClCompile Include="fx_test\computetest2.cpp" />
     <ClCompile Include="fx_test\cubemaptesti.cpp" />
@@ -302,12 +295,7 @@
     <ClCompile Include="render\Texture.cpp" />
     <ClCompile Include="render\TextureManager.cpp" />
     <ClCompile Include="render\TextureParameters.cpp" />
-    <ClCompile Include="scenes\fjara.cpp" />
-    <ClCompile Include="scenes\huuru.cpp" />
-    <ClCompile Include="scenes\ikuisuus.cpp" />
-    <ClCompile Include="scenes\midaftann.cpp" />
-    <ClCompile Include="scenes\mountain.cpp" />
-    <ClCompile Include="scenes\rivers.cpp" />
+    <ClCompile Include="scenes\tyhjyys.cpp" />
     <ClCompile Include="util\StringUtils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

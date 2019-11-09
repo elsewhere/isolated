@@ -53,6 +53,8 @@ namespace demorender
 		m_meshes.clear();
 		//TODO: integrate assimp or something
 
+		int startTime = timeGetTime();
+
 		Mesh *cube = new Mesh();
 		cube->generateCube();
 		addMesh("cube", cube);
@@ -112,45 +114,8 @@ namespace demorender
 			}
 
 		}
-
-		/*
-		vector<string> filenames;
-		string directory = "data\\graphics\\";
-		StringUtils::iterateDirectory(directory, filenames);
-
-		//add steps, one for uploading and one for loading
-		democore::g_system->addLoadingScreenSteps(filenames.size() * 2);
-
-		for (string& filename : filenames)
-		{
-			string path = directory + filename;
-			string suffix = filename.substr(filename.length()-3, filename.length());
-
-			if (suffix == "jpg")
-			{
-				Image *image = ImageFactory::loadJPG(path);
-				if (image != 0)
-				{
-					addImage(filename, image);
-				}
-				democore::g_system->advanceLoadingScreen(1);
-			}
-			else if (suffix == "png")
-			{
-				Image *image = ImageFactory::loadPNG(path);
-				if (image != 0)
-				{
-					addImage(filename, image);
-				}
-				democore::g_system->advanceLoadingScreen(1);
-			}
-			else
-			{
-				g_debug << "non-image file " << filename << " found in graphics directory!" << std::endl;
-			}
-			democore::g_system->drawLoadingScreen();
-		}
-		*/
+		int endTime = timeGetTime();
+		g_debug << "mesh loading took " << (endTime - startTime) << " ms\n";
 	}
 
 }

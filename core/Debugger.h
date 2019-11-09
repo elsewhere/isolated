@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <fstream>
+#include <iostream>
 #include <windows.h>
 
 /*
@@ -13,7 +14,7 @@ namespace democore
 
 	class Debugger
 	{
-	public:
+	public:		
 		Debugger(bool enabled = true);
 		~Debugger();
 
@@ -28,6 +29,7 @@ namespace democore
 		{
 			printDate();
 			m_debugFile << str;
+			
 			m_debugFile.flush();
 			return m_debugFile;
 		}

@@ -72,6 +72,7 @@ namespace demorender
 		g_debug << "loadShaders()" << std::endl;
 		g_debug << "-------------" << std::endl;
 
+		int startTime = timeGetTime();
 		for (auto &directory : shaderDirectories)
 		{
 			std::string path = directory + filter;
@@ -103,8 +104,10 @@ namespace demorender
 				shaderIndex++;
 			}
 			g_debug << "" << std::endl;
-
 		}
+		int endTime = timeGetTime();
+
+		g_debug << "shader compilation took " << (endTime - startTime) << " ms\n";
 	}
 
 	void ShaderManager::freeShaders()

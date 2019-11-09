@@ -196,21 +196,15 @@
     <ClInclude Include="fx_test\lightingtest.h">
       <Filter>Src\Effects</Filter>
     </ClInclude>
-    <ClInclude Include="scenes\huuru.h" />
-    <ClInclude Include="scenes\mountain.h" />
-    <ClInclude Include="scenes\rivers.h" />
     <ClInclude Include="fx_test\particletesti3.h" />
-    <ClInclude Include="scenes\fjara.h" />
-    <ClInclude Include="scenes\midaftann.h" />
     <ClInclude Include="fx\Cloth.h" />
     <ClInclude Include="fx_test\computetest.h" />
     <ClInclude Include="fx_test\computetest2.h" />
     <ClInclude Include="render\Buffer.h" />
     <ClInclude Include="fx\CPUParticleSystem.h" />
     <ClInclude Include="fx\GPUParticleSystem.h" />
-    <ClInclude Include="scenes\ikuisuus.h" />
     <ClInclude Include="render\LineRenderer.h" />
-    <ClInclude Include="fx\LensFlare.h" />
+    <ClInclude Include="scenes\tyhjyys.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\setupdialog.aps">
@@ -344,20 +338,14 @@
     <ClCompile Include="fx_test\lightingtest.cpp">
       <Filter>Src\Effects</Filter>
     </ClCompile>
-    <ClCompile Include="scenes\huuru.cpp" />
-    <ClCompile Include="scenes\mountain.cpp" />
-    <ClCompile Include="scenes\rivers.cpp" />
     <ClCompile Include="fx_test\particletesti3.cpp" />
-    <ClCompile Include="scenes\fjara.cpp" />
-    <ClCompile Include="scenes\midaftann.cpp" />
     <ClCompile Include="fx\Cloth.cpp" />
     <ClCompile Include="fx_test\computetest.cpp" />
     <ClCompile Include="fx_test\computetest2.cpp" />
     <ClCompile Include="render\Buffer.cpp" />
     <ClCompile Include="fx\CPUParticleSystem.cpp" />
     <ClCompile Include="fx\GPUParticleSystem.cpp" />
-    <ClCompile Include="scenes\ikuisuus.cpp" />
     <ClCompile Include="render\LineRenderer.cpp" />
-    <ClCompile Include="fx\LensFlare.cpp" />
+    <ClCompile Include="scenes\tyhjyys.cpp" />
   </ItemGroup>
 </Project>

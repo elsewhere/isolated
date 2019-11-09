@@ -2,14 +2,13 @@
 
 #include "../globals.h"
 #include "../render/LineRenderer.h"
-#include "../fx/LensFlare.h"
 
-class Ikuisuus : public democore::Scene
+class Tyhjyys : public democore::Scene
 {
 
 public:
-	Ikuisuus():m_pMesh(nullptr) {};
-	~Ikuisuus() {};
+	Tyhjyys():m_pMesh(nullptr) {};
+	~Tyhjyys() {};
 	
 	void init();
 	void update();
@@ -19,11 +18,11 @@ public:
 	
 private:
 
-	class IkuisuusLight
+	class TyhjyysLight
 	{
 		public:
-			IkuisuusLight();
-			~IkuisuusLight();
+			TyhjyysLight();
+			~TyhjyysLight();
 
 			void update();
 			void draw();
@@ -34,7 +33,6 @@ private:
 			void setIntensity(float intensity) { m_intensity = intensity; }
 	
 		private:
-			std::unique_ptr<demofx::LensFlare> m_flare;
 			glm::vec3 m_position = glm::vec3(0.f);
 			float m_intensity;
 
@@ -54,7 +52,7 @@ private:
 	float m_lightValue = 0.f;
 	glm::vec3 m_lightPos;
 	float m_lightRadius = 100.f;
-	std::unique_ptr<IkuisuusLight> m_light;
+	std::unique_ptr<TyhjyysLight> m_light;
 
 	std::unique_ptr<demorender::LineRenderer> m_lines;
 

@@ -236,6 +236,7 @@ namespace demorender
 	}
 	void TextureManager::loadImages()
 	{
+		int startTime = timeGetTime();
 		std::vector<std::string> filenames;
 		std::string directory = "data\\graphics\\";
 		StringUtils::iterateDirectory(directory, filenames);
@@ -272,6 +273,9 @@ namespace demorender
 			}
 			democore::g_system->drawLoadingScreen();
 		}
+		int endTime = timeGetTime();
+		g_debug << "image loading took " << (endTime - startTime) << " ms\n";
+
 	}
 
 	void TextureManager::createTextures()
@@ -279,6 +283,7 @@ namespace demorender
 		int textureCount = 0;
 		g_debug << "uploading textures to OpenGL" << std::endl;
 		int videoMemoryConsumption = 0;
+		int startTime = timeGetTime();
 
 		//iterate through everything in textureparameters and create stuff accordingly
 		for (const auto& param : m_textureParameters)
@@ -412,6 +417,9 @@ namespace demorender
 
 			}
 		}
+		int endTime = timeGetTime();
+		g_debug << "texture creation took " << (endTime - startTime) << " ms\n";
+
 	}
 
 	Image* TextureManager::image(const std::string& name)
