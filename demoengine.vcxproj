@@ -1,0 +1,316 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{F0A28F3E-60EE-416D-A757-A338C942DBFA}</ProjectGuid>
+    <RootNamespace>demoengine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\Debug\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Release/demoengine.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeaderOutputFile>.\Release/demoengine.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
+      <ObjectFileName>.\Release/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x040b</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;comctl32.lib;winmm.lib;%(AdditionalDependencies);lib/glew32.lib;lib/glfw3dll.lib;lib/AntTweakBar.lib;lib/freetype.lib</AdditionalDependencies>
+      <OutputFile>.\Release/demoengine.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <IgnoreSpecificDefaultLibraries>LIBC.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\Release/demoengine.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <AdditionalOptions>/ignore:4204 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release/demoengine.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Debug/demoengine.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeaderOutputFile>.\Debug/demoengine.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
+      <ObjectFileName>.\Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x040b</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;comctl32.lib;winmm.lib;%(AdditionalDependencies);lib/glew32.lib;lib/glfw3dll.lib;lib/AntTweakBar.lib;lib/freetype.lib</AdditionalDependencies>
+      <OutputFile>.\Debug/demoengine.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <IgnoreSpecificDefaultLibraries>LIBC.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\Debug/demoengine.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug/demoengine.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Library Include="lib\DevIL.lib" />
+    <Library Include="lib\fmodex_vc.lib" />
+    <Library Include="lib\glew32s.lib" />
+    <Library Include="lib\GLU32.LIB" />
+    <Library Include="lib\ILU.lib" />
+    <Library Include="lib\ILUT.lib" />
+    <Library Include="lib\OPENGL32.LIB" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\bitmap1.bmp" />
+    <Image Include="resources\bitmap2.bmp" />
+    <Image Include="resources\brslogo.bmp" />
+    <Image Include="resources\icon1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="core\Bpm.h" />
+    <ClInclude Include="core\Config.h" />
+    <ClInclude Include="core\Debugger.h" />
+    <ClInclude Include="core\Demo.h" />
+    <ClInclude Include="core\DemoContext.h" />
+    <ClInclude Include="core\ErrorLog.h" />
+    <ClInclude Include="core\Event.h" />
+    <ClInclude Include="core\FrameTimer.h" />
+    <ClInclude Include="core\Parameter.h" />
+    <ClInclude Include="core\Scene.h" />
+    <ClInclude Include="core\ScriptLoader.h" />
+    <ClInclude Include="core\Sound.h" />
+    <ClInclude Include="core\SyncManager.h" />
+    <ClInclude Include="core\System.h" />
+    <ClInclude Include="core\Timer.h" />
+    <ClInclude Include="core\Trigger.h" />
+    <ClInclude Include="fx\Cloth.h" />
+    <ClInclude Include="fx\CPUParticleSystem.h" />
+    <ClInclude Include="fx\GPUParticleSystem.h" />
+    <ClInclude Include="fx\LensFlare.h" />
+    <ClInclude Include="fx_test\computetest.h" />
+    <ClInclude Include="fx_test\computetest2.h" />
+    <ClInclude Include="fx_test\cubemaptesti.h" />
+    <ClInclude Include="fx_test\cubemaptesti2.h" />
+    <ClInclude Include="fx_test\lightingtest.h" />
+    <ClInclude Include="fx_test\particletesti2.h" />
+    <ClInclude Include="fx_test\particletesti3.h" />
+    <ClInclude Include="fx_test\postprocesstesti.h" />
+    <ClInclude Include="fx_test\postprocesstesti2.h" />
+    <ClInclude Include="Globals.h" />
+    <ClInclude Include="math\Bezier.h" />
+    <ClInclude Include="math\CatmullRom.h" />
+    <ClInclude Include="math\Curve.h" />
+    <ClInclude Include="math\LinearCurve.h" />
+    <ClInclude Include="math\Mathematics.h" />
+    <ClInclude Include="math\Range.h" />
+    <ClInclude Include="objloader\OBJ_Loader.h" />
+    <ClInclude Include="render\Buffer.h" />
+    <ClInclude Include="render\Camera.h" />
+    <ClInclude Include="render\Cubemap.h" />
+    <ClInclude Include="render\CubemapRenderer.h" />
+    <ClInclude Include="render\Font.h" />
+    <ClInclude Include="render\Image.h" />
+    <ClInclude Include="render\ImageFactory.h" />
+    <ClInclude Include="render\Light.h" />
+    <ClInclude Include="render\LineRenderer.h" />
+    <ClInclude Include="render\Mesh.h" />
+    <ClInclude Include="render\MeshBuilder.h" />
+    <ClInclude Include="render\MeshManager.h" />
+    <ClInclude Include="render\Model.h" />
+    <ClInclude Include="render\OrthoCamera.h" />
+    <ClInclude Include="render\PostProcessEffect.h" />
+    <ClInclude Include="render\PostProcessManager.h" />
+    <ClInclude Include="render\RenderDebug.h" />
+    <ClInclude Include="render\RenderStatistics.h" />
+    <ClInclude Include="render\RenderTargetManager.h" />
+    <ClInclude Include="render\RenderUtils.h" />
+    <ClInclude Include="render\Shader.h" />
+    <ClInclude Include="render\ShaderManager.h" />
+    <ClInclude Include="render\Texture.h" />
+    <ClInclude Include="render\TextureManager.h" />
+    <ClInclude Include="render\TextureParameters.h" />
+    <ClInclude Include="resources\resource.h" />
+    <ClInclude Include="scenes\fjara.h" />
+    <ClInclude Include="scenes\huuru.h" />
+    <ClInclude Include="scenes\ikuisuus.h" />
+    <ClInclude Include="scenes\midaftann.h" />
+    <ClInclude Include="scenes\mountain.h" />
+    <ClInclude Include="scenes\rivers.h" />
+    <ClInclude Include="util\StringUtils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\setupdialog.aps" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources\setupdialog.rc">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">resources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">resources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="core\Bpm.cpp" />
+    <ClCompile Include="core\Config.cpp" />
+    <ClCompile Include="core\Debugger.cpp" />
+    <ClCompile Include="core\Demo.cpp" />
+    <ClCompile Include="core\DemoContext.cpp" />
+    <ClCompile Include="core\ErrorLog.cpp" />
+    <ClCompile Include="core\Event.cpp" />
+    <ClCompile Include="core\FrameTimer.cpp" />
+    <ClCompile Include="core\Parameter.cpp" />
+    <ClCompile Include="core\Scene.cpp" />
+    <ClCompile Include="core\ScriptLoader.cpp" />
+    <ClCompile Include="core\Sound.cpp" />
+    <ClCompile Include="core\SyncManager.cpp" />
+    <ClCompile Include="core\System.cpp" />
+    <ClCompile Include="core\Timer.cpp" />
+    <ClCompile Include="core\Trigger.cpp" />
+    <ClCompile Include="fx\Cloth.cpp" />
+    <ClCompile Include="fx\CPUParticleSystem.cpp" />
+    <ClCompile Include="fx\GPUParticleSystem.cpp" />
+    <ClCompile Include="fx\LensFlare.cpp" />
+    <ClCompile Include="fx_test\computetest.cpp" />
+    <ClCompile Include="fx_test\computetest2.cpp" />
+    <ClCompile Include="fx_test\cubemaptesti.cpp" />
+    <ClCompile Include="fx_test\cubemaptesti2.cpp" />
+    <ClCompile Include="fx_test\lightingtest.cpp" />
+    <ClCompile Include="fx_test\particletesti2.cpp" />
+    <ClCompile Include="fx_test\particletesti3.cpp" />
+    <ClCompile Include="fx_test\postprocesstesti.cpp" />
+    <ClCompile Include="fx_test\postprocesstesti2.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="math\Bezier.cpp" />
+    <ClCompile Include="math\CatmullRom.cpp" />
+    <ClCompile Include="math\Curve.cpp" />
+    <ClCompile Include="math\LinearCurve.cpp" />
+    <ClCompile Include="math\Mathematics.cpp" />
+    <ClCompile Include="math\Range.cpp" />
+    <ClCompile Include="render\Buffer.cpp" />
+    <ClCompile Include="render\Camera.cpp" />
+    <ClCompile Include="render\Cubemap.cpp" />
+    <ClCompile Include="render\CubemapRenderer.cpp" />
+    <ClCompile Include="render\Font.cpp" />
+    <ClCompile Include="render\Image.cpp" />
+    <ClCompile Include="render\ImageFactory.cpp" />
+    <ClCompile Include="render\Light.cpp" />
+    <ClCompile Include="render\LineRenderer.cpp" />
+    <ClCompile Include="render\Mesh.cpp" />
+    <ClCompile Include="render\MeshBuilder.cpp" />
+    <ClCompile Include="render\MeshManager.cpp" />
+    <ClCompile Include="render\Model.cpp" />
+    <ClCompile Include="render\OrthoCamera.cpp" />
+    <ClCompile Include="render\PostProcessEffect.cpp" />
+    <ClCompile Include="render\PostProcessManager.cpp" />
+    <ClCompile Include="render\RenderDebug.cpp" />
+    <ClCompile Include="render\RenderStatistics.cpp" />
+    <ClCompile Include="render\RenderTargetManager.cpp" />
+    <ClCompile Include="render\RenderUtils.cpp" />
+    <ClCompile Include="render\Shader.cpp" />
+    <ClCompile Include="render\ShaderManager.cpp" />
+    <ClCompile Include="render\Texture.cpp" />
+    <ClCompile Include="render\TextureManager.cpp" />
+    <ClCompile Include="render\TextureParameters.cpp" />
+    <ClCompile Include="scenes\fjara.cpp" />
+    <ClCompile Include="scenes\huuru.cpp" />
+    <ClCompile Include="scenes\ikuisuus.cpp" />
+    <ClCompile Include="scenes\midaftann.cpp" />
+    <ClCompile Include="scenes\mountain.cpp" />
+    <ClCompile Include="scenes\rivers.cpp" />
+    <ClCompile Include="util\StringUtils.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

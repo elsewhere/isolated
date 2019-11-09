@@ -1,0 +1,48 @@
+
+Jumitusprioriteetti 0
+----------------------
+Destruktorit kuntoon 
+nullptr
+config-luokka
+
+
+Prioriteetti 1
+--------------
+- loading screen
+- jonkinsorttinen 2D-tuki edellämainittua varten 
+- debug-piirto 2d:nä
+
+
+Prioriteetti 2
+--------------
+- kelaus toimimaan - glfw callback 
+- HDR toimimaan
+	- clamppaaminen simpletexturessa auttaa. Miksi ihmeessä se bugaa? 
+- non-pow2 rendertargetit
+- frustum cull
+- shadow map
+- dynaaminen cubemap
+- cubemap-debugrender
+
+Prioriteetti 3
+--------------
+- joku kunnollinen mesh-importteri
+- mesh-exportteri binääriksi niin on nopeampi ladata
+- joku pak-filesysteemi ja purku streamattuna muistista 
+
+- tuki skinnatuille mesheille
+- rocket-integraatio
+- skenegraafi
+
+
+Käytetyt kolmannen osapuolen jutut:
+-----------------------------------
+- FreeType 
+- fmod
+- glew 
+- glfw
+- glm
+- mersenne twister
+- OBJ loader by Robert Smith
+- tekstuurit - http://wdc3d.com/ - Creative Commons Attribution 4.0 International
+- skyboxit - http://www.custommapmakers.org/skyboxes.php - miramar = Jockum Skoglund aka hipshot

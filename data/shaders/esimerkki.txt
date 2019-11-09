@@ -1,0 +1,469 @@
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// ReShade effect file
+// visit facebook.com/MartyMcModding for news/updates
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Advanced Depth of Field 4.2 by Marty McFly 
+// Version for release
+// Copyright © 2008-2015 Marty McFly
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//FOCUS
+#define	bADOF_AutofocusEnable		1			//[0 or 1] Enables automated focus recognition based on samples around autofocus center.
+#define	fADOF_AutofocusCenter		float2(0.5, 0.5)	//[0.0 to 1.0] X and Y coordinates of autofocus center. Axes start from upper left screen corner.
+#define iADOF_AutofocusSamples		6			//[3 to 10] Amount of samples around the focus point for smoother focal plane detection.
+#define fADOF_AutofocusRadius		0.05			//[0.02 to 0.2] Radius of samples around the focus point.
+#define bADOF_AutofocusVisualizeEnable	1
+#define	fADOF_NearBlurCurve 		999.00			//[0.5 to 5.0] Curve of blur closer than focal plane. Higher means less blur.
+#define	fADOF_FarBlurCurve		2.00			//[0.5 to 5.0] Curve of blur behind      focal plane. Higher means less blur.
+#define	fADOF_ManualfocusDepth		0.02			//[0.0 to 1.0] Depth of focal plane when autofocus is off. 0.0 means camera, 1.0 means infinite distance.
+#define fADOF_InfiniteFocus		1.00			//[0.01 to 1.0] Distance at which depth is considered as infinite. 1.0 is standard. Low values only produce out of focus blur when focus object is very close to the camera. Recommended for gaming.
+//SHAPE
+#define fADOF_RenderResMult 		0.707			//[0.5 to 1.0] Resolution scale for DOF blur processing. Less means smoother shape and more performance but maybe artifacts if set too low.
+#define fADOF_ShapeRadius		12.0			//[2.0 to 30.0] Radius of maximal blur disc.
+#define iADOF_ShapeQuality 		12			//[1 to 255] Quality level of DOF shape. Higher means more offsets taken, cleaner shape but also less performance. Compilation time stays same.
+#define iADOF_ShapeVertices 		6			//[3 to 8] Polygon count of bokeh shape. 4 = square, 5 = pentagon, 6 = hexagon and so on.
+#define bADOF_ShapeTextureEnable	0			//[0 or 1] Enables the use of a texture overlay. Quite some performance drop.
+#define iADOF_ShapeTextureSize		63			//[user dependant] Higher texture size means less performance. Higher quality integers better work with detailed shape textures. Uneven numbers recommended because even size textures have no center pixel.
+//ROTATION
+#define fADOF_ShapeRotation 		15.0			//[0 to 360] Static rotation of bokeh shape.
+#define bADOF_RotAnimationEnable	0			//[0 or 1] Enables constant shape rotation in time.
+#define fADOF_RotAnimationSpeed		2.0			//[0.2 to 5.0] Speed of shape rotation. Negative numbers change direction.
+//CURVATURE
+#define bADOF_ShapeCurvatureEnable 	0			//[0 or 1] Bends edges of polygonal shape outwards (or inwards). Circular shape best with vertices > 7
+#define fADOF_ShapeCurvatureAmount	1.0			//[0.0 to 1.0] Amount of edge bending. 1.0 results in circular shape. Values below 0 produce star-like shapes.
+//APERTURE SIMULATION
+#define bADOF_ShapeApertureEnable       0			//[0 or 1] Enables deformation of bokeh shape into swirl-like aperture. You will recognize it when you try it out. Best with big bokeh shapes.
+#define fADOF_ShapeApertureAmount       0.01			//[-0.05 to 0.05] Amount of deformation. Negative values mirror the effect.		
+//ANAMORPHISM
+#define bADOF_ShapeAnamorphEnable	0			//[0 or 1] Lessens horizontal width of shape to simulate anamorphic bokeh shape seen in movies.
+#define fADOF_ShapeAnamorphRatio	0.6			//[0.0 to 0.8]  Horizontal width factor. 1.0 means 100% width, 0.0 means 0% width (bokeh shape will be vertical line).				
+//DISTORTION
+#define bADOF_ShapeDistortEnable  	0			//[0 or 1] Deforms bokeh shape at screen borders to simulate lens distortion. Bokeh shapes at screen egdes look like an egg.
+#define fADOF_ShapeDistortAmount	0.8			//[0.0 to 1.0] Amount of deformation.
+//DIFFUSION
+#define bADOF_ShapeDiffusionEnable	0			//[0 or 1] Enables some fuzzyness of bokeh shape, makes it less clearly defined.
+#define fADOF_ShapeDiffusionAmount	0.1			//[0.0 to 1.0] Amount of shape diffusion. High values look like the bokeh shape exploded.
+//WEIGHTING
+#define bADOF_ShapeWeightEnable 	0			//[0 or 1] Enables bokeh shape weight bias and shifts color to the shape borders.
+#define fADOF_ShapeWeightCurve		4.0			//[0.5 to 8.0] Curve of shape weight bias.
+#define fADOF_ShapeWeightAmount		1.0			//[0.5 to 8.0] Amount of shape weight bias.
+#define fADOF_BokehCurve		4.0			//[1.0 to 20.0] Bokeh factor. Higher values produce more defined bokeh shapes for separated bright spots.
+//CHROMATIC ABERRATION
+#define bADOF_ShapeChromaEnable		0			//[0 or 1] Enables chromatic aberration at bokeh shape borders. This means 3 times more samples = less performance.
+#define iADOF_ShapeChromaMode 		6			//[1 to 6] Switches through the possible R G B shifts.
+#define fADOF_ShapeChromaAmount		0.125			//[0.0 to 0.5] Amount of color shifting.
+#define bADOF_ImageChromaEnable		0			//[0 or 1] Enables image chromatic aberration at screen corners. This one is way more complex than the shape chroma (and any other chroma on the web).
+#define iADOF_ImageChromaHues		3			//[2 to 20] Amount of samples through the light spectrum to get a smooth gradient.
+#define fADOF_ImageChromaCurve		1.0			//[0.5 to 2.0] Image chromatic aberration curve. Higher means less chroma at screen center areas.
+#define fADOF_ImageChromaAmount		3.0			//[0.25 to 10.0] Linearly increases image chromatic aberration amount. 
+//POST BOX BLUR
+#define fADOF_SmootheningAmount		1.0			//[0.5 to 2.0] Blur multiplicator of box blur after bokeh to smoothen shape. Box blur is better than gaussian.
+//GRAIN NOISE
+#define bADOF_ImageGrainEnable    	0			//[0 or 1] Enables some fuzzyness in blurred areas. The more out of focus, the more grain.
+#define fADOF_ImageGrainCurve    	1.0			//[0.5 to 5.0] Curve of Image Grain distribution. Higher values lessen grain at moderately blurred areas.
+#define fADOF_ImageGrainAmount 		0.55			//[0.1 to 2.0] Linearly multiplies the amount of Image Grain applied.
+#define fADOF_ImageGrainScale   	1.0			//[0.5 to 2.0] Grain texture scale. Low values produce more coarse Noise.
+
+
+/////////////////////////TEXTURES / INTERNAL PARAMETERS/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////TEXTURES / INTERNAL PARAMETERS/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+#define ScreenSize 	float4(BUFFER_WIDTH, BUFFER_RCP_WIDTH, float(BUFFER_WIDTH) / float(BUFFER_HEIGHT), float(BUFFER_HEIGHT) / float(BUFFER_WIDTH)) //x=Width, y=1/Width, z=ScreenScaleY, w=1/ScreenScaleY
+#define PixelSize  	float2(BUFFER_RCP_WIDTH, BUFFER_RCP_HEIGHT)
+uniform float  Timer < source = "timer"; >;
+
+texture2D texColor  : COLOR; 
+texture2D texDepth : DEPTH;
+//yes I am very much aware that I downscale the DOF texture here and later with the texcoord stuff again, thanks.
+texture2D texHDR1 { Width = BUFFER_WIDTH*fADOF_RenderResMult; Height = BUFFER_HEIGHT*fADOF_RenderResMult; Format = RGBA8;};
+texture2D texHDR2 { Width = BUFFER_WIDTH; Height = BUFFER_HEIGHT; Format = RGBA8;}; //is a bit useless once I reverted to RGBA8 but who cares.
+texture2D texMask    	< string source = "ADOF/bokehmask.png";  > {Width = iADOF_ShapeTextureSize;Height = iADOF_ShapeTextureSize;Format = R8; };
+texture2D texNoise      < string source = "ADOF/bokehnoise.png"; > {Width = BUFFER_WIDTH;Height = BUFFER_HEIGHT;Format = RGBA8;};
+
+sampler2D SamplerColor 
+{
+	Texture = texColor;
+	MinFilter = LINEAR;
+	MagFilter = LINEAR;
+	MipFilter = LINEAR;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
+
+sampler2D SamplerDepth
+{
+	Texture = texDepth;
+	MinFilter = LINEAR;
+	MagFilter = LINEAR;
+	MipFilter = LINEAR;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
+
+sampler2D SamplerHDR1 
+{
+	Texture = texHDR1;
+	MinFilter = LINEAR;
+	MagFilter = LINEAR;
+	MipFilter = LINEAR;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
+
+sampler2D SamplerHDR2
+{
+	Texture = texHDR2;
+	MinFilter = LINEAR;
+	MagFilter = LINEAR;
+	MipFilter = LINEAR;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
+#if(bADOF_ShapeTextureEnable != 0)
+sampler2D SamplerMask  
+{
+	Texture = texMask;
+	MinFilter = LINEAR;
+	MagFilter = LINEAR;
+	MipFilter = LINEAR;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
+#endif
+sampler2D SamplerNoise
+{
+	Texture = texNoise;
+	MinFilter = LINEAR;
+	MagFilter = LINEAR;
+	MipFilter = LINEAR;
+	AddressU = Wrap;
+	AddressV = Wrap;
+};
+
+struct VS_OUTPUT_POST
+{
+	float4 vpos  : POSITION;
+	float2 txcoord : TEXCOORD0;
+};
+
+/////////////////////////VERTEX SHADER//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////VERTEX SHADER//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+VS_OUTPUT_POST VS_PostProcess(in uint id : SV_VertexID)
+{
+	VS_OUTPUT_POST OUT;
+	OUT.txcoord.x = (id == 2) ? 2.0 : 0.0;
+	OUT.txcoord.y = (id == 1) ? 2.0 : 0.0;
+	OUT.vpos = float4(OUT.txcoord * float2(2.0, -2.0) + float2(-1.0, 1.0), 0.0, 1.0);
+	return OUT;
+}
+
+/////////////////////////FUNCTIONS//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////FUNCTIONS//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float GetLinearDepth(float2 coords)
+{
+	float depth = tex2Dlod(SamplerDepth, float4(coords.xy,0,0)).x;
+	depth = 1.f/(1000.f-999.f*depth);
+	return depth;
+}
+
+float GetCoC(float2 coords)
+{
+	float  scenedepth = GetLinearDepth(coords.xy);
+	float  scenefocus = fADOF_ManualfocusDepth;
+	float  scenecoc = 0.0;
+
+#if(bADOF_AutofocusEnable != 0)
+	scenefocus = 0.0;
+
+	[loop]
+	for(int r=0;r<iADOF_AutofocusSamples;r++)
+	{ 
+ 		sincos((6.2831853 / iADOF_AutofocusSamples)*r,coords.y,coords.x);
+ 		coords.y *= ScreenSize.z; 
+ 		scenefocus += GetLinearDepth(coords*fADOF_AutofocusRadius + fADOF_AutofocusCenter.xy); 
+  	}
+	scenefocus /= iADOF_AutofocusSamples; 
+#endif
+	scenefocus = smoothstep(0.0,fADOF_InfiniteFocus,scenefocus);
+	scenedepth = smoothstep(0.0,fADOF_InfiniteFocus,scenedepth);
+
+	float farBlurDepth = scenefocus*pow(4.0,fADOF_FarBlurCurve);
+
+	if(scenedepth < scenefocus)
+	{
+		scenecoc=(scenedepth - scenefocus)/scenefocus;
+	}
+	else
+	{
+		scenecoc=(scenedepth - scenefocus)/(farBlurDepth - scenefocus);
+		scenecoc=saturate(scenecoc);
+	}
+
+	return saturate(scenecoc * 0.5 + 0.5);
+}
+
+//2.221 = PI/2*sqrt(2) so that a config value of 1.0 results in a 90 deg rotation at screen borders and not some weird value
+//transforms into 3d space and rotates offset vector around an axis that is perpendicular to the vector to screen center.
+//and uses only projection of 3d vector on our 2d screen plane. 
+//Yes, I know that this lens distortion is actually overlay of 2 offsetted circles but that's easier and loses no offsets.
+float2 GetDistortedOffsets(float2 intexcoord, float2 sampleoffset)
+{
+	float2 tocenter = intexcoord.xy-float2(0.5,0.5);
+	float3 perp = normalize(float3(tocenter.y, -tocenter.x, 0.0));
+
+	float rotangle = length(tocenter.xy)*2.221*fADOF_ShapeDistortAmount;  
+	float3 oldoffset = float3(sampleoffset.xy,0);
+
+	float3 rotatedoffset =  oldoffset * cos(rotangle) + cross(perp, oldoffset) * sin(rotangle) + perp * dot(perp,oldoffset)*(1.0 - cos(rotangle));
+
+	return rotatedoffset.xy;
+
+}
+
+float4 tex2Dchroma(sampler2D tex, float2 sourcecoord, float2 offsetcoord)
+{
+	float4 res = 0.0;
+
+	float4 sample1 = tex2Dlod(tex, float4(sourcecoord.xy + offsetcoord.xy * (1.0 - fADOF_ShapeChromaAmount),0,0));
+	float4 sample2 = tex2Dlod(tex, float4(sourcecoord.xy + offsetcoord.xy				       ,0,0));
+	float4 sample3 = tex2Dlod(tex, float4(sourcecoord.xy + offsetcoord.xy * (1.0 + fADOF_ShapeChromaAmount),0,0));
+
+	#if(iADOF_ShapeChromaMode == 1)		
+		res.xyz = float3(sample1.x, sample2.y, sample3.z);
+	#elif(iADOF_ShapeChromaMode == 2)	
+		res.xyz = float3(sample2.x, sample3.y, sample1.z);
+	#elif(iADOF_ShapeChromaMode == 3)	
+		res.xyz = float3(sample3.x, sample1.y, sample2.z);
+	#elif(iADOF_ShapeChromaMode == 4)	
+		res.xyz = float3(sample1.x, sample3.y, sample2.z);
+	#elif(iADOF_ShapeChromaMode == 5)	
+		res.xyz = float3(sample2.x, sample1.y, sample3.z);
+	#elif(iADOF_ShapeChromaMode == 6)	
+		res.xyz = float3(sample3.x, sample2.y, sample1.z);
+	#endif
+
+	res.w = sample2.w;
+	return res;
+}
+
+#if(bADOF_ShapeTextureEnable != 0)
+ 	#undef fADOF_ShapeRotation
+ 	#undef iADOF_ShapeVertices
+ 	#define fADOF_ShapeRotation 45.0
+ 	#define iADOF_ShapeVertices 4
+#endif
+
+float3 BokehBlur(sampler2D tex, float2 coord, float CoC, float centerDepth)
+{
+	
+	float4 res 		= float4(tex2Dlod(tex, float4(coord.xy, 0.0, 0.0)).xyz,1.0);
+ 	int ringCount          	= round(lerp(1.0,(float)iADOF_ShapeQuality,CoC/fADOF_ShapeRadius));
+	float rotAngle		= fADOF_ShapeRotation;
+	float2 discRadius 	= CoC*PixelSize.xy;
+	float2 edgeVertices[iADOF_ShapeVertices+1];
+
+	res.xyz = pow(res.xyz,fADOF_BokehCurve)*res.w;
+
+	#if(bADOF_ShapeAnamorphEnable != 0)
+		discRadius.x *= fADOF_ShapeAnamorphRatio;
+	#endif
+
+	#if(bADOF_RotAnimationEnable != 0)
+		rotAngle += fADOF_RotAnimationSpeed*Timer*0.005;
+	#endif
+
+	#if(bADOF_ShapeDiffusionEnable != 0)
+		float2 Grain = float2(frac(sin(coord.x + coord.y * 543.31) *  493013.0),
+				      frac(cos(coord.x - coord.y * 573.31) *  289013.0));
+		Grain = (Grain-0.5)*fADOF_ShapeDiffusionAmount+1.0;
+	#endif
+
+	[unroll]
+	for (int z = 0; z <= iADOF_ShapeVertices; z++)			
+	{								
+		sincos( (6.2831853 / iADOF_ShapeVertices)*z + radians(rotAngle), edgeVertices[z].y, edgeVertices[z].x);
+	}
+
+	[fastopt]
+	for(float i = 1; i <= ringCount; i++)
+	{
+		[fastopt]
+		for (int j = 1; j <= iADOF_ShapeVertices; j++) 
+		{
+		float radiusCoeff = i/ringCount;
+		float blursamples = i;
+
+		#if(bADOF_ShapeTextureEnable != 0)
+			blursamples *= 2;
+		#endif
+
+			[fastopt]
+			for (float k = 0; k < blursamples; k++)
+			{
+				float2 sampleOffset = lerp(edgeVertices[j-1].xy,edgeVertices[j].xy,k/blursamples) * radiusCoeff;
+
+				float4 tap = tex2Dlod(tex, float4(coord.xy + sampleOffset.xy * discRadius, 0, 0));
+				tap.w = (tap.w >= centerDepth*0.99) ? 1.0 : pow(abs(tap.w * 2.0 - 1.0),4.0); 
+				res.xyz += pow(tap.xyz,fADOF_BokehCurve)*tap.w;
+				res.w += tap.w;
+			}
+		}
+	}	
+
+	res.xyz = max(res.xyz/res.w,0.0);
+	return pow(res.xyz,1.0/fADOF_BokehCurve);
+}
+
+/////////////////////////PIXEL SHADERS//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////PIXEL SHADERS//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float4 PS_Focus(VS_OUTPUT_POST IN) : COLOR
+{
+	float4 scenecolor = tex2D(SamplerColor, IN.txcoord.xy);
+	scenecolor.w = GetCoC(IN.txcoord.xy);
+	return scenecolor;
+}
+
+float4 PS_Bokeh(VS_OUTPUT_POST IN) : COLOR
+{
+	IN.txcoord.xy /= fADOF_RenderResMult;
+
+	float4 scenecolor = tex2D(SamplerHDR1, saturate(IN.txcoord.xy));
+
+	//+0.05 padding, otherwise chromatic aberration samples outside the screen boundaries will return black.
+	//dark borders at the right and lower side of screen will be the result. 
+	//But go ahead, OPTIMIZE THE SHIT OUT OF IT!
+	if(max(IN.txcoord.x,IN.txcoord.y) > 1.05) discard;
+
+	float centerDepth = scenecolor.w;
+	float blurAmount = abs(centerDepth * 2.0 - 1.0);
+	float discRadius = blurAmount * fADOF_ShapeRadius;
+
+	#if(bADOF_AutofocusEnable != 0)
+		//2.0 because of pow(4.0). Best explanation EU West
+		discRadius*=(centerDepth < 0.5) ? (1.0 / max(fADOF_NearBlurCurve * 2.0, 1.0)) : 1.0; 
+	#endif
+
+	//doesn't bring that much with intelligent tap calculation
+	scenecolor.xyz = (discRadius >= 1.2) ? BokehBlur(SamplerHDR1, IN.txcoord.xy, discRadius, centerDepth) : scenecolor.xyz;
+
+	return scenecolor;
+}
+
+float4 PS_Chroma(VS_OUTPUT_POST IN) : COLOR
+{   
+	float4 scenecolor = 0;
+	float4 blurcolor = tex2D(SamplerHDR2, IN.txcoord.xy*fADOF_RenderResMult);
+	float4 noblurcolor = tex2D(SamplerColor, IN.txcoord.xy);
+	//using a fullscreen texHDR1 texture and using the CoC and color here instead of calculating the CoC here
+	//all over again is slower. For a render res mult of 0.6 I experience almost a doubling in fps using a lower res
+	//render target in the bokeh blur. Doing the CoC math twice is faster than creating a separate lower res render target
+	//in a separate pass. And yes, the CoC math is needed in the Focus pass.
+	noblurcolor.w = GetCoC(IN.txcoord.xy); 
+
+	float discRadius = abs(noblurcolor.w * 2.0 - 1.0) * fADOF_ShapeRadius;
+	#if(bADOF_AutofocusEnable != 0)
+		discRadius*=(noblurcolor.w < 0.5) ? (1.0 / max(fADOF_NearBlurCurve * 2.0, 1.0)) : 1.0; 
+	#endif
+
+	#if ( bADOF_ImageChromaEnable != 0)
+		float2 coord=IN.txcoord.xy*2.0-1.0;
+		float centerfact=length(IN.txcoord.xy*2.0-1.0);
+		centerfact=pow(centerfact,fADOF_ImageChromaCurve)*fADOF_ImageChromaAmount;
+
+		float chromafact=BUFFER_RCP_WIDTH*centerfact*discRadius;
+	
+		float3 chromadivisor = 0.0;
+
+		[unroll]
+		for (float c=0; c<iADOF_ImageChromaHues; c++)
+		{
+			float temphue = c/iADOF_ImageChromaHues;
+			//hue2rgb
+			float3 tempchroma = saturate(float3(abs(temphue * 6.0 - 3.0) - 1.0,2.0 - abs(temphue * 6.0 - 2.0),2.0 - abs(temphue * 6.0 - 4.0)));
+			//complicated like that to center the chromatic offsets.
+			float  tempoffset = (c + 0.5)/iADOF_ImageChromaHues - 0.5; 
+			float3 tempsample = tex2Dlod(SamplerHDR2, float4((coord.xy*(1.0+chromafact*tempoffset)*0.5+0.5)*fADOF_RenderResMult,0,0)).xyz;
+			scenecolor.xyz += tempsample.xyz*tempchroma.xyz;
+			chromadivisor += tempchroma;
+		}
+		scenecolor.xyz /= dot(chromadivisor.xyz, 0.333);
+	#else
+		scenecolor = blurcolor;
+	#endif
+
+	scenecolor.xyz = lerp(scenecolor.xyz, noblurcolor.xyz, smoothstep(2.0,1.2,discRadius));
+
+	scenecolor.w = noblurcolor.w;
+	return scenecolor;
+}
+
+float4 PS_Post(VS_OUTPUT_POST IN) : COLOR
+{
+	float4 scenecolor = tex2D(SamplerColor, IN.txcoord.xy);
+	float4 blurcolor = 0.0001;
+	float outOfFocus = abs(scenecolor.w * 2.0 - 1.0);
+
+	//move all math out of loop if possible
+	float2 blurmult = smoothstep(0.3,0.8,outOfFocus) * PixelSize.xy * fADOF_SmootheningAmount;
+
+	float weights[3] = {1.0,0.75,0.5};
+	//Why not seperable? For the glory of Satan, of course!
+	for(float x = -2; x <= 2; x++)
+	for(float y = -2; y <= 2; y++)	
+	{
+		float2 offset = float2(x,y);
+		float offsetweight = weights[abs(x)]*weights[abs(y)];
+		blurcolor.xyz += tex2Dlod(SamplerColor,float4(IN.txcoord.xy + offset.xy * blurmult,0,0)).xyz * offsetweight;
+		blurcolor.w += offsetweight;
+	}
+
+	scenecolor.xyz = blurcolor.xyz / blurcolor.w;
+
+	#if(bADOF_ImageGrainEnable != 0)
+		float ImageGrain = frac(sin(IN.txcoord.x + IN.txcoord.y * 543.31) *  893013.0 + Timer * 0.001);
+
+		float3 AnimGrain = 0.5;
+		float2 GrainPixelSize = PixelSize/fADOF_ImageGrainScale;
+		//My emboss noise
+		AnimGrain += lerp(tex2D(SamplerNoise, IN.txcoord.xy*fADOF_ImageGrainScale + float2(GrainPixelSize.x,0)).xyz,tex2D(SamplerNoise, IN.txcoord.xy*fADOF_ImageGrainScale + 0.5 + float2(GrainPixelSize.x,0)).xyz,ImageGrain.x) * 0.1;
+		AnimGrain -= lerp(tex2D(SamplerNoise, IN.txcoord.xy*fADOF_ImageGrainScale + float2(0,GrainPixelSize.y)).xyz,tex2D(SamplerNoise, IN.txcoord.xy*fADOF_ImageGrainScale + 0.5 + float2(0,GrainPixelSize.y)).xyz,ImageGrain.x) * 0.1;
+		AnimGrain = dot(AnimGrain.xyz,0.333);
+
+		//Photoshop overlay mix mode
+		float3 graincolor = (scenecolor.xyz < 0.5 ? (2.0 * scenecolor.xyz * AnimGrain.xxx) : (1.0 - 2.0 * (1.0 - scenecolor.xyz) * (1.0 - AnimGrain.xxx)));
+		scenecolor.xyz = lerp(scenecolor.xyz, graincolor.xyz, pow(outOfFocus,fADOF_ImageGrainCurve)*fADOF_ImageGrainAmount);
+	#endif
+
+	#if(bADOF_AutofocusVisualizeEnable != 0 && bADOF_AutofocusEnable != 0)
+		float2 tempcoords = IN.txcoord.xy;
+		[loop]
+		for(int r=0;r<iADOF_AutofocusSamples;r++)
+		{ 
+ 			sincos((6.2831853 / iADOF_AutofocusSamples)*r,tempcoords.y,tempcoords.x);
+ 			tempcoords.y *= ScreenSize.z;
+			tempcoords.xy = tempcoords.xy * fADOF_AutofocusRadius + fADOF_AutofocusCenter.xy;
+
+ 			float tempdepth = GetLinearDepth(tempcoords.xy);
+			tempdepth = smoothstep(0.0,fADOF_InfiniteFocus,tempdepth);
+			float tempdist = length((IN.txcoord.xy-tempcoords.xy)*float2(ScreenSize.z,1.0));
+			scenecolor.xyz = lerp(scenecolor.xyz,lerp(float3(0.0,1.0,0.0),float3(1.0,0.0,0.0),tempdepth),smoothstep(0.004,0.0035,tempdist));
+  		}
+	#endif
+
+	return scenecolor;
+}
+
+/////////////////////////TECHNIQUES/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////TECHNIQUES/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+technique DepthOfField < bool enabled = 1; toggle=0x20; >
+{
+	pass Focus	{	VertexShader = VS_PostProcess;	PixelShader  = PS_Focus;	RenderTarget = texHDR1;	}
+	pass Bokeh	{	VertexShader = VS_PostProcess;	PixelShader = PS_Bokeh;		RenderTarget = texHDR2;	}
+	pass Chroma	{	VertexShader = VS_PostProcess;	PixelShader = PS_Chroma;				}
+	pass Post	{	VertexShader = VS_PostProcess;	PixelShader = PS_Post;					}
+}

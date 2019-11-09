@@ -1,0 +1,375 @@
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;     config                                                                                   ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; sound = true/false
+; debug = true/false
+
+democonfig
+{
+	sound = false;
+	developermode = true;
+	song = music.mp3
+	endtime = 220000
+	jumptime = 71000
+}
+/*
+timeline
+{
+	mountain 0 150000 666
+}
+timeline
+{
+	particletesti3 0 150000 666
+}
+timeline
+{
+	fjara 0 150000 666
+}
+timeline
+{
+	particletesti 0 150000 666
+}
+
+*/
+timeline
+{
+	ikuisuus 0 150000 666
+}
+
+/*
+
+timeline
+{
+	fjara 1000 100000 666
+	mountain 100000 200000 666
+	midaftann 20000 300000
+}
+*/
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;     effects			                                                                        ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+namespace fjara
+{
+	vec3 cameraposition = 0 50 -30
+	vec3 cameratarget = 0 0 0 
+	vec3 cameraup = 1 0 0 
+	
+}
+namespace mountain
+{
+	vec3 cameraposition = 0 30 -50
+	vec3 cameratarget = 0 0 0 
+	vec3 cameraup = 0 1 0 	
+}
+
+namespace ikuisuus
+{
+	vec3 cameraposition = 0 30 -50
+	vec3 cameratarget = 0 0 0 
+	vec3 cameraup = 0 1 0 	
+
+	vec3 lightpos = 0 20 0
+	
+}
+namespace midaftann
+{
+	vec3 cameraposition = 0 0 490
+	vec3 cameratarget = 0 0 0 
+	vec3 cameraup = 0 1 0
+
+	vec3 flagpos = 0 70 0
+	float windspeed = 5.666
+	float windmagnitude = 0.9
+	float winddensity = 4.3
+	float dt = 0.02
+	float damping = 0.1
+	float gravity = -0.15
+}
+
+namespace river
+{
+	float riversize = 260
+	vec3 cameraposition = 100 120 20
+	vec3 cameratarget = 100 120 0
+	vec3 cameraup = 0 1 0 
+
+	float rotationangle = 0.09
+	vec3 rotation = 1.0 0.9 0 
+}
+
+/*
+namespace river
+{
+	float riversize = 260
+	vec3 cameraposition = 100 120 20
+	vec3 cameratarget = 100 120 0
+	vec3 cameraup = 0 1 0 
+}
+*/
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;     beat				                                                                        ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+bpm beatquarter
+{
+	bpm = 17.5
+	offset = 0
+}
+
+bpm beathalf
+{
+	bpm = 35
+	offset = 0
+}
+
+bpm basicbeat0
+{
+	bpm = 70
+	offset = 0
+}
+
+event jokufadein
+{
+	time = 159151
+	length = 1000
+}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;     meshes																					;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+/*
+mesh testi.obj
+{
+	usevbo = true
+	autotexture = false
+	texture = texture1.jpg
+	usefacenormals = false
+	calculatenormals = false
+	retain = true
+}
+*/
+/*
+mesh sphere.obj
+{
+	usevbo = true
+}
+mesh test.obj
+{
+	usevbo = true
+}
+*/
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;     textures                                                                                 ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; upload = true/false 
+; wrap 	 = repeat/clamp
+; retain = true/false 
+; mipmap = true/false
+; filter = nearest / linear 
+/*
+texture test.jpg
+{
+	mipmap = true
+	wrap = repeat
+	filter = linear
+	retain = true
+}
+*/
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;     postprocessing rendertargets                                                             ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; TODO: make dynamic
+
+texture main
+{
+	width = 1024;
+	height = 1024;
+	format = float16;
+}
+
+texture main_downscale1
+{
+	width = 512;
+	height = 512;
+	format = float16;
+}
+texture main_downscale2
+{
+	width = 256;
+	height = 256;
+	format = float16;
+}
+texture main_downscale3
+{
+	width = 256;
+	height = 256;
+	format = float16;
+}
+texture main_downscale3_2
+{
+	width = 256;
+	height = 256;
+	format = float16;
+}
+
+texture computetest
+{
+	width = 1024;
+	height = 1024;
+	format = float32;
+}
+
+texture lens_coc
+{
+	width = 1024;
+	height = 1024; 
+	format = float16;
+}
+
+texture post1
+{
+	width = 1024;
+	height = 1024;
+	format = float16;
+}
+texture post2
+{
+	width = 1024;
+	height = 1024;
+	format = float16;
+}
+texture downscale1
+{
+	width = 512;
+	height = 512;
+	format = float16;
+}
+texture downscale2
+{
+	width = 256;
+	height = 256;
+	format = float16;
+}
+texture downscale3
+{
+	width = 256;
+	height = 256;
+	format = float16;
+}
+texture downscale3_2
+{
+	width = 256;
+	height = 256;
+	format = float16;
+}
+
+texture fabric
+{
+	filename = fabric.jpg
+}
+texture heightmap1
+{
+	filename = heightmap1.jpg
+}
+texture heightmap2
+{
+	filename = heightmap2.jpg
+}
+texture fjara
+{
+	filename = fjara.jpg
+}
+texture mustakivi
+{
+	filename = mustakivi.jpg
+}
+texture fjara_watermap
+{
+	filename = fjara_watermap.jpg
+}
+texture waternormals1
+{
+	filename = waternormals1.jpg
+}
+texture waternormals2
+{
+	filename = waternormals2.jpg
+}
+texture kivitesti
+{
+	filename = kivitesti.jpg
+}
+texture starparticle
+{
+	filename = starparticlee.png	
+}
+texture whiteparticle
+{
+	filename = whiteparticle.png	
+}
+texture circle
+{
+	filename = circle.png
+}
+
+texture dynamictest
+{
+	type = cubemap;
+	format = rgba;
+	width = 1024;
+	height = 1024;
+}
+texture miramar
+{
+	type = cubemap;
+	format = rgba;
+	width = 1024;
+	height = 1024;
+
+	filenameposx = miramar_negx.jpg
+	filenamenegx = miramar_posx.jpg
+	filenameposy = miramar_posy.jpg
+	filenamenegy = miramar_negy.jpg
+	filenameposz = miramar_posz.jpg
+	filenamenegz = miramar_negz.jpg
+}
+texture fjaraenv
+{
+	type = cubemap;
+	format = rgba;
+	width = 1024;
+	height = 1024;
+
+	filenameposx = fjara_negx.jpg
+	filenamenegx = fjara_posx.jpg
+	filenameposy = fjara_posy.jpg
+	filenamenegy = fjara_negy.jpg
+	filenameposz = fjara_posz.jpg
+	filenamenegz = fjara_negz.jpg
+}
+texture nebula
+{
+	type = cubemap;
+	format = rgba;
+	width = 1024;
+	height = 1024;
+
+	filenameposx = nebula_negx.jpg
+	filenamenegx = nebula_posx.jpg
+	filenameposy = nebula_posy.jpg
+	filenamenegy = nebula_negy.jpg
+	filenameposz = nebula_posz.jpg
+	filenamenegz = nebula_negz.jpg
+
+}
+
+texture chess
+{
+	filename = chess.jpg
+}
+
+; some whitespade needed :)

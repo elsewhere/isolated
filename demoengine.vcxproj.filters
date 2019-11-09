@@ -1,0 +1,363 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Library">
+      <UniqueIdentifier>{498cd181-5b5f-4ffa-b80f-6db00062de29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{5dd78479-9cb1-467a-bdd7-49d80425cf22}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+    <Filter Include="Src">
+      <UniqueIdentifier>{f9b98929-1a03-4f1e-b915-774f9104d6ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Core">
+      <UniqueIdentifier>{72750152-96e9-4cc6-88e8-0054fd348410}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Core\Demo">
+      <UniqueIdentifier>{db746508-0448-44d8-b5c3-59cf3c945152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Effects">
+      <UniqueIdentifier>{a2d14406-3bb8-4943-8218-17344c715ae7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Math">
+      <UniqueIdentifier>{16dcfa05-bb07-4f6c-b770-79b6e28fb7ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Math\Curve">
+      <UniqueIdentifier>{ac66991e-42b8-4006-af0a-f3a415c460b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Render">
+      <UniqueIdentifier>{1201904d-325b-448c-b7ed-82a14afa847b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Util">
+      <UniqueIdentifier>{85e19035-bc57-43c9-8eab-16c39699b067}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="lib\DevIL.lib">
+      <Filter>Library</Filter>
+    </Library>
+    <Library Include="lib\fmodex_vc.lib">
+      <Filter>Library</Filter>
+    </Library>
+    <Library Include="lib\glew32s.lib">
+      <Filter>Library</Filter>
+    </Library>
+    <Library Include="lib\GLU32.LIB">
+      <Filter>Library</Filter>
+    </Library>
+    <Library Include="lib\ILU.lib">
+      <Filter>Library</Filter>
+    </Library>
+    <Library Include="lib\ILUT.lib">
+      <Filter>Library</Filter>
+    </Library>
+    <Library Include="lib\OPENGL32.LIB">
+      <Filter>Library</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\bitmap1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\bitmap2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\brslogo.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resources\resource.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Config.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Debugger.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\DemoContext.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\FrameTimer.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Parameter.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\ScriptLoader.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Sound.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\System.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Timer.h">
+      <Filter>Src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Bpm.h">
+      <Filter>Src\Core\Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Demo.h">
+      <Filter>Src\Core\Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Event.h">
+      <Filter>Src\Core\Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Scene.h">
+      <Filter>Src\Core\Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="core\SyncManager.h">
+      <Filter>Src\Core\Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="core\Trigger.h">
+      <Filter>Src\Core\Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Mathematics.h">
+      <Filter>Src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Range.h">
+      <Filter>Src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Bezier.h">
+      <Filter>Src\Math\Curve</Filter>
+    </ClInclude>
+    <ClInclude Include="math\CatmullRom.h">
+      <Filter>Src\Math\Curve</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Curve.h">
+      <Filter>Src\Math\Curve</Filter>
+    </ClInclude>
+    <ClInclude Include="math\LinearCurve.h">
+      <Filter>Src\Math\Curve</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Image.h">
+      <Filter>Src\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\ImageFactory.h">
+      <Filter>Src\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\RenderStatistics.h">
+      <Filter>Src\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Shader.h">
+      <Filter>Src\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\ShaderManager.h">
+      <Filter>Src\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Texture.h">
+      <Filter>Src\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\TextureManager.h">
+      <Filter>Src\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="util\StringUtils.h">
+      <Filter>Src\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="render\RenderDebug.h">
+      <Filter>Src\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Camera.h">
+      <Filter>Src\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Light.h">
+      <Filter>Src\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="render\Mesh.h" />
+    <ClInclude Include="render\Model.h" />
+    <ClInclude Include="render\MeshManager.h" />
+    <ClInclude Include="render\MeshBuilder.h" />
+    <ClInclude Include="render\PostProcessManager.h" />
+    <ClInclude Include="render\PostProcessEffect.h" />
+    <ClInclude Include="render\OrthoCamera.h" />
+    <ClInclude Include="render\RenderTargetManager.h" />
+    <ClInclude Include="render\RenderUtils.h" />
+    <ClInclude Include="render\Cubemap.h" />
+    <ClInclude Include="render\TextureParameters.h" />
+    <ClInclude Include="objloader\OBJ_Loader.h" />
+    <ClInclude Include="render\CubemapRenderer.h" />
+    <ClInclude Include="core\ErrorLog.h" />
+    <ClInclude Include="render\Font.h" />
+    <ClInclude Include="fx_test\cubemaptesti.h" />
+    <ClInclude Include="fx_test\cubemaptesti2.h" />
+    <ClInclude Include="fx_test\particletesti2.h" />
+    <ClInclude Include="fx_test\postprocesstesti.h" />
+    <ClInclude Include="fx_test\postprocesstesti2.h" />
+    <ClInclude Include="fx_test\lightingtest.h">
+      <Filter>Src\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="scenes\huuru.h" />
+    <ClInclude Include="scenes\mountain.h" />
+    <ClInclude Include="scenes\rivers.h" />
+    <ClInclude Include="fx_test\particletesti3.h" />
+    <ClInclude Include="scenes\fjara.h" />
+    <ClInclude Include="scenes\midaftann.h" />
+    <ClInclude Include="fx\Cloth.h" />
+    <ClInclude Include="fx_test\computetest.h" />
+    <ClInclude Include="fx_test\computetest2.h" />
+    <ClInclude Include="render\Buffer.h" />
+    <ClInclude Include="fx\CPUParticleSystem.h" />
+    <ClInclude Include="fx\GPUParticleSystem.h" />
+    <ClInclude Include="scenes\ikuisuus.h" />
+    <ClInclude Include="render\LineRenderer.h" />
+    <ClInclude Include="fx\LensFlare.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\setupdialog.aps">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources\setupdialog.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Config.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Debugger.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\DemoContext.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\FrameTimer.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Parameter.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\ScriptLoader.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Sound.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\System.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Timer.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Bpm.cpp">
+      <Filter>Src\Core\Demo</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Demo.cpp">
+      <Filter>Src\Core\Demo</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Event.cpp">
+      <Filter>Src\Core\Demo</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Scene.cpp">
+      <Filter>Src\Core\Demo</Filter>
+    </ClCompile>
+    <ClCompile Include="core\SyncManager.cpp">
+      <Filter>Src\Core\Demo</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Trigger.cpp">
+      <Filter>Src\Core\Demo</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Mathematics.cpp">
+      <Filter>Src\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Range.cpp">
+      <Filter>Src\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Bezier.cpp">
+      <Filter>Src\Math\Curve</Filter>
+    </ClCompile>
+    <ClCompile Include="math\CatmullRom.cpp">
+      <Filter>Src\Math\Curve</Filter>
+    </ClCompile>
+    <ClCompile Include="math\Curve.cpp">
+      <Filter>Src\Math\Curve</Filter>
+    </ClCompile>
+    <ClCompile Include="math\LinearCurve.cpp">
+      <Filter>Src\Math\Curve</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Image.cpp">
+      <Filter>Src\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\ImageFactory.cpp">
+      <Filter>Src\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\RenderStatistics.cpp">
+      <Filter>Src\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Shader.cpp">
+      <Filter>Src\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\ShaderManager.cpp">
+      <Filter>Src\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Texture.cpp">
+      <Filter>Src\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\TextureManager.cpp">
+      <Filter>Src\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="util\StringUtils.cpp">
+      <Filter>Src\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="render\RenderDebug.cpp">
+      <Filter>Src\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Camera.cpp">
+      <Filter>Src\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Light.cpp">
+      <Filter>Src\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="render\Mesh.cpp" />
+    <ClCompile Include="render\Model.cpp" />
+    <ClCompile Include="render\MeshManager.cpp" />
+    <ClCompile Include="render\MeshBuilder.cpp" />
+    <ClCompile Include="render\PostProcessManager.cpp" />
+    <ClCompile Include="render\PostProcessEffect.cpp" />
+    <ClCompile Include="render\OrthoCamera.cpp" />
+    <ClCompile Include="render\RenderTargetManager.cpp" />
+    <ClCompile Include="render\RenderUtils.cpp" />
+    <ClCompile Include="render\Cubemap.cpp" />
+    <ClCompile Include="render\TextureParameters.cpp" />
+    <ClCompile Include="render\CubemapRenderer.cpp" />
+    <ClCompile Include="core\ErrorLog.cpp" />
+    <ClCompile Include="render\Font.cpp" />
+    <ClCompile Include="fx_test\cubemaptesti.cpp" />
+    <ClCompile Include="fx_test\cubemaptesti2.cpp" />
+    <ClCompile Include="fx_test\particletesti2.cpp" />
+    <ClCompile Include="fx_test\postprocesstesti.cpp" />
+    <ClCompile Include="fx_test\postprocesstesti2.cpp" />
+    <ClCompile Include="fx_test\lightingtest.cpp">
+      <Filter>Src\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="scenes\huuru.cpp" />
+    <ClCompile Include="scenes\mountain.cpp" />
+    <ClCompile Include="scenes\rivers.cpp" />
+    <ClCompile Include="fx_test\particletesti3.cpp" />
+    <ClCompile Include="scenes\fjara.cpp" />
+    <ClCompile Include="scenes\midaftann.cpp" />
+    <ClCompile Include="fx\Cloth.cpp" />
+    <ClCompile Include="fx_test\computetest.cpp" />
+    <ClCompile Include="fx_test\computetest2.cpp" />
+    <ClCompile Include="render\Buffer.cpp" />
+    <ClCompile Include="fx\CPUParticleSystem.cpp" />
+    <ClCompile Include="fx\GPUParticleSystem.cpp" />
+    <ClCompile Include="scenes\ikuisuus.cpp" />
+    <ClCompile Include="render\LineRenderer.cpp" />
+    <ClCompile Include="fx\LensFlare.cpp" />
+  </ItemGroup>
+</Project>
