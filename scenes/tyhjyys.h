@@ -25,7 +25,7 @@ private:
 			~TyhjyysLight();
 
 			void update();
-			void draw();
+			void draw(demorender::Camera* camera);
 
 			void debug();
 
@@ -34,7 +34,9 @@ private:
 	
 		private:
 			glm::vec3 m_position = glm::vec3(0.f);
-			float m_intensity;
+			float m_intensity = 1.f;
+
+			demorender::Mesh* m_pMesh = nullptr;
 
 	};
 	void createMesh();

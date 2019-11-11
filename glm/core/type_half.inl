@@ -134,6 +134,7 @@ namespace detail
 		// Adjust e, accounting for the different exponent bias
 		// of float and half (127 versus 15).
 		//
+#pragma warning (disable : 5033)
 
 		register int s =  (i >> 16) & 0x00008000;
 		register int e = ((i >> 23) & 0x000000ff) - (127 - 15);

@@ -53,6 +53,7 @@ namespace demorender
 		m_effects["ssao"] = new SSAO();
 		m_effects["dof"] = new DOF();
 		m_effects["lens"] = new Lens();
+		m_effects["radial"] = new Radial();
 		return true;
 	}
 
@@ -70,6 +71,13 @@ namespace demorender
 		StackItem item;
 		item.first = m_effects["test"];
 		item.second.clear();
+		m_stack.push_back(item);
+	}
+
+	void PostProcessManager::addRadial()
+	{
+		StackItem item;
+		item.first = m_effects["radial"];
 		m_stack.push_back(item);
 	}
 

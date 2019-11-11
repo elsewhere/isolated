@@ -66,6 +66,16 @@ namespace demorender
 		std::string getName();
 	};
 
+	class Radial : public PostProcessEffect
+	{
+	public:
+		Radial();
+		virtual ~Radial();
+
+		virtual void apply(const std::string& source, const std::string& target, PostProcessParameters& params);
+		std::string getName();
+	};
+
 	class SSAO : public PostProcessEffect
 	{
 	public:
