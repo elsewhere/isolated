@@ -77,8 +77,8 @@ namespace demorender
 		Shader& shader = g_shaders->getShader("postprocess_sobel");
 		shader.bind();
 
-		shader.setUniform1f("spacing", params["spacing"].getFloat());
-		shader.setUniform1f("exponent", params["exponent"].getFloat());
+		shader.setUniform1f("spacing", std::get<float>(params["spacing"]));
+		shader.setUniform1f("exponent", std::get<float>(params["exponent"]));
 
 		glActiveTexture(GL_TEXTURE0);
 
@@ -113,11 +113,11 @@ namespace demorender
 		//add the result on top of the source rendertarget
 
 
-		const int iterations = params["iterations"].getInt();
-		const float spreadX = params["spreadX"].getFloat();
-		const float spreadY = params["spreadY"].getFloat();
-		const float exponent = params["exponent"].getFloat();
-		const float alpha = params["alpha"].getFloat();
+		const int iterations = std::get<int>(params["iterations"]);
+		const float spreadX = std::get<float>(params["spreadX"]);
+		const float spreadY = std::get<float>(params["spreadY"]);
+		const float exponent = std::get<float>(params["exponent"]);
+		const float alpha = std::get<float>(params["alpha"]);
 
 		glDisable(GL_DEPTH_TEST);
 		glDepthMask(GL_FALSE);
@@ -209,6 +209,7 @@ namespace demorender
 		shader.bind();
 
 		glActiveTexture(GL_TEXTURE0);
+		
 
 		shader.setUniform1i("tex", 0);
 		g_renderTargets->bindTexture(target);
@@ -250,8 +251,8 @@ namespace demorender
 
 		glActiveTexture(GL_TEXTURE0);
 
-		float nearValue = params["near"].getFloat();
-		float farValue = params["far"].getFloat();
+		float nearValue = std::get<float>(params["near"]);
+		float farValue = std::get<float>(params["far"]);
 		shader.setUniform1i("depthtex", 1);
 		shader.setUniform1f("near", nearValue);
 		shader.setUniform1f("far", farValue);
@@ -292,9 +293,9 @@ namespace demorender
 		glActiveTexture(GL_TEXTURE0);
 
 		shader.setUniform1i("depthtex", 1);
-		shader.setUniform1f("near", params["near"].getFloat());
-		shader.setUniform1f("far", params["far"].getFloat());
-		shader.setUniform1f("focus", params["focus"].getFloat());
+		shader.setUniform1f("near", std::get<float>(params["near"]));
+		shader.setUniform1f("far", std::get<float>(params["far"]));
+		shader.setUniform1f("focus", std::get<float>(params["focus"]));
 
 		g_renderTargets->bindTexture(target);
 		g_renderUtils->fullscreenQuad(source, shader);
@@ -338,9 +339,9 @@ namespace demorender
 
 		cocShader.setUniform1i("colorTex", 0);
 		cocShader.setUniform1i("depthTex", 1);
-		cocShader.setUniform1f("nearPlane", params["near"].getFloat());
-		cocShader.setUniform1f("farPlane", params["far"].getFloat());
-		cocShader.setUniform1f("focus", params["focus"].getFloat());
+		cocShader.setUniform1f("nearPlane", std::get<float>(params["near"]));
+		cocShader.setUniform1f("farPlane", std::get<float>(params["far"]));
+		cocShader.setUniform1f("focus", std::get<float>(params["focus"]));
 
 		g_renderTargets->bindTexture("lens_coc");
 		g_renderUtils->fullscreenQuad(cocShader); //->lens_coc rendertargettiin
@@ -388,11 +389,11 @@ namespace demorender
 		//add the result on top of the source rendertarget
 
 
-		const int iterations = params["iterations"].getInt();
-		const float spreadX = params["spreadX"].getFloat();
-		const float spreadY = params["spreadY"].getFloat();
-		const float exponent = params["exponent"].getFloat();
-		const float alpha = params["alpha"].getFloat();
+		const int iterations = std::get<int>(params["iterations"]);
+		const float spreadX = std::get<float>(params["spreadX"]);
+		const float spreadY = std::get<float>(params["spreadY"]);
+		const float exponent = std::get<float>(params["exponent"]);
+		const float alpha = std::get<float>(params["alpha"]);
 
 		glDisable(GL_DEPTH_TEST);
 		glDepthMask(0);

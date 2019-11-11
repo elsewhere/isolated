@@ -87,8 +87,8 @@ namespace demorender
 		item.first = m_effects["sobel"];
 		item.second.clear();
 
-		item.second["spacing"] = createFloat(spacing);
-		item.second["exponent"] = createFloat(exponent);
+		item.second["spacing"] = spacing;
+		item.second["exponent"] = exponent;
 
 		m_stack.push_back(item);
 	}
@@ -99,11 +99,11 @@ namespace demorender
 		item.first = m_effects["glow"];
 		item.second.clear();
 
-		item.second["iterations"] = createInt(iterations);
-		item.second["spreadX"] = createFloat(spreadX);
-		item.second["spreadY"] = createFloat(spreadY);
-		item.second["exponent"] = createFloat(exponent);
-		item.second["alpha"] = createFloat(addAlpha);
+		item.second["iterations"] = iterations;
+		item.second["spreadX"] = spreadX;
+		item.second["spreadY"] = spreadY;
+		item.second["exponent"] = exponent;
+		item.second["alpha"] = addAlpha;
 
 		m_stack.push_back(item);
 	}
@@ -113,8 +113,8 @@ namespace demorender
 		StackItem item;
 		item.first = m_effects["ssao"];
 		item.second.clear();
-		item.second["near"] = createFloat(nearPlane);
-		item.second["far"] = createFloat(farPlane);
+		item.second["near"] = nearPlane;
+		item.second["far"] = farPlane;
 
 		m_stack.push_back(item);
 	}
@@ -124,9 +124,9 @@ namespace demorender
 		StackItem item;
 		item.first = m_effects["dof"];
 		item.second.clear();
-		item.second["focus"] = createFloat(focus);
-		item.second["near"] = createFloat(nearPlane);
-		item.second["far"] = createFloat(farPlane);
+		item.second["focus"] = focus;
+		item.second["near"] = nearPlane;
+		item.second["far"] = farPlane;
 
 		m_stack.push_back(item);
 	}
@@ -136,9 +136,9 @@ namespace demorender
 		StackItem item;
 		item.first = m_effects["lens"];
 		item.second.clear();
-		item.second["focus"] = createFloat(focus);
-		item.second["near"] = createFloat(pCamera->getNearPlane());
-		item.second["far"] = createFloat(pCamera->getFarPlane());
+		item.second["focus"] = focus;
+		item.second["near"] = pCamera->getNearPlane();
+		item.second["far"] = pCamera->getFarPlane();
 
 		m_stack.push_back(item);
 	}

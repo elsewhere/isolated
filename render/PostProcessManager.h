@@ -4,6 +4,7 @@
 #include <deque>
 #include <map>
 #include <utility>
+#include <variant>
 
 #define g_postProcess PostProcessManager::inst()
 
@@ -11,36 +12,9 @@ namespace demorender
 {
 	class Camera;
 
-	//TODO: this is pretty awful, should really use a template or something but.. 
-	class Parameter
-	{
-	public:
-		enum Type
-		{
-			FLOAT,
-			INT
-		};
-		Parameter() :
-			m_type(FLOAT),
-			m_floatValue(0.f),
-			m_intValue(0)
-		{
-		}
-		//TODO: error checking
-		float getFloat() { return m_floatValue; }
-		int getInt() { return m_intValue; }
-
-		void setFloat(float value) { m_type = FLOAT;  m_floatValue = value; };
-		void setInt(int value) { m_type = INT;  m_intValue = value; };
-		bool isFloat() { return m_type == FLOAT; }
-		bool isInt() { return m_type == INT; }
-	private:
-		Type m_type;
-		float m_floatValue;
-		int m_intValue;
-	};
-
-	typedef std::map<std::string, Parameter> PostProcessParameters;
+	using Parameter = std::variant<int, float>;
+	using PostProcessParameters = std::map<std::string, Parameter>;
+	using StackItem = std::pair<class PostProcessEffect*, PostProcessParameters>;
 
 	class PostProcessManager
 	{
@@ -62,9 +36,6 @@ namespace demorender
 		void addSSAO(float nearPlane, float farPlane); //TODO
 
 	private:
-		Parameter createInt(int value) { Parameter p; p.setInt(value); return p; }
-		Parameter createFloat(float value) { Parameter p; p.setFloat(value); return p; }
-		typedef std::pair<class PostProcessEffect*, PostProcessParameters> StackItem;
 
 		PostProcessManager();
 		~PostProcessManager();
