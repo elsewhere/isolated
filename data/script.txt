@@ -23,64 +23,19 @@ timeline
 ;;     effects			                                                                        ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-namespace fjara
-{
-	vec3 cameraposition = 0 50 -30
-	vec3 cameratarget = 0 0 0 
-	vec3 cameraup = 1 0 0 
-	
-}
-namespace mountain
-{
-	vec3 cameraposition = 0 30 -50
-	vec3 cameratarget = 0 0 0 
-	vec3 cameraup = 0 1 0 	
-}
 
-namespace ikuisuus
+namespace tyhjyys
 {
 	vec3 cameraposition = 0 30 -50
 	vec3 cameratarget = 0 0 0 
 	vec3 cameraup = 0 1 0 	
 
 	vec3 lightpos = 0 20 0
+
+	float lightscale = 15.0
 	
 }
-namespace midaftann
-{
-	vec3 cameraposition = 0 0 490
-	vec3 cameratarget = 0 0 0 
-	vec3 cameraup = 0 1 0
 
-	vec3 flagpos = 0 70 0
-	float windspeed = 5.666
-	float windmagnitude = 0.9
-	float winddensity = 4.3
-	float dt = 0.02
-	float damping = 0.1
-	float gravity = -0.15
-}
-
-namespace river
-{
-	float riversize = 260
-	vec3 cameraposition = 100 120 20
-	vec3 cameratarget = 100 120 0
-	vec3 cameraup = 0 1 0 
-
-	float rotationangle = 0.09
-	vec3 rotation = 1.0 0.9 0 
-}
-
-/*
-namespace river
-{
-	float riversize = 260
-	vec3 cameraposition = 100 120 20
-	vec3 cameratarget = 100 120 0
-	vec3 cameraup = 0 1 0 
-}
-*/
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;     beat				                                                                        ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

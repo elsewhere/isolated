@@ -151,7 +151,7 @@ namespace democore
 				if (StringUtils::convertStringToNumber<float>(value, tokens[3], std::dec))
 				{
 					if (m_currentnamespace != "")
-						params.addFloat(m_currentnamespace, tokens[1], value);
+						params.add<float>(m_currentnamespace, tokens[1], value);
 					else
 						error("trying to add parameter to an empty namespace!");
 				}
@@ -167,7 +167,7 @@ namespace democore
 				if (StringUtils::convertStringToNumber<int>(value, tokens[3], std::dec))
 				{
 					if (m_currentnamespace != "")
-						params.addInt(m_currentnamespace, tokens[1], value);
+						params.add<int>(m_currentnamespace, tokens[1], value);
 					else
 						error("trying to add parameter to an empty namespace!");
 				}
@@ -184,50 +184,16 @@ namespace democore
 				{
 					if (tokens[3] == "true")
 					{
-						params.addBool(m_currentnamespace, tokens[1], true);
+						params.add<bool>(m_currentnamespace, tokens[1], true);
 					}
 					else if (tokens[3] == "false")
 					{
-						params.addBool(m_currentnamespace, tokens[1], false);
+						params.add<bool>(m_currentnamespace, tokens[1], false);
 					}
 					else
 					{
 						error("cannot parse bool");
 					}
-				}
-				else
-				{
-					error("trying to add parameter to an empty namespace!");
-				}
-			}
-			else if (tokens[0] == "blendmode")
-			{
-				int value = 0;
-
-				if (m_currentnamespace != "")
-				{
-					if (tokens[3] == "gl_zero")
-						params.addBlendMode(m_currentnamespace, tokens[1], GL_ZERO);
-					else if (tokens[3] == "gl_one")
-						params.addBlendMode(m_currentnamespace, tokens[1], GL_ONE);
-					else if (tokens[3] == "gl_dst_color")
-						params.addBlendMode(m_currentnamespace, tokens[1], GL_DST_COLOR);
-					else if (tokens[3] == "gl_one_minus_dst_color")
-						params.addBlendMode(m_currentnamespace, tokens[1], GL_ONE_MINUS_DST_COLOR);
-					else if (tokens[3] == "gl_src_alpha")
-						params.addBlendMode(m_currentnamespace, tokens[1], GL_SRC_ALPHA);
-					else if (tokens[3] == "gl_one_minus_src_alpha")
-						params.addBlendMode(m_currentnamespace, tokens[1], GL_ONE_MINUS_SRC_ALPHA);
-					else if (tokens[3] == "gl_one_minus_src_color")
-						params.addBlendMode(m_currentnamespace, tokens[1], GL_ONE_MINUS_SRC_COLOR);
-					else if (tokens[3] == "gl_dst_alpha")
-						params.addBlendMode(m_currentnamespace, tokens[1], GL_DST_ALPHA);
-					else if (tokens[3] == "gl_one_minus_dst_alpha")
-						params.addBlendMode(m_currentnamespace, tokens[1], GL_ONE_MINUS_DST_ALPHA);
-					else if (tokens[3] == "gl_src_alpha_saturate")
-						params.addBlendMode(m_currentnamespace, tokens[1], GL_SRC_ALPHA_SATURATE);
-					else
-						error("cannot parse blendmode");
 				}
 				else
 				{
@@ -243,7 +209,11 @@ namespace democore
 				{
 					glm::vec3 v = glm::vec3(x, y, z);
 					if (m_currentnamespace != "")
-						params.addVector3(m_currentnamespace, tokens[1], v);
+					{
+						params.add<glm::vec3>(m_currentnamespace, tokens[1], v);
+						g_debug << "lisätään\n";
+
+					}
 					else
 						error("trying to add parameter to an empty namespace!");
 				}
@@ -260,7 +230,7 @@ namespace democore
 				{
 					Range r = Range(minimum, maximum);
 					if (m_currentnamespace != "")
-						params.addRange(m_currentnamespace, tokens[1], r);
+						params.add<demomath::Range>(m_currentnamespace, tokens[1], r);
 					else
 						error("trying to add parameter to an empty namespace!");
 				}
@@ -293,7 +263,7 @@ namespace democore
 						str = str.substr(0, str.size() -1);
 					}
 
-					params.addString(m_currentnamespace, tokens[1], str);
+					params.add<std::string>(m_currentnamespace, tokens[1], str);
 				}
 				else
 					error("trying to add parameter to an empty namespace!");

@@ -3,7 +3,6 @@
 #include "../Globals.h"
 
 using namespace demomath;
-using namespace std;
 using namespace democore;
 
 namespace demorender
