@@ -4,7 +4,7 @@
 namespace democore
 {
 
-	Debugger::Debugger(bool enabled)
+	Debugger::Debugger()
 	{
 		m_debugFile.open("log.txt");
 	}
@@ -12,10 +12,6 @@ namespace democore
 	Debugger::~Debugger()
 	{
 	   m_debugFile.close();
-	}
-
-	void Debugger::setEnabled(bool enabled)
-	{
 	}
 
 	void Debugger::printDate()
@@ -34,5 +30,7 @@ namespace democore
 	   if(t.wSecond < 10)m_debugFile << "0";
 	   m_debugFile << t.wSecond << "     ";
 	}
+
+
 }
 

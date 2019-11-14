@@ -205,6 +205,7 @@
     <ClInclude Include="fx\GPUParticleSystem.h" />
     <ClInclude Include="render\LineRenderer.h" />
     <ClInclude Include="scenes\tyhjyys.h" />
+    <ClInclude Include="core\Profiler.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\setupdialog.aps">
@@ -347,5 +348,6 @@
     <ClCompile Include="fx\GPUParticleSystem.cpp" />
     <ClCompile Include="render\LineRenderer.cpp" />
     <ClCompile Include="scenes\tyhjyys.cpp" />
+    <ClCompile Include="core\Profiler.cpp" />
   </ItemGroup>
 </Project>

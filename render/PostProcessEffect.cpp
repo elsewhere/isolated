@@ -209,7 +209,6 @@ namespace demorender
 		shader.bind();
 
 		glActiveTexture(GL_TEXTURE0);
-		
 
 		shader.setUniform1i("tex", 0);
 		g_renderTargets->bindTexture(target);

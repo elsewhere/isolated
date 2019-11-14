@@ -29,6 +29,7 @@
 #include "math/Mathematics.h"
 
 #include "core/Debugger.h"
+#include "core/Profiler.h"
 #include "core/ErrorLog.h"
 #include "core/Scene.h"	
 #include "core/Demo.h"
@@ -64,6 +65,7 @@
 #include "core/System.h"
 
 extern democore::Debugger g_debug;
+extern democore::Profiler g_profiler;
 extern democore::ErrorLog g_error;
 extern democore::ErrorLog g_screenText;
 extern const std::string g_prodName;

@@ -3,6 +3,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <windows.h>
 
 /*
@@ -15,10 +16,9 @@ namespace democore
 	class Debugger
 	{
 	public:		
-		Debugger(bool enabled = true);
+		Debugger();
 		~Debugger();
 
-		void setEnabled(bool enabled);
 		void flush()
 		{
 		   m_debugFile.flush();
@@ -42,9 +42,9 @@ namespace democore
 			return m_debugFile;
 		}
 
+
 	private:
 		void printDate();
 		std::ofstream m_debugFile;
-
 	};
 }

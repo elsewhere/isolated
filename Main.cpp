@@ -30,8 +30,8 @@
 
 #include "scenes/tyhjyys.h"
 
-
 democore::Debugger g_debug;
+democore::Profiler g_profiler;
 democore::ErrorLog g_error;
 democore::ErrorLog g_screenText;
 

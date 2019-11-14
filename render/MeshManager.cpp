@@ -53,8 +53,7 @@ namespace demorender
 		m_meshes.clear();
 		//TODO: integrate assimp or something
 
-		int startTime = timeGetTime();
-
+		g_profiler.startProfile("Mesh loading");
 		Mesh *cube = new Mesh();
 		cube->generateCube();
 		addMesh("cube", cube);
@@ -114,8 +113,7 @@ namespace demorender
 			}
 
 		}
-		int endTime = timeGetTime();
-		g_debug << "mesh loading took " << (endTime - startTime) << " ms\n";
+		g_profiler.endProfile("Mesh loading");
 	}
 
 }

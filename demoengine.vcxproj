@@ -171,6 +171,7 @@
     <ClInclude Include="core\Event.h" />
     <ClInclude Include="core\FrameTimer.h" />
     <ClInclude Include="core\Parameter.h" />
+    <ClInclude Include="core\Profiler.h" />
     <ClInclude Include="core\Scene.h" />
     <ClInclude Include="core\ScriptLoader.h" />
     <ClInclude Include="core\Sound.h" />
@@ -246,6 +247,7 @@
     <ClCompile Include="core\Event.cpp" />
     <ClCompile Include="core\FrameTimer.cpp" />
     <ClCompile Include="core\Parameter.cpp" />
+    <ClCompile Include="core\Profiler.cpp" />
     <ClCompile Include="core\Scene.cpp" />
     <ClCompile Include="core\ScriptLoader.cpp" />
     <ClCompile Include="core\Sound.cpp" />
