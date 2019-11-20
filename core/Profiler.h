@@ -19,6 +19,7 @@ namespace democore
 		void endProfile(const std::string& name);
 
 	private:
-		std::map < std::string, DWORD> m_profiling;
+		LARGE_INTEGER m_frequency;
+		std::map < std::string, LARGE_INTEGER> m_profiling;
 	};
 }

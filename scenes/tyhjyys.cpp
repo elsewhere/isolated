@@ -25,12 +25,12 @@ Tyhjyys::TyhjyysLight::TyhjyysLight()
 
 	builder->start(false);
 
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 60; i++)
 	{
 		glm::vec3 pos = Math::randVectSphere(60.f);
-		glm::vec3 v1 = pos + Math::randVectSphere(4.4f);
-		glm::vec3 v2 = pos + Math::randVectSphere(4.4f);
-		glm::vec3 v3 = pos + Math::randVectSphere(4.4f);
+		glm::vec3 v1 = pos + Math::randVectSphere(1.4f);
+		glm::vec3 v2 = pos + Math::randVectSphere(1.4f);
+		glm::vec3 v3 = pos + Math::randVectSphere(1.4f);
 
 		builder->addVertex(v1);
 		builder->addVertex(v2);
@@ -66,7 +66,7 @@ void Tyhjyys::TyhjyysLight::draw(Camera* camera)
 	m_pMesh->bind(&s);
 	m_pMesh->draw();
 
-	g_shaders->unbindShader();
+//	g_shaders->unbindShader();
 
 }
 
@@ -244,7 +244,7 @@ void Tyhjyys::draw()
 		m_cameraUp);
 
 	drawBackground();
-	drawTerrain();
+//	drawTerrain();
 	m_light->draw(m_camera);
 
 	const float focus = 0.1f;

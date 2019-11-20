@@ -44,21 +44,16 @@ using namespace demorender;
 
 /*
 	demo:
-		- alussa piiirtyy vaakasuora viiva, jonka ylle tulee demon nimi in our dreams we were birds once
-		- kamera kääntyy ja viiva onkin lasia
-		- lasin päälle valuu mustaa öljyä
-			- shaderissa specular + ehkä kromaattinen aberraatio
-			- valo tulee ylhäältä 
-		- lasiin ilmaantuu säröjä
-		- öljyä pääsee läpi, se tippuu pisaroina alaspäin
-		- kamera kääntyy ja pisarat tippuu äärettömän kokoiseen vesialtaaseen
-		- altaasta nousee lintu
-		- valaistus muuttuu ja kamera kääntyy ylöspäin
-		- taivaalla on auringonpimennys, jonka reunat savuavat
-		- linnut lentävät kohti auringonpimennystä
+		viisi skeneä, pentagrammin muotoinen symboli (ympyrä pentagrammin kärjissä)
 
-		in our dreams we were birds once
-		the light
+		skene yksi - musta tausta, hohtava valo, kohinaa. Fokus. 
+		skene kaksi - valkoinen pohja ja musta valo (invertoitu), maassa ympyrä sen ympärillä, ehkä fft. Repivä tyhjyys. Raivo.
+		skene kolme - Auringonpimennys. Logiikka ja rationaalinen mieli.
+		skene neljä - Jokin asia, joka hajoaa miljoonaksi pieneksi asiaksi. Katharsis. 
+		skene viisi - symboli 
+
+
+
 
 */
 
