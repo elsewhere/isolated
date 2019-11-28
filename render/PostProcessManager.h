@@ -30,7 +30,8 @@ namespace demorender
 		void addSobel(float spacing = 0.001f, float exponent = 1.0f);
 		void addGlow(int iterations = 5, float spreadX = 0.001f, float spreadY = 0.001f, float exponent = 1.f, float addAlpha = 1.0f);
 		void addDOF(float focus, float nearPlane, float farPlane);
-		void addRadial();
+		void addOldschoolRadialBlur();
+		void addRadialGlow(int iterations = 10, float spread = 0.007f, float exponent = 1.f, float addAlpha = 1.0f);
 
 		void addLens(float focus, demorender::Camera* pCamera);
 		void addSSAO(float nearPlane, float farPlane); //TODO

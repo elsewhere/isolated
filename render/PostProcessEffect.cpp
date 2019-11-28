@@ -190,20 +190,116 @@ namespace demorender
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Radial
+	// RadialGlow
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	Radial::Radial()
+	RadialGlow::RadialGlow()
 	{
 
 	}
 
-	Radial::~Radial()
+	RadialGlow::~RadialGlow()
 	{
 
 	}
 
-	void Radial::apply(const std::string& source, const std::string& target, PostProcessParameters& params)
+	void RadialGlow::apply(const std::string& source, const std::string& target, PostProcessParameters& params)
+	{
+		//take source rendertarget
+		//downscale it a few times
+		//blur radially
+		//add the result on top of the source rendertarget
+
+
+		const int iterations = std::get<int>(params["iterations"]);
+		const float spread = std::get<float>(params["spread"]);
+		const float exponent = std::get<float>(params["exponent"]);
+		const float alpha = std::get<float>(params["alpha"]);
+
+		glDisable(GL_DEPTH_TEST);
+		glDepthMask(GL_FALSE);
+
+		Shader& simpleCopy = g_shaders->getShader("simpletexture");
+		Shader& expShader = g_shaders->getShader("postprocess_exp");
+		Shader& blurShader = g_shaders->getShader("postprocess_blur_radial");
+		Shader& combine = g_shaders->getShader("postprocess_add");
+
+		//downscale and blit source to downscale1
+		g_renderTargets->bindTexture("downscale1");
+		simpleCopy.bind();
+		simpleCopy.setUniform1i("tex", 0);
+		g_textures->bindTexture(source, GL_TEXTURE0); //tästä lähtee
+		g_renderUtils->fullscreenQuad(simpleCopy);
+
+		//downscale and use exp filter to downscale 2
+		g_renderTargets->bindTexture("downscale2");
+		expShader.bind();
+		g_textures->bindTexture("downscale1", GL_TEXTURE0);
+		expShader.setUniform1i("tex", 0);
+		expShader.setUniform1f("expfactor", exponent);
+		g_renderUtils->fullscreenQuad(expShader);
+
+		//downscale and blit downcale2 to downscale3
+		g_renderTargets->bindTexture("downscale3");
+		simpleCopy.bind();
+		g_textures->bindTexture("downscale2", GL_TEXTURE0);
+		simpleCopy.setUniform1i("tex", 0);
+		g_renderUtils->fullscreenQuad(simpleCopy);
+
+		blurShader.bind();
+		blurShader.setUniform1i("tex", 0);
+
+		for (int i = 0; i < iterations; i++)
+		{
+			//now blur horizontally from downscale3 to downscale 3_2
+			g_renderTargets->bindTexture("downscale3_2");
+			g_textures->bindTexture("downscale3", GL_TEXTURE0);
+			blurShader.setUniform1f("blurscale", spread * (1.f + i));
+			g_renderUtils->fullscreenQuad(blurShader);
+
+			//now blur vertically from downscale3_2 to downscale 3
+			g_renderTargets->bindTexture("downscale3");
+			g_textures->bindTexture("downscale3_2", GL_TEXTURE0);
+			blurShader.setUniform1f("blurscale", spread * (1.f + i));
+			g_renderUtils->fullscreenQuad(blurShader);
+		}
+
+		//finally combine them with the original 
+		g_renderTargets->bindTexture(target);
+		g_textures->bindTexture(source, GL_TEXTURE0);
+		g_textures->bindTexture("downscale3", GL_TEXTURE1);
+		combine.bind();
+		combine.setUniform1i("tex", 0);
+		combine.setUniform1i("tex2", 1);
+		combine.setUniform1f("amount", alpha);
+		g_renderUtils->fullscreenQuad(source, combine);
+
+		glDepthMask(GL_TRUE);
+
+
+	}
+	std::string RadialGlow::getName()
+	{
+		return "radialglow";
+	}
+
+
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// OldschoolRadialBlur
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	OldschoolRadialBlur::OldschoolRadialBlur()
+	{
+
+	}
+
+	OldschoolRadialBlur::~OldschoolRadialBlur()
+	{
+
+	}
+
+	void OldschoolRadialBlur::apply(const std::string& source, const std::string& target, PostProcessParameters& params)
 	{
 		Shader& shader = g_shaders->getShader("postprocess_radial");
 		shader.bind();
@@ -216,7 +312,7 @@ namespace demorender
 
 
 	}
-	std::string Radial::getName()
+	std::string OldschoolRadialBlur::getName()
 	{
 		return "radial";
 	}

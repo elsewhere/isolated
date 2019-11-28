@@ -6,6 +6,7 @@ namespace democore
 
 	Profiler::Profiler()
 	{
+		QueryPerformanceFrequency(&m_frequency);
 	}
 
 	Profiler::~Profiler()
@@ -20,7 +21,8 @@ namespace democore
 		}
 		else
 		{
-			DWORD timestamp = timeGetTime();
+			LARGE_INTEGER timestamp;
+			QueryPerformanceCounter(&timestamp);
 			m_profiling[name] = timestamp;
 		}
 
@@ -33,10 +35,16 @@ namespace democore
 		}
 		else
 		{
-			DWORD now = timeGetTime();
-			DWORD then = m_profiling[name];
+			LARGE_INTEGER now;
+			QueryPerformanceCounter(&now);
+			LARGE_INTEGER then = m_profiling[name];
 
-			g_debug << name << " took " << (now - then) << " ms\n";
+			LARGE_INTEGER elapsed;
+			elapsed.QuadPart = now.QuadPart - then.QuadPart;
+			elapsed.QuadPart *= 1000;
+			elapsed.QuadPart /= m_frequency.QuadPart;
+
+			g_debug << name << " took " << elapsed.QuadPart << " ms\n";
 
 			m_profiling.erase(name);
 		}

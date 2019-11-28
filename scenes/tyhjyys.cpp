@@ -55,7 +55,10 @@ void Tyhjyys::TyhjyysLight::draw(Camera* camera)
 
 	float lightScale = g_params->get<float>("tyhjyys", "lightscale");
 
-	glm::mat4 model = glm::scale(glm::vec3(lightScale));
+	static float t = 0.f;
+
+	t += 0.004f;
+	glm::mat4 model = glm::rotate(t, glm::vec3(0.4f, 0.7f, 0.2f)) * glm::scale(glm::vec3(lightScale));
 
 	Shader& s = g_shaders->getShader("singlecolor");
 	s.bind();
@@ -249,8 +252,12 @@ void Tyhjyys::draw()
 
 	const float focus = 0.1f;
 
-	g_postProcess->addGlow(10, 1.0f, 1.0f, 1.f, 1.f);
-	g_postProcess->addRadial();
+	g_postProcess->addRadialGlow( g_params->get<int>("glowiterations"), 
+								  g_params->get<float>("glowspread"),
+								  g_params->get<float>("glowexponent"),
+								  g_params->get<float>("glowalpha"));
+
+	//	g_postProcess->addRadial();
 	//	g_postProcess->addLens(focus, m_camera);
 	//	g_renderDebug->drawDepthTexture(g_renderTargets->getDepthTextureId("main"), m_camera, 512 + 256, 256, 512.f);
 

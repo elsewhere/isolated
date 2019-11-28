@@ -66,11 +66,21 @@ namespace demorender
 		std::string getName();
 	};
 
-	class Radial : public PostProcessEffect
+	class RadialGlow : public PostProcessEffect
 	{
 	public:
-		Radial();
-		virtual ~Radial();
+		RadialGlow();
+		virtual ~RadialGlow();
+
+		virtual void apply(const std::string& source, const std::string& target, PostProcessParameters& params);
+		std::string getName();
+	};
+
+	class OldschoolRadialBlur : public PostProcessEffect
+	{
+	public:
+		OldschoolRadialBlur();
+		virtual ~OldschoolRadialBlur();
 
 		virtual void apply(const std::string& source, const std::string& target, PostProcessParameters& params);
 		std::string getName();

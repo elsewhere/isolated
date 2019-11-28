@@ -33,6 +33,12 @@ namespace tyhjyys
 	vec3 lightpos = 0 20 0
 
 	float lightscale = 15.0
+
+	int glowiterations = 10
+	float glowspread = 0.007
+	float glowexponent = 1.0
+	float glowalpha = 1.0
+
 	
 }
 

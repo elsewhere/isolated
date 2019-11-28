@@ -53,7 +53,8 @@ namespace demorender
 		m_effects["ssao"] = new SSAO();
 		m_effects["dof"] = new DOF();
 		m_effects["lens"] = new Lens();
-		m_effects["radial"] = new Radial();
+		m_effects["oldschoolradialbur"] = new OldschoolRadialBlur();
+		m_effects["radialglow"] = new RadialGlow();
 		return true;
 	}
 
@@ -74,7 +75,7 @@ namespace demorender
 		m_stack.push_back(item);
 	}
 
-	void PostProcessManager::addRadial()
+	void PostProcessManager::addOldschoolRadialBlur()
 	{
 		StackItem item;
 		item.first = m_effects["radial"];
@@ -108,6 +109,19 @@ namespace demorender
 		m_stack.push_back(item);
 	}
 
+	void PostProcessManager::addRadialGlow(int iterations, float spread, float exponent, float addAlpha)
+	{
+		StackItem item;
+		item.first = m_effects["radialglow"];
+		item.second.clear();
+
+		item.second["iterations"] = iterations;
+		item.second["spread"] = spread;
+		item.second["exponent"] = exponent;
+		item.second["alpha"] = addAlpha;
+
+		m_stack.push_back(item);
+	}
 	void PostProcessManager::addSSAO(float nearPlane, float farPlane)
 	{
 		StackItem item;
