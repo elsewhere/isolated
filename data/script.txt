@@ -16,7 +16,8 @@ democonfig
 
 timeline
 {
-	tyhjyys 0 150000 666
+;	tyhjyys 0 150000 666
+	kasvot 0 150000 666
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -25,6 +26,23 @@ timeline
 
 
 namespace tyhjyys
+{
+	vec3 cameraposition = 0 30 -50
+	vec3 cameratarget = 0 0 0 
+	vec3 cameraup = 0 1 0 	
+
+
+	float cameraradius = 10
+
+	int glowiterations = 10
+	float glowspread = 0.007
+	float glowexponent = 1.0
+	float glowalpha = 1.0
+
+	
+}
+
+namespace kasvot
 {
 	vec3 cameraposition = 0 30 -50
 	vec3 cameratarget = 0 0 0 

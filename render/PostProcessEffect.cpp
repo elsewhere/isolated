@@ -210,7 +210,6 @@ namespace demorender
 		//blur radially
 		//add the result on top of the source rendertarget
 
-
 		const int iterations = std::get<int>(params["iterations"]);
 		const float spread = std::get<float>(params["spread"]);
 		const float exponent = std::get<float>(params["exponent"]);

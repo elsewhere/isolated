@@ -206,11 +206,13 @@
     <ClInclude Include="render\LineRenderer.h" />
     <ClInclude Include="scenes\tyhjyys.h" />
     <ClInclude Include="core\Profiler.h" />
+    <ClInclude Include="scenes\kasvot.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\setupdialog.aps">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="scenes\tyhjyys" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\setupdialog.rc">
@@ -349,5 +351,6 @@
     <ClCompile Include="render\LineRenderer.cpp" />
     <ClCompile Include="scenes\tyhjyys.cpp" />
     <ClCompile Include="core\Profiler.cpp" />
+    <ClCompile Include="scenes\kasvot.cpp" />
   </ItemGroup>
 </Project>

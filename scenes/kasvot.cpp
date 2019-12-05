@@ -1,4 +1,4 @@
-#include "Tyhjyys.h"
+#include "Kasvot.h"
 #include "../render/MeshBuilder.h"
 #include "../glm/gtx/transform.hpp"
 
@@ -14,71 +14,38 @@ namespace
 	static const std::string skyboxTexture = "nebula";
 }
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// TyhjyysLight
+// KasvotParticles
 ////////////////////////////////////////////////////////////////1////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-Tyhjyys::TyhjyysLight::TyhjyysLight()
+Kasvot::KasvotParticles::KasvotParticles() :
+	GPUParticleSystem(1024 * 1024)
 {
-	auto builder = std::make_unique<MeshBuilder>();
 
-	builder->start(false);
+}
 
-	for (int i = 0; i < 60; i++)
+Kasvot::KasvotParticles::~KasvotParticles()
+{
+
+}
+
+void Kasvot::KasvotParticles::setInitialData()
+{
+	m_pInitialData = new Particle[m_particleCount];
+
+	for (int i = 0; i < m_particleCount; i++)
 	{
-		glm::vec3 pos = Math::randVectSphere(60.f);
-		glm::vec3 v1 = pos + Math::randVectSphere(1.4f);
-		glm::vec3 v2 = pos + Math::randVectSphere(1.4f);
-		glm::vec3 v3 = pos + Math::randVectSphere(1.4f);
-
-		builder->addVertex(v1);
-		builder->addVertex(v2);
-		builder->addVertex(v3);
+		Particle& p = m_pInitialData[i];
+		p.direction = Math::randVectSphere();
+		p.position = Math::randVectSphere();
+		p.color = glm::vec4(1.f);
+		p.energy = p.maxEnergy = Math::randFloat(0.5, 1.5f);
 	}
-
-	builder->end();
-	m_pMesh = builder->getMesh();
-}
-
-Tyhjyys::TyhjyysLight::~TyhjyysLight()
-{
-}
-
-void Tyhjyys::TyhjyysLight::update()
-{
-
-}
-
-void Tyhjyys::TyhjyysLight::draw(Camera* camera)
-{
-
-	float lightScale = g_params->get<float>("tyhjyys", "lightscale");
-
-	static float t = 0.f;
-
-	t += 0.004f;
-	glm::mat4 model = glm::rotate(t, glm::vec3(0.4f, 0.7f, 0.2f)) * glm::scale(glm::vec3(lightScale));
-
-	Shader& s = g_shaders->getShader("singlecolor");
-	s.bind();
-	s.setUniform3f("color", 1.1f, 1.f, 1.f); 
-	s.setUniformMatrix4fv("camera", 1, false, (float*)(&camera->getCameraMatrix()));
-	s.setUniformMatrix4fv("model", 1, false, (float *)&model);
-
-	m_pMesh->bind(&s);
-	m_pMesh->draw();
-
-//	g_shaders->unbindShader();
-
-}
-
-void Tyhjyys::TyhjyysLight::debug()
-{
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Tyhjyys
+// Kasvot
 ////////////////////////////////////////////////////////////////1////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -107,7 +74,7 @@ void Tyhjyys::TyhjyysLight::debug()
 
 */
 
-void Tyhjyys::createMesh()
+void Kasvot::createMesh()
 {
 	if (m_pMesh)
 		delete m_pMesh;
@@ -121,22 +88,18 @@ void Tyhjyys::createMesh()
 	m_pMesh = builder->getMesh();
 }
 
-void Tyhjyys::init()
+void Kasvot::init()
 {
 	m_camera = new demorender::Camera(1.f, 1000.f, 45.f);
 
 	createMesh();
 
-	m_light = std::make_unique<TyhjyysLight>();
 	m_lines = std::make_unique<demorender::LineRenderer>();
 
 	m_lines->startNewBatch();
 
 	for (int i = 0; i < 300; i++)
 	{
-//		float t = (i / 300.f - 0.5f) * 2.f;
-//		const float a = t * 15.f;
-//		glm::vec3 v = glm::vec3(sinf(a) * 10.f, t * 100.f, cosf(a) * 10.f);
 		glm::vec3 v = Math::randVectSphere() * Math::randFloat(300.f);
 
 		glm::vec4 c = i < 150 ? glm::vec4(1.f) : glm::vec4(1.f, 0.f, 0.f, 1.f);
@@ -145,42 +108,34 @@ void Tyhjyys::init()
 
 	m_pSkybox = new demorender::Model();
 	m_pSkybox->setMesh("cube");
+
+	m_particles = std::make_unique<KasvotParticles>();
+	m_particles->setShader("gpuparticletest");
+	m_particles->setInitialData();
+	m_particles->createBuffers();
 }
 
-void Tyhjyys::update()
+void Kasvot::update()
 {
-	g_params->useNamespace("Tyhjyys");
+	g_params->useNamespace("Kasvot");
 
 	const float light_t = 0.5f + 0.5f * sinf(m_pos * 130.f);
-	m_lightPos = g_params->get<glm::vec3>("lightpos");
 
-	m_lightValue = 0.2f + (Math::randFloat(0, 1.f) * (light_t * 0.7f + 0.3f)) * 0.8f;
-	m_lightRadius = 10.f + light_t * 100.f;
 	m_cameraUp = glm::vec3(0.f, 1.f, 0.f);
 
+	const float a = m_pos * 20.f;
 
-	m_light->setPos(m_lightPos);
-	m_light->setIntensity(m_lightValue);
-
-	const float radius = 100.f;
-	const float height = 30.f;
-
-	const float a = m_pos * 2.f;
-
-	glm::vec3 cameraStart = glm::vec3(0, 0, -240.f);
-	glm::vec3 cameraEnd = glm::vec3(0, 0, 240.f);
-
-	m_cameraPosition = cameraStart + (cameraEnd - cameraStart) * m_pos;
-	m_cameraPosition.y = height;
-	m_cameraPosition += glm::vec3(sinf(a), 0.f, cosf(a)) * radius;
-
-	m_cameraTarget = m_cameraPosition * 0.000f;
+	const float radius = 20.f;
+	m_cameraPosition = glm::vec3(sinf(a) * radius, 10.f, cosf(a) * radius);
+	m_cameraTarget = glm::vec3(0.f);
 	m_cameraTarget.y = 0.f;// ::vec3(0.f);
+
+	m_particles->update();
 }
 
-void Tyhjyys::drawTerrain()
+void Kasvot::drawTerrain()
 {
-	glm::mat4 model = glm::mat4(1.f);
+/*	glm::mat4 model = glm::mat4(1.f);
 
 	Shader& s = g_shaders->getShader("effect_ikuisuusplane");
 	s.bind();
@@ -202,11 +157,12 @@ void Tyhjyys::drawTerrain()
 
 	m_pMesh->bind(&s);
 	m_pMesh->draw();
-
+	*/
+	m_particles->draw(m_camera);
 //	m_lines->draw(m_camera, LineRenderer::Mode::LINE_STRIP);
 }
 
-void Tyhjyys::drawBackground()
+void Kasvot::drawBackground()
 {
 	Shader &s = g_shaders->getShader("skybox");
 	s.bind();
@@ -223,22 +179,17 @@ void Tyhjyys::drawBackground()
 
 }
 
-void Tyhjyys::debug()
+void Kasvot::debug()
 {
 
-
-	m_light->debug();
-
-
-
-	g_screenText.log<std::string>("lightPos", Math::toString(m_lightPos));
-	g_screenText.log<float>("m_lightValue", m_lightValue);
-	g_screenText.log<float>("m_lightRadius", m_lightRadius);
+//	g_screenText.log<std::string>("lightPos", Math::toString(m_lightPos));
+//	g_screenText.log<float>("m_lightValue", m_lightValue);
+//	g_screenText.log<float>("m_lightRadius", m_lightRadius);
 }
 
-void Tyhjyys::draw()
+void Kasvot::draw()
 {
-	g_params->useNamespace("Tyhjyys");
+	g_params->useNamespace("Kasvot");
 
 	g_renderTargets->bindMain();
 
@@ -247,8 +198,7 @@ void Tyhjyys::draw()
 		m_cameraUp);
 
 	drawBackground();
-//	drawTerrain();
-	m_light->draw(m_camera);
+	drawTerrain();
 
 	const float focus = 0.1f;
 

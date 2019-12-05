@@ -26,7 +26,7 @@ namespace demofx
 
 	}
 
-	void GPUParticleSystem::setinitialData()
+	void GPUParticleSystem::setInitialData()
 	{
 		if (m_particleCount <= 0)
 		{

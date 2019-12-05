@@ -11,7 +11,7 @@ namespace demofx
 		GPUParticleSystem(int particleCount);
 		~GPUParticleSystem();
 
-		virtual void setinitialData();
+		virtual void setInitialData();
 		void createBuffers();
 		void update();
 		void draw(demorender::Camera *pCamera);

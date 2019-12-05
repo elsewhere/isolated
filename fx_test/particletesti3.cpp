@@ -17,7 +17,7 @@ void ParticleTesti3::init()
 	m_camera = new demorender::Camera(1.f, 100.f, 45.f);
 	m_pParticles = new demofx::GPUParticleSystem(200000);
 	m_pParticles->setShader("gpuparticletest");
-	m_pParticles->setinitialData();
+	m_pParticles->setInitialData();
 	m_pParticles->createBuffers();
 }
 
