@@ -31,12 +31,6 @@ Kasvot::KasvotParticles::KasvotParticles() :
 	addRenderShaderAttribute({ "vertexColor", 4 });
 	addRenderShaderAttribute({ "vertexEnergy", 1 });
 	addRenderShaderAttribute({ "vertexMaxEnergy", 1 });
-
-	//		glVertexAttribPointer(s.attrib("vertexPosition"), 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, position)); GL_DEBUG;
-//		glVertexAttribPointer(s.attrib("vertexColor"), 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, color)); GL_DEBUG;
-//		glVertexAttribPointer(s.attrib("vertexEnergy"), 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, energy)); GL_DEBUG;
-//		glVertexAttribPointer(s.attrib("vertexMaxEnergy"), 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, maxEnergy)); GL_DEBUG;
-
 }
 
 Kasvot::KasvotParticles::~KasvotParticles()
@@ -48,26 +42,18 @@ void Kasvot::KasvotParticles::setInitialData()
 {
 	m_pInitialData = new float[m_particleCount * m_particleSize];
 
-	g_debug << "particleCount = " << m_particleCount << " size = " << m_particleSize << "\n";
+	//g_debug << "particleCount = " << m_particleCount << " size = " << m_particleSize << "\n";
+	float* dataptr = m_pInitialData;
 	for (int i = 0; i < m_particleCount; i++)
 	{
-		float* base = m_pInitialData + i * m_particleSize;
-
-		glm::vec3 position = Math::randVectSphere();
+		glm::vec3 position = Math::randVectSphere() * 5.f;
 		glm::vec4 color = glm::vec4(1.f);
 		float energy = Math::randFloat(0.5f, 1.5f);
 
-		*base++ = position.x;
-		*base++ = position.y;
-		*base++ = position.z;
-
-		*base++ = color.x;
-		*base++ = color.y;
-		*base++ = color.z;
-		*base++ = color.w;
-
-		*base++ = energy;
-		*base++ = energy;
+		writeVec3(&dataptr, position);
+		writeVec4(&dataptr, color);
+		writeFloat(&dataptr, energy);
+		writeFloat(&dataptr, energy);
 	}
 }
 

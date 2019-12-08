@@ -32,6 +32,10 @@ namespace demofx
 
 	protected:
 
+		void writeFloat(float** ptr, const float value);
+		void writeVec2(float** ptr, const glm::vec2& value);
+		void writeVec3(float** ptr, const glm::vec3& value);
+		void writeVec4(float** ptr, const glm::vec4& value);
 		std::vector<ParticleAttribute> m_logicShaderAttributes;
 		std::vector<ParticleAttribute> m_renderShaderAttributes;
 		int m_particleSize = 0;

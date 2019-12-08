@@ -30,7 +30,7 @@ namespace demofx
 	{
 		if (std::find(std::begin(m_logicShaderAttributes), std::end(m_logicShaderAttributes), attribute) != m_logicShaderAttributes.end())
 		{
-			g_debug << "Trying to add attribute " << attribute.name << " to particle system twice\n";
+			g_debug << "Trying to add logic shader attribute " << attribute.name << " to particle system twice\n";
 		}
 		else
 		{
@@ -43,7 +43,7 @@ namespace demofx
 	{
 		if (std::find(std::begin(m_logicShaderAttributes), std::end(m_logicShaderAttributes), attribute) != m_logicShaderAttributes.end())
 		{
-			g_debug << "Trying to add attribute " << attribute.name << " to particle system twice\n";
+			g_debug << "Trying to add render shader attribute " << attribute.name << " to particle system twice\n";
 		}
 		else
 		{
@@ -67,7 +67,6 @@ namespace demofx
 		}
 
 		m_pInitialData = new float[m_particleCount * m_particleSize];
-
 		memset(m_pInitialData, m_particleCount, m_particleSize * sizeof(float));
 	}
 
@@ -119,6 +118,44 @@ namespace demofx
 		m_renderShader = renderShader;
 	}
 
+	//I'm pretty sure that the C++ gods will send me to hell for this
+	void GPUParticleSystem::writeFloat(float** ptr, const float value)
+	{
+		**ptr = value;
+		(*ptr)++;
+	}
+	void GPUParticleSystem::writeVec2(float** ptr, const glm::vec2& value)
+	{
+		const float* dataptr = (float *)&value;
+		**ptr = *dataptr++;
+		(*ptr)++;
+		**ptr = *dataptr++;
+		(*ptr)++;
+	}
+	void GPUParticleSystem::writeVec3(float** ptr, const glm::vec3& value)
+	{
+		const float* dataptr = (float *)&value;
+		**ptr = *dataptr++;
+		(*ptr)++;
+		**ptr = *dataptr++;
+		(*ptr)++;
+		**ptr = *dataptr++;
+		(*ptr)++;
+	}
+	void GPUParticleSystem::writeVec4(float** ptr, const glm::vec4& value)
+	{
+		const float* dataptr = (float *)&value;
+		**ptr = *dataptr++;
+		(*ptr)++;
+		**ptr = *dataptr++;
+		(*ptr)++;
+		**ptr = *dataptr++;
+		(*ptr)++;
+		**ptr = *dataptr++;
+		(*ptr)++;
+
+	}
+
 	void GPUParticleSystem::update()
 	{
 		Shader& s = g_shaders->getShader(m_logicShader);
@@ -132,17 +169,11 @@ namespace demofx
 		GL_DEBUG;
 		glBindBuffer(GL_ARRAY_BUFFER, m_particleBuffer1);
 
-		for (const auto &a : m_logicShaderAttributes)
-		{
-			glEnableVertexAttribArray(s.attrib(a.name));
-			GL_DEBUG;
-		}
-
 		int offset = 0;
 		for (const auto &a : m_logicShaderAttributes)
 		{
-			glVertexAttribPointer(s.attrib(a.name), a.size, GL_FLOAT, GL_FALSE, m_particleSize * sizeof(float), (void *)(offset * sizeof(float)));
-			GL_DEBUG;
+			glEnableVertexAttribArray(s.attrib(a.name));  GL_DEBUG;
+			glVertexAttribPointer(s.attrib(a.name), a.size, GL_FLOAT, GL_FALSE, m_particleSize * sizeof(float), (void *)(offset * sizeof(float))); GL_DEBUG;
 			offset += a.size;
 		}
 
@@ -152,7 +183,7 @@ namespace demofx
 		glBeginTransformFeedback(GL_POINTS);
 		GL_DEBUG;
 		//tekstuuri tähän jos tarvitaan
-		glDrawArrays(GL_POINTS, 0, m_particleCount); //do it 
+		glDrawArrays(GL_POINTS, 0, m_particleCount);
 		GL_DEBUG;
 		glEndTransformFeedback();
 		GL_DEBUG;
@@ -182,35 +213,15 @@ namespace demofx
 		s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&modelMatrix); GL_DEBUG;
 
 		glBindBuffer(GL_ARRAY_BUFFER, m_particleBuffer1); GL_DEBUG;
+		int offset = 0;
 		for (const auto& a : m_renderShaderAttributes)
 		{
-			glEnableVertexAttribArray(s.attrib(a.name));
-			GL_DEBUG;
-		}
-//		glEnableVertexAttribArray(s.attrib("vertexPosition")); GL_DEBUG;
-//		glEnableVertexAttribArray(s.attrib("vertexColor")); GL_DEBUG;
-//		glEnableVertexAttribArray(s.attrib("vertexEnergy")); GL_DEBUG;
-//		glEnableVertexAttribArray(s.attrib("vertexMaxEnergy")); GL_DEBUG;
-
-		int offset = 0;
-		for (const auto &a : m_renderShaderAttributes)
-		{
-			glVertexAttribPointer(s.attrib(a.name), a.size, GL_FLOAT, GL_FALSE, m_particleSize * sizeof(float), (void *)(offset * sizeof(float)));
-			GL_DEBUG;
+			glEnableVertexAttribArray(s.attrib(a.name)); GL_DEBUG;
+			glVertexAttribPointer(s.attrib(a.name), a.size, GL_FLOAT, GL_FALSE, m_particleSize * sizeof(float), (void *)(offset * sizeof(float))); GL_DEBUG;
 			offset += a.size;
 		}
 
-//		glVertexAttribPointer(s.attrib("vertexPosition"), 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, position)); GL_DEBUG;
-//		glVertexAttribPointer(s.attrib("vertexColor"), 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, color)); GL_DEBUG;
-//		glVertexAttribPointer(s.attrib("vertexEnergy"), 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, energy)); GL_DEBUG;
-//		glVertexAttribPointer(s.attrib("vertexMaxEnergy"), 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, maxEnergy)); GL_DEBUG;
-
 		glDrawArrays(GL_POINTS, 0, m_particleCount); GL_DEBUG;
-
-//		glDisableVertexAttribArray(s.attrib("vertexPosition")); GL_DEBUG;
-//		glDisableVertexAttribArray(s.attrib("vertexColor")); GL_DEBUG;
-//		glDisableVertexAttribArray(s.attrib("vertexEnergy")); GL_DEBUG;
-//		glDisableVertexAttribArray(s.attrib("vertexMaxEnergy")); GL_DEBUG;
 
 		for (const auto& a : m_renderShaderAttributes)
 		{
