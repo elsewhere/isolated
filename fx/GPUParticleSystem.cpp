@@ -26,6 +26,33 @@ namespace demofx
 
 	}
 
+	void GPUParticleSystem::addLogicShaderAttribute(GPUParticleSystem::ParticleAttribute attribute)
+	{
+		if (std::find(std::begin(m_logicShaderAttributes), std::end(m_logicShaderAttributes), attribute) != m_logicShaderAttributes.end())
+		{
+			g_debug << "Trying to add attribute " << attribute.name << " to particle system twice\n";
+		}
+		else
+		{
+			m_particleSize += attribute.size;
+			m_logicShaderAttributes.push_back(attribute);
+			g_debug << "Added logic shader attribute " << attribute.name << " size = " << attribute.size << " total size = " << m_particleSize << "\n";
+		}
+	}
+	void GPUParticleSystem::addRenderShaderAttribute(GPUParticleSystem::ParticleAttribute attribute)
+	{
+		if (std::find(std::begin(m_logicShaderAttributes), std::end(m_logicShaderAttributes), attribute) != m_logicShaderAttributes.end())
+		{
+			g_debug << "Trying to add attribute " << attribute.name << " to particle system twice\n";
+		}
+		else
+		{
+			g_debug << "Added render shader attribute " << attribute.name << " size = " << attribute.size << "\n";
+			m_renderShaderAttributes.push_back(attribute);
+		}
+	}
+
+
 	void GPUParticleSystem::setInitialData()
 	{
 		if (m_particleCount <= 0)
@@ -33,16 +60,15 @@ namespace demofx
 			g_error.log("less than zero particles requested");
 			return;
 		}
-		m_pInitialData = new Particle[m_particleCount];
-
-		for (int i = 0; i < m_particleCount; i++)
+		if (m_particleSize <= 0)
 		{
-			Particle& p = m_pInitialData[i];
-			p.direction = Math::randVectSphere();
-			p.position = Math::randVectSphere();
-			p.color = glm::vec4(1.f);
-			p.energy = p.maxEnergy = Math::randFloat(0.5, 1.5f);
+			g_error.log("no particle attributes have been set");
+			return;
 		}
+
+		m_pInitialData = new float[m_particleCount * m_particleSize];
+
+		memset(m_pInitialData, m_particleCount, m_particleSize * sizeof(float));
 	}
 
 	void GPUParticleSystem::createBuffers()
@@ -53,12 +79,11 @@ namespace demofx
 			return;
 		}
 
-		const size_t dataSize = sizeof(Particle) * m_particleCount;
+		const size_t dataSize = m_particleSize * m_particleCount;
 		if (EXTRA_DEBUG)
 		{
-			g_debug << "creating gpu particle buffer with " << m_particleCount << " particles, datasize = " << dataSize << std::endl;
+			g_debug << "creating gpu particle buffer with " << m_particleCount << " particles, particle size = " << m_particleSize << " total = " << dataSize << std::endl;
 		}
-
 
 		//buffers		
 		glGenBuffers(1, &m_particleBuffer1);
@@ -88,14 +113,15 @@ namespace demofx
 		delete[] m_pInitialData;
 		m_pInitialData = nullptr;
 	}
-	void GPUParticleSystem::setShader(const std::string& shader)
+	void GPUParticleSystem::setShaders(const std::string& logicShader, const std::string& renderShader)
 	{
-		m_shader = shader;
+		m_logicShader = logicShader;
+		m_renderShader = renderShader;
 	}
 
 	void GPUParticleSystem::update()
 	{
-		Shader& s = g_shaders->getShader(m_shader);
+		Shader& s = g_shaders->getShader(m_logicShader);
 		s.bind();
 
 		m_time += 0.01f; 
@@ -106,27 +132,19 @@ namespace demofx
 		GL_DEBUG;
 		glBindBuffer(GL_ARRAY_BUFFER, m_particleBuffer1);
 
-		glEnableVertexAttribArray(s.attrib("particlePosition"));
-		GL_DEBUG;
-		glEnableVertexAttribArray(s.attrib("particleDirection"));
-		GL_DEBUG;
-		glEnableVertexAttribArray(s.attrib("particleColor"));
-		GL_DEBUG;
-		glEnableVertexAttribArray(s.attrib("particleEnergy"));
-		GL_DEBUG;
-		glEnableVertexAttribArray(s.attrib("particleMaxEnergy"));
-		GL_DEBUG;
+		for (const auto &a : m_logicShaderAttributes)
+		{
+			glEnableVertexAttribArray(s.attrib(a.name));
+			GL_DEBUG;
+		}
 
-		glVertexAttribPointer(s.attrib("particlePosition"), 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, position));
-		GL_DEBUG;
-		glVertexAttribPointer(s.attrib("particleDirection"), 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, direction));
-		GL_DEBUG;
-		glVertexAttribPointer(s.attrib("particleColor"), 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, color));
-		GL_DEBUG;
-		glVertexAttribPointer(s.attrib("particleEnergy"), 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, energy));
-		GL_DEBUG;
-		glVertexAttribPointer(s.attrib("particleMaxEnergy"), 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, maxEnergy));
-		GL_DEBUG;
+		int offset = 0;
+		for (const auto &a : m_logicShaderAttributes)
+		{
+			glVertexAttribPointer(s.attrib(a.name), a.size, GL_FLOAT, GL_FALSE, m_particleSize * sizeof(float), (void *)(offset * sizeof(float)));
+			GL_DEBUG;
+			offset += a.size;
+		}
 
 		glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, m_particleBuffer2);
 		GL_DEBUG;
@@ -147,7 +165,7 @@ namespace demofx
 	void GPUParticleSystem::draw(Camera *pCamera)
 	{
 		//draw the contents of particlebuffer1
-		Shader& s = g_shaders->getShader("gpuparticlesimple");
+		Shader& s = g_shaders->getShader(m_renderShader);
 
 		s.bind();
 
@@ -164,22 +182,41 @@ namespace demofx
 		s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&modelMatrix); GL_DEBUG;
 
 		glBindBuffer(GL_ARRAY_BUFFER, m_particleBuffer1); GL_DEBUG;
-		glEnableVertexAttribArray(s.attrib("vertexPosition")); GL_DEBUG;
-		glEnableVertexAttribArray(s.attrib("vertexColor")); GL_DEBUG;
-		glEnableVertexAttribArray(s.attrib("vertexEnergy")); GL_DEBUG;
-		glEnableVertexAttribArray(s.attrib("vertexMaxEnergy")); GL_DEBUG;
+		for (const auto& a : m_renderShaderAttributes)
+		{
+			glEnableVertexAttribArray(s.attrib(a.name));
+			GL_DEBUG;
+		}
+//		glEnableVertexAttribArray(s.attrib("vertexPosition")); GL_DEBUG;
+//		glEnableVertexAttribArray(s.attrib("vertexColor")); GL_DEBUG;
+//		glEnableVertexAttribArray(s.attrib("vertexEnergy")); GL_DEBUG;
+//		glEnableVertexAttribArray(s.attrib("vertexMaxEnergy")); GL_DEBUG;
 
-		glVertexAttribPointer(s.attrib("vertexPosition"), 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, position)); GL_DEBUG;
-		glVertexAttribPointer(s.attrib("vertexColor"), 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, color)); GL_DEBUG;
-		glVertexAttribPointer(s.attrib("vertexEnergy"), 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, energy)); GL_DEBUG;
-		glVertexAttribPointer(s.attrib("vertexMaxEnergy"), 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, maxEnergy)); GL_DEBUG;
+		int offset = 0;
+		for (const auto &a : m_renderShaderAttributes)
+		{
+			glVertexAttribPointer(s.attrib(a.name), a.size, GL_FLOAT, GL_FALSE, m_particleSize * sizeof(float), (void *)(offset * sizeof(float)));
+			GL_DEBUG;
+			offset += a.size;
+		}
+
+//		glVertexAttribPointer(s.attrib("vertexPosition"), 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, position)); GL_DEBUG;
+//		glVertexAttribPointer(s.attrib("vertexColor"), 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, color)); GL_DEBUG;
+//		glVertexAttribPointer(s.attrib("vertexEnergy"), 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, energy)); GL_DEBUG;
+//		glVertexAttribPointer(s.attrib("vertexMaxEnergy"), 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, maxEnergy)); GL_DEBUG;
 
 		glDrawArrays(GL_POINTS, 0, m_particleCount); GL_DEBUG;
 
-		glDisableVertexAttribArray(s.attrib("vertexPosition")); GL_DEBUG;
-		glDisableVertexAttribArray(s.attrib("vertexColor")); GL_DEBUG;
-		glDisableVertexAttribArray(s.attrib("vertexEnergy")); GL_DEBUG;
-		glDisableVertexAttribArray(s.attrib("vertexMaxEnergy")); GL_DEBUG;
+//		glDisableVertexAttribArray(s.attrib("vertexPosition")); GL_DEBUG;
+//		glDisableVertexAttribArray(s.attrib("vertexColor")); GL_DEBUG;
+//		glDisableVertexAttribArray(s.attrib("vertexEnergy")); GL_DEBUG;
+//		glDisableVertexAttribArray(s.attrib("vertexMaxEnergy")); GL_DEBUG;
+
+		for (const auto& a : m_renderShaderAttributes)
+		{
+			glDisableVertexAttribArray(s.attrib(a.name));
+			GL_DEBUG;
+		}
 
 		g_shaders->unbindShader();
 		glDisable(GL_BLEND);

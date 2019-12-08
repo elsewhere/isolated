@@ -22,6 +22,20 @@ namespace
 Kasvot::KasvotParticles::KasvotParticles() :
 	GPUParticleSystem(1024 * 1024)
 {
+	addLogicShaderAttribute({ "particlePosition", 3 });
+	addLogicShaderAttribute({ "particleColor", 4 });
+	addLogicShaderAttribute({ "particleEnergy", 1 });
+	addLogicShaderAttribute({ "particleMaxEnergy", 1 });
+
+	addRenderShaderAttribute({ "vertexPosition", 3 });
+	addRenderShaderAttribute({ "vertexColor", 4 });
+	addRenderShaderAttribute({ "vertexEnergy", 1 });
+	addRenderShaderAttribute({ "vertexMaxEnergy", 1 });
+
+	//		glVertexAttribPointer(s.attrib("vertexPosition"), 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, position)); GL_DEBUG;
+//		glVertexAttribPointer(s.attrib("vertexColor"), 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, color)); GL_DEBUG;
+//		glVertexAttribPointer(s.attrib("vertexEnergy"), 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, energy)); GL_DEBUG;
+//		glVertexAttribPointer(s.attrib("vertexMaxEnergy"), 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void *)offsetof(Particle, maxEnergy)); GL_DEBUG;
 
 }
 
@@ -32,15 +46,28 @@ Kasvot::KasvotParticles::~KasvotParticles()
 
 void Kasvot::KasvotParticles::setInitialData()
 {
-	m_pInitialData = new Particle[m_particleCount];
+	m_pInitialData = new float[m_particleCount * m_particleSize];
 
+	g_debug << "particleCount = " << m_particleCount << " size = " << m_particleSize << "\n";
 	for (int i = 0; i < m_particleCount; i++)
 	{
-		Particle& p = m_pInitialData[i];
-		p.direction = Math::randVectSphere();
-		p.position = Math::randVectSphere();
-		p.color = glm::vec4(1.f);
-		p.energy = p.maxEnergy = Math::randFloat(0.5, 1.5f);
+		float* base = m_pInitialData + i * m_particleSize;
+
+		glm::vec3 position = Math::randVectSphere();
+		glm::vec4 color = glm::vec4(1.f);
+		float energy = Math::randFloat(0.5f, 1.5f);
+
+		*base++ = position.x;
+		*base++ = position.y;
+		*base++ = position.z;
+
+		*base++ = color.x;
+		*base++ = color.y;
+		*base++ = color.z;
+		*base++ = color.w;
+
+		*base++ = energy;
+		*base++ = energy;
 	}
 }
 
@@ -110,7 +137,7 @@ void Kasvot::init()
 	m_pSkybox->setMesh("cube");
 
 	m_particles = std::make_unique<KasvotParticles>();
-	m_particles->setShader("gpuparticletest");
+	m_particles->setShaders("effect_kasvotparticle", "effect_kasvotparticlerender");
 	m_particles->setInitialData();
 	m_particles->createBuffers();
 }

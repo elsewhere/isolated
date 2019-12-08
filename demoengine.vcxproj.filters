@@ -190,13 +190,11 @@
     <ClInclude Include="render\Font.h" />
     <ClInclude Include="fx_test\cubemaptesti.h" />
     <ClInclude Include="fx_test\cubemaptesti2.h" />
-    <ClInclude Include="fx_test\particletesti2.h" />
     <ClInclude Include="fx_test\postprocesstesti.h" />
     <ClInclude Include="fx_test\postprocesstesti2.h" />
     <ClInclude Include="fx_test\lightingtest.h">
       <Filter>Src\Effects</Filter>
     </ClInclude>
-    <ClInclude Include="fx_test\particletesti3.h" />
     <ClInclude Include="fx\Cloth.h" />
     <ClInclude Include="fx_test\computetest.h" />
     <ClInclude Include="fx_test\computetest2.h" />
@@ -335,13 +333,11 @@
     <ClCompile Include="render\Font.cpp" />
     <ClCompile Include="fx_test\cubemaptesti.cpp" />
     <ClCompile Include="fx_test\cubemaptesti2.cpp" />
-    <ClCompile Include="fx_test\particletesti2.cpp" />
     <ClCompile Include="fx_test\postprocesstesti.cpp" />
     <ClCompile Include="fx_test\postprocesstesti2.cpp" />
     <ClCompile Include="fx_test\lightingtest.cpp">
       <Filter>Src\Effects</Filter>
     </ClCompile>
-    <ClCompile Include="fx_test\particletesti3.cpp" />
     <ClCompile Include="fx\Cloth.cpp" />
     <ClCompile Include="fx_test\computetest.cpp" />
     <ClCompile Include="fx_test\computetest2.cpp" />
