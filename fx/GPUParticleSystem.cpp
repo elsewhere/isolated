@@ -118,44 +118,6 @@ namespace demofx
 		m_renderShader = renderShader;
 	}
 
-	//I'm pretty sure that the C++ gods will send me to hell for this
-	void GPUParticleSystem::writeFloat(float** ptr, const float value)
-	{
-		**ptr = value;
-		(*ptr)++;
-	}
-	void GPUParticleSystem::writeVec2(float** ptr, const glm::vec2& value)
-	{
-		const float* dataptr = (float *)&value;
-		**ptr = *dataptr++;
-		(*ptr)++;
-		**ptr = *dataptr++;
-		(*ptr)++;
-	}
-	void GPUParticleSystem::writeVec3(float** ptr, const glm::vec3& value)
-	{
-		const float* dataptr = (float *)&value;
-		**ptr = *dataptr++;
-		(*ptr)++;
-		**ptr = *dataptr++;
-		(*ptr)++;
-		**ptr = *dataptr++;
-		(*ptr)++;
-	}
-	void GPUParticleSystem::writeVec4(float** ptr, const glm::vec4& value)
-	{
-		const float* dataptr = (float *)&value;
-		**ptr = *dataptr++;
-		(*ptr)++;
-		**ptr = *dataptr++;
-		(*ptr)++;
-		**ptr = *dataptr++;
-		(*ptr)++;
-		**ptr = *dataptr++;
-		(*ptr)++;
-
-	}
-
 	void GPUParticleSystem::update()
 	{
 		Shader& s = g_shaders->getShader(m_logicShader);

@@ -42,7 +42,6 @@ void Kasvot::KasvotParticles::setInitialData()
 {
 	m_pInitialData = new float[m_particleCount * m_particleSize];
 
-	//g_debug << "particleCount = " << m_particleCount << " size = " << m_particleSize << "\n";
 	float* dataptr = m_pInitialData;
 	for (int i = 0; i < m_particleCount; i++)
 	{
@@ -50,10 +49,10 @@ void Kasvot::KasvotParticles::setInitialData()
 		glm::vec4 color = glm::vec4(1.f);
 		float energy = Math::randFloat(0.5f, 1.5f);
 
-		writeVec3(&dataptr, position);
-		writeVec4(&dataptr, color);
-		writeFloat(&dataptr, energy);
-		writeFloat(&dataptr, energy);
+		writeData<glm::vec3>(&dataptr, position);
+		writeData<glm::vec4>(&dataptr, color);
+		writeData<float>(&dataptr, energy);
+		writeData<float>(&dataptr, energy);
 	}
 }
 

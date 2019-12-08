@@ -32,10 +32,18 @@ namespace demofx
 
 	protected:
 
-		void writeFloat(float** ptr, const float value);
-		void writeVec2(float** ptr, const glm::vec2& value);
-		void writeVec3(float** ptr, const glm::vec3& value);
-		void writeVec4(float** ptr, const glm::vec4& value);
+		//write objects as raw floats into a stream of data
+		template<typename T>
+		void writeData(float **ptr, const T& value)
+		{
+			const float* dataptr = (float *)&value;
+			for (int i = 0; i < sizeof(T) / sizeof(float); i++)
+			{
+				**ptr = *dataptr++;
+				(*ptr)++;
+			}
+		}
+
 		std::vector<ParticleAttribute> m_logicShaderAttributes;
 		std::vector<ParticleAttribute> m_renderShaderAttributes;
 		int m_particleSize = 0;
