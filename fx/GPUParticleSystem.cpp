@@ -53,6 +53,21 @@ namespace demofx
 	}
 
 
+	void GPUParticleSystem::startFrame()
+	{
+		m_logicUniforms.clear();
+		m_renderUniforms.clear();
+	}
+
+	void GPUParticleSystem::addLogicShaderUniform(const std::string& name, ParticleUniform uniform)
+	{
+		m_logicUniforms.push_back(std::make_pair(name, uniform));
+	}
+	void GPUParticleSystem::addRenderShaderUniform(const std::string& name, ParticleUniform uniform)
+	{
+		m_renderUniforms.push_back(std::make_pair(name, uniform));
+	}
+
 	void GPUParticleSystem::setInitialData()
 	{
 		if (m_particleCount <= 0)
@@ -118,12 +133,36 @@ namespace demofx
 		m_renderShader = renderShader;
 	}
 
+	void GPUParticleSystem::applyUniforms(demorender::Shader& shader, const UniformList& uniformList)
+	{
+		for (const auto &u : uniformList)
+		{
+			if (std::holds_alternative<int>(u.second))
+				shader.setUniform1i(u.first, std::get<int>(u.second));
+			else if (std::holds_alternative<float>(u.second))
+				shader.setUniform1f(u.first, std::get<float>(u.second));
+			else if (std::holds_alternative<glm::vec3>(u.second))
+				shader.setUniform3fv(u.first, 1, (float *)&(std::get<glm::vec3>(u.second)));
+			else if (std::holds_alternative<glm::vec4>(u.second))
+				shader.setUniform4fv(u.first, 1, (float *)&(std::get<glm::vec4>(u.second)));
+			else if (std::holds_alternative<glm::mat4>(u.second))
+				shader.setUniformMatrix4fv(u.first, 1, GL_FALSE, (float *)&(std::get<glm::mat4>(u.second)));
+			else
+			{
+				g_debug << "ERROR trying to apply uniforms to shader " << shader.getName() << " in GPUParticleSystem\n";
+			}
+		}
+	}
+
 	void GPUParticleSystem::update()
 	{
 		Shader& s = g_shaders->getShader(m_logicShader);
 		s.bind();
 
 		m_time += 0.01f; 
+
+		applyUniforms(s, m_logicUniforms);
+
 		s.setUniform1f("time", m_time);
 
 		GL_DEBUG;
@@ -159,20 +198,15 @@ namespace demofx
 	{
 		//draw the contents of particlebuffer1
 		Shader& s = g_shaders->getShader(m_renderShader);
-
 		s.bind();
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
 		glDisable(GL_DEPTH_TEST);
-		glm::mat4 modelMatrix = glm::mat4(1.f);
+		g_textures->bindTexture(m_texture, GL_TEXTURE0);
 
-		g_textures->bindTexture("circle", GL_TEXTURE0);
-		s.setUniform1i("tex", 0);
-		s.setUniformMatrix4fv("viewMatrix", 1, GL_FALSE, (float *)&pCamera->getViewMatrix()); GL_DEBUG;
-		s.setUniformMatrix4fv("projectionMatrix", 1, GL_FALSE, (float *)&pCamera->getProjectionMatrix()); GL_DEBUG;
-		s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&modelMatrix); GL_DEBUG;
+		applyUniforms(s, m_renderUniforms);
 
 		glBindBuffer(GL_ARRAY_BUFFER, m_particleBuffer1); GL_DEBUG;
 		int offset = 0;

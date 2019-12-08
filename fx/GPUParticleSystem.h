@@ -6,6 +6,9 @@ namespace demofx
 {
 	class GPUParticleSystem
 	{
+		using ParticleUniform = std::variant<int, float, glm::vec3, glm::vec4, glm::mat4>;
+		using UniformList = std::vector<std::pair<std::string, ParticleUniform>>;
+
 		struct ParticleAttribute
 		{
 			std::string name;
@@ -30,6 +33,10 @@ namespace demofx
 		void addLogicShaderAttribute(GPUParticleSystem::ParticleAttribute attribute);
 		void addRenderShaderAttribute(GPUParticleSystem::ParticleAttribute attribute);
 
+		void startFrame();
+		void addLogicShaderUniform(const std::string& name, ParticleUniform uniform);
+		void addRenderShaderUniform(const std::string& name, ParticleUniform uniform);
+
 	protected:
 
 		//write objects as raw floats into a stream of data
@@ -44,13 +51,22 @@ namespace demofx
 			}
 		}
 
+		void applyUniforms(demorender::Shader& shader, const UniformList& uniformList);
+
 		std::vector<ParticleAttribute> m_logicShaderAttributes;
 		std::vector<ParticleAttribute> m_renderShaderAttributes;
+
+		UniformList m_logicUniforms;
+		UniformList m_renderUniforms;
+
 		int m_particleSize = 0;
 
 		float* m_pInitialData = nullptr;
 		std::string m_logicShader;
 		std::string m_renderShader;
+
+		std::string m_texture = "circle";
+
 		int m_particleCount = 0;
 		GLuint m_particleBuffer1 = GL_INVALID_VALUE;
 		GLuint m_particleBuffer2 = GL_INVALID_VALUE;

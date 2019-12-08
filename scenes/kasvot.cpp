@@ -140,38 +140,20 @@ void Kasvot::update()
 	const float radius = 20.f;
 	m_cameraPosition = glm::vec3(sinf(a) * radius, 10.f, cosf(a) * radius);
 	m_cameraTarget = glm::vec3(0.f);
-	m_cameraTarget.y = 0.f;// ::vec3(0.f);
+	m_cameraTarget.y = 0.f;
+
+	m_particles->startFrame();
+	m_particles->addRenderShaderUniform("tex", 0);
+	m_particles->addRenderShaderUniform("viewMatrix", m_camera->getViewMatrix());
+	m_particles->addRenderShaderUniform("projectionMatrix", m_camera->getProjectionMatrix());
+	m_particles->addRenderShaderUniform("modelMatrix", glm::mat4(1.f));
 
 	m_particles->update();
 }
 
 void Kasvot::drawTerrain()
 {
-/*	glm::mat4 model = glm::mat4(1.f);
-
-	Shader& s = g_shaders->getShader("effect_ikuisuusplane");
-	s.bind();
-
-	g_textures->bindTexture("heightmap1", GL_TEXTURE0);
-	g_textures->bindTexture("kivitesti", GL_TEXTURE1);
-	s.setUniform1f("time", m_pos);
-	s.setUniform1i("heightmap", 0);
-	s.setUniform1i("stone", 1);
-	s.setUniform1f("terrainScale", 1.2f);
-	s.setUniform1f("terrainHeightScale", 24.f);
-	s.setUniform3fv("lightpos", 1, (float *)&m_lightPos );
-
-	s.setUniform1f("lightvalue", m_lightValue);
-	s.setUniform1f("lightradius", m_lightRadius);
-
-	s.setUniformMatrix4fv("camera", 1, false, (float *)&m_camera->getCameraMatrix());
-	s.setUniformMatrix4fv("model", 1, false, (float *)&model);
-
-	m_pMesh->bind(&s);
-	m_pMesh->draw();
-	*/
 	m_particles->draw(m_camera);
-//	m_lines->draw(m_camera, LineRenderer::Mode::LINE_STRIP);
 }
 
 void Kasvot::drawBackground()
@@ -193,10 +175,6 @@ void Kasvot::drawBackground()
 
 void Kasvot::debug()
 {
-
-//	g_screenText.log<std::string>("lightPos", Math::toString(m_lightPos));
-//	g_screenText.log<float>("m_lightValue", m_lightValue);
-//	g_screenText.log<float>("m_lightRadius", m_lightRadius);
 }
 
 void Kasvot::draw()
