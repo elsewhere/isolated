@@ -142,11 +142,14 @@ void Kasvot::update()
 	m_cameraTarget = glm::vec3(0.f);
 	m_cameraTarget.y = 0.f;
 
+
+	glm::mat4 modelMatrix = glm::rotate(m_pos * -70.f, glm::vec3(0.3f, 1.0f, 0.2f)) * glm::scale(vec3(1.f));
+
 	m_particles->startFrame();
 	m_particles->addRenderShaderUniform("tex", 0);
 	m_particles->addRenderShaderUniform("viewMatrix", m_camera->getViewMatrix());
 	m_particles->addRenderShaderUniform("projectionMatrix", m_camera->getProjectionMatrix());
-	m_particles->addRenderShaderUniform("modelMatrix", glm::mat4(1.f));
+	m_particles->addRenderShaderUniform("modelMatrix", modelMatrix);
 
 	m_particles->update();
 }
