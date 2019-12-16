@@ -65,7 +65,8 @@ namespace demofx
 		std::string m_logicShader;
 		std::string m_renderShader;
 
-		std::string m_texture = "circle";
+		std::string m_renderTexture = "circle";
+		std::string m_logicTexture = "oldman";
 
 		int m_particleCount = 0;
 		GLuint m_particleBuffer1 = GL_INVALID_VALUE;

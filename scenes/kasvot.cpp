@@ -131,25 +131,19 @@ void Kasvot::update()
 {
 	g_params->useNamespace("Kasvot");
 
-	const float light_t = 0.5f + 0.5f * sinf(m_pos * 130.f);
-
 	m_cameraUp = glm::vec3(0.f, 1.f, 0.f);
-
-	const float a = m_pos * 20.f;
-
-	const float radius = 20.f;
-	m_cameraPosition = glm::vec3(sinf(a) * radius, 10.f, cosf(a) * radius);
+	m_cameraPosition = g_params->get<glm::vec3>("cameraposition");// ::vec3(0.f, 0.f, -20.f);
 	m_cameraTarget = glm::vec3(0.f);
-	m_cameraTarget.y = 0.f;
 
-
-	glm::mat4 modelMatrix = glm::rotate(m_pos * -70.f, glm::vec3(0.3f, 1.0f, 0.2f)) * glm::scale(vec3(1.f));
+	glm::mat4 modelMatrix = glm::mat4(1.f);// glm::rotate(m_pos * -70.f, glm::vec3(0.3f, 1.0f, 0.2f)) * glm::scale(vec3(1.f));
 
 	m_particles->startFrame();
 	m_particles->addRenderShaderUniform("tex", 0);
 	m_particles->addRenderShaderUniform("viewMatrix", m_camera->getViewMatrix());
 	m_particles->addRenderShaderUniform("projectionMatrix", m_camera->getProjectionMatrix());
 	m_particles->addRenderShaderUniform("modelMatrix", modelMatrix);
+
+	m_particles->addLogicShaderUniform("tex", 0);
 
 	m_particles->update();
 }
@@ -195,10 +189,10 @@ void Kasvot::draw()
 
 	const float focus = 0.1f;
 
-	g_postProcess->addRadialGlow( g_params->get<int>("glowiterations"), 
-								  g_params->get<float>("glowspread"),
-								  g_params->get<float>("glowexponent"),
-								  g_params->get<float>("glowalpha"));
+//	g_postProcess->addRadialGlow( g_params->get<int>("glowiterations"), 
+//								  g_params->get<float>("glowspread"),
+//								  g_params->get<float>("glowexponent"),
+//								  g_params->get<float>("glowalpha"));
 
 	//	g_postProcess->addRadial();
 	//	g_postProcess->addLens(focus, m_camera);

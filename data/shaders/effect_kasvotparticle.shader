@@ -21,6 +21,8 @@ VERTEX_SHADER
 	out float particleEnergyOut;
 	out float particleMaxEnergyOut;
 
+	uniform sampler2D tex;
+
 	float randhash(uint seed, float b)
 	{
 	    uint i=(seed^12345391u)*2654435769u;
@@ -33,18 +35,16 @@ VERTEX_SHADER
 	vec3 getDirection(vec3 position)
 	{
 		float s = time * 0.4;
-		position *= 0.3;
+		position *= 1.3;
 		float x = sin(position.x * 1.2 + 1.2 * s) + cos(position.y * 0.5 + 1.1 * s);
 		float y = cos(position.x * 1.5 + 0.7 * s) + cos(position.z * 2.1 - 1.4 * s);
-		float z = sin(position.y * 1.0 + 1.1 * s) + cos(position.z * 3.3 + 0.5 * s);
+		float z = sin(position.y * 1.0 + 1.1 * s) + cos(position.z * 3.3 + 0.5 * s)  - 10.0;
 
-		return normalize(vec3(x, y, z)) * 3.0;
+		return vec3(x, y, z) * 0.001;
 	}
 
 	void main() 
 	{
-		particlePositionOut = particlePosition + getDirection(particlePosition) * 0.01;
-		particleColorOut = particleColor;
 		particleEnergyOut = particleEnergy - 0.01;
 		particleMaxEnergyOut = particleMaxEnergy;
 
@@ -56,15 +56,27 @@ VERTEX_SHADER
 		   float a = randhash(seed++, 2*3.141592);
 		   float b = randhash(seed++, 2*3.141592);
 
-		   float r = 0.5 + randhash(seed++, 4.5);
-		   particlePositionOut = vec3(sin(a) * sin(b), sin(a) * cos(b), cos(a)) * r;
+		   float u = randhash(seed++, 1.0);
+		   float v = randhash(seed++, 1.0);
+
+		   vec3 generatedPos = vec3((u - 0.5), (v - 0.5), 0.0) * 2 * 5;
+//		   vec3 generatedPos = vec3(sin(a) * sin(b), sin(a) * cos(b), cos(a));
+		   particlePositionOut = generatedPos;
 
 		   float c = randhash(seed++, 2*3.141592);
 		   float d = randhash(seed++, 2*3.141592);
 
-		   float energy = 0.5 + randhash(seed++, 5.4);
+		   float energy = 0.5 + randhash(seed++, 3.4);
 		   particleEnergyOut = energy;
 		   particleMaxEnergyOut = energy;
+
+		   particleColorOut = texture2D(tex, vec2(u, 1.0 - v));
+		}
+		else
+		{
+			particlePositionOut = particlePosition + getDirection(particlePosition);
+			particleColorOut = particleColor;
+
 		}
 	}
 }

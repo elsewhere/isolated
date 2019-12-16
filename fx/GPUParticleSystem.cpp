@@ -163,6 +163,8 @@ namespace demofx
 
 		applyUniforms(s, m_logicUniforms);
 
+		g_textures->bindTexture(m_logicTexture, GL_TEXTURE0);
+
 		s.setUniform1f("time", m_time);
 
 		GL_DEBUG;
@@ -204,7 +206,7 @@ namespace demofx
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
 		glDisable(GL_DEPTH_TEST);
-		g_textures->bindTexture(m_texture, GL_TEXTURE0);
+		g_textures->bindTexture(m_renderTexture, GL_TEXTURE0);
 
 		applyUniforms(s, m_renderUniforms);
 
