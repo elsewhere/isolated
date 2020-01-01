@@ -205,6 +205,7 @@
     <ClInclude Include="scenes\tyhjyys.h" />
     <ClInclude Include="core\Profiler.h" />
     <ClInclude Include="scenes\kasvot.h" />
+    <ClInclude Include="scenes\tunne.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\setupdialog.aps">
@@ -348,5 +349,6 @@
     <ClCompile Include="scenes\tyhjyys.cpp" />
     <ClCompile Include="core\Profiler.cpp" />
     <ClCompile Include="scenes\kasvot.cpp" />
+    <ClCompile Include="scenes\tunne.cpp" />
   </ItemGroup>
 </Project>
