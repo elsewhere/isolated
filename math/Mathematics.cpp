@@ -587,3 +587,17 @@ std::string Math::toString(glm::mat4 &m)
 	ss << "[" << m[0][3] << "," << m[1][3] << "," << m[2][3] << "," << m[3][3] << "]" << std::endl;
 	return ss.str();
 }
+
+
+glm::vec3 Math::transform(const glm::vec3& v, const glm::mat4& trans)
+{
+	glm::vec4 vec = glm::vec4(v, 1.0f);
+	vec = trans * vec;
+	return glm::vec3(vec.x, vec.y, vec.z);
+
+}
+glm::vec3 Math::transform(const glm::vec4& v, const glm::mat4& trans)
+{
+	glm::vec4 vec = v * trans;
+	return glm::vec3(vec.x, vec.y, vec.z);
+}

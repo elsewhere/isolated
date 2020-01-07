@@ -166,6 +166,8 @@ public:
 	static glm::vec3 randVectHemisphere(glm::vec3& normal, float radius = 1.0f);
 	static glm::vec3 randVectCircle(float radius = 1.0f);
 
+	static glm::vec3 transform(const glm::vec3& v, const glm::mat4& trans);
+	static glm::vec3 transform(const glm::vec4& v, const glm::mat4& trans);
 	static std::string toString(glm::vec3 &v);
 	static std::string toString(glm::vec4 &v);
 	static std::string toString(glm::mat4 &m);

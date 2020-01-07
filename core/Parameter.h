@@ -76,7 +76,19 @@ namespace democore
 		template<typename T>
 		T get(const std::string& name)
 		{
-			return m_params[m_currentName].get<T>(name);
+			try
+			{
+				T value = m_params[m_currentName].get<T>(name);
+				return value;
+			}
+			catch (const std::bad_variant_access& exception)
+			{
+				g_debug << exception.what() << std::endl;
+				g_error.log(exception.what());
+
+				return T();
+
+			}
 		}
 
 		template<typename T>

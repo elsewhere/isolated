@@ -46,8 +46,36 @@ namespace demorender
 	void MeshBuilder::addColor(const glm::vec4& color)
 	{
 		m_colors.push_back(color);
+	}
+
+	void MeshBuilder::addTriangleVertex(const glm::vec3& position1, const glm::vec3& position2, const glm::vec3& position3)
+	{
+		addVertex(position1);
+		addVertex(position2);
+		addVertex(position3);
 
 	}
+	void MeshBuilder::addTriangleUv(const glm::vec2& uv1, const glm::vec2& uv2, const glm::vec2& uv3)
+	{
+		addUv(uv1);
+		addUv(uv2);
+		addUv(uv3);
+
+	}
+	void MeshBuilder::addTriangleNormal(const glm::vec3& normal1, const glm::vec3& normal2, const glm::vec3& normal3)
+	{
+		addNormal(normal1);
+		addNormal(normal2);
+		addNormal(normal3);
+
+	}
+	void MeshBuilder::addTriangleColor(const glm::vec4& color1, const glm::vec4& color2, const glm::vec4& color3)
+	{
+		addColor(color1);
+		addColor(color2);
+		addColor(color3);
+	}
+
 	void MeshBuilder::addIndices(int v1, int v2, int v3)
 	{
 		if (m_indexed)
@@ -79,7 +107,7 @@ namespace demorender
 			g_debug << "MeshBuilder getMesh - invalid number of vertices! positions = " <<
 				positionCount << " uvs = " << uvCount << " normals = " << normalCount << " colors = " 
 				<< colorCount << std::endl;
-			return 0;
+			return nullptr;
 		}
 
 		std::vector<Mesh::Vertex> vertices;
@@ -123,7 +151,7 @@ namespace demorender
 			if (indexCount == 0)
 			{
 				g_debug << "Trying to create an indexed mesh with no indices" << std::endl;
-				return 0;
+				return nullptr;
 			}
 			for (int i = 0; i < triangleCount; i++)
 			{
@@ -136,12 +164,12 @@ namespace demorender
 				if (f.v1 >= positionCount || f.v2 >= positionCount || f.v3 >= positionCount)
 				{
 					g_debug << "Index too large (" << f.v1 << "," << f.v2 << "," << f.v3 << ")" << std::endl;
-					return 0;
+					return nullptr;
 				}
 				if (f.v1 < 0 || f.v2 < 0 || f.v3 < 0)
 				{
 					g_debug << "Index negative (" << f.v1 << "," << f.v2 << "," << f.v3 << ")" << std::endl;
-					return 0;
+					return nullptr;
 				}
 				faces.push_back(f);
 			}

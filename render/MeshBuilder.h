@@ -22,6 +22,12 @@ namespace demorender
 		void addColor(const glm::vec4& color);
 		void addIndices(int v1, int v2, int v3);
 
+		void addTriangleVertex(const glm::vec3& position1, const glm::vec3& position2, const glm::vec3& position3);
+		void addTriangleUv(const glm::vec2& uv1, const glm::vec2& uv2, const glm::vec2& uv3);
+		void addTriangleNormal(const glm::vec3& normal1, const glm::vec3& normal2, const glm::vec3& normal3);
+		void addTriangleColor(const glm::vec4& color1, const glm::vec4& color2, const glm::vec4& color3);
+		void addTriangleIndices(int v1, int v2, int v3);
+
 		class Mesh* getMesh();
 
 

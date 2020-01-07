@@ -31,6 +31,7 @@
 #include "scenes/tyhjyys.h"
 #include "scenes/kasvot.h"
 #include "scenes/tunne.h"
+#include "scenes/kalpeus.h"
 
 democore::Debugger g_debug;
 democore::Profiler g_profiler;
@@ -89,7 +90,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		g_postProcess->init();
 //		static_cast<Demo*>(context)->addScene("tyhjyys", new Tyhjyys());
 //		static_cast<Demo*>(context)->addScene("kasvot", new Kasvot());
-		static_cast<Demo*>(context)->addScene("tunne", new Tunne());
+//		static_cast<Demo*>(context)->addScene("tunne", new Tunne());
+		static_cast<Demo*>(context)->addScene("kalpeus", new Kalpeus());
 
 		//init the prodand play
 		g_textures->createTextures();

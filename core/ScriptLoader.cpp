@@ -121,6 +121,8 @@ namespace democore
 	{
 		std::vector<std::string> tokens;
 
+
+		g_debug << "parsing namespace " << m_currentnamespace << std::endl;
 		getNextLine(tokens);
 		if (tokens[0] != "{")
 		{
@@ -211,7 +213,6 @@ namespace democore
 					if (m_currentnamespace != "")
 					{
 						params.add<glm::vec3>(m_currentnamespace, tokens[1], v);
-						g_debug << "lisätään\n";
 
 					}
 					else
