@@ -29,6 +29,9 @@ namespace demorender
 		int maxWorkGroupSizeZ;
 		int maxWorkGroupInvocations;
 
+		int maxGeometryShaderOutputVertices;
+		int maxGeometryShaderTotalOutputComponents;
+
 		int maxShaderStorageBlockSize;
 		int maxShaderStorageBufferBindings;
 		int maxVertexShaderStorageBlocks;

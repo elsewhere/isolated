@@ -93,6 +93,8 @@ namespace demorender
 		GLhandleARB m_compute;
 		GLhandleARB m_program;
 
+		static GLhandleARB sm_activeProgram;
+
 
 	};
 }

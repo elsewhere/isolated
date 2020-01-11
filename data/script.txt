@@ -56,10 +56,12 @@ namespace kalpeus
 	range flowerscale = 6.0 12.0
 	range flowerheight = 8 20
 
-	range petalangle = 0.6 0.8
+	range flowerpentaalpha = 0.2 0.3 
+
+	range petalangle = 0.5 0.8
 	range petalstartpower = 0.4 0.5
 	range petalendpower = 0.4 0.5
-
+	range petalendrotation = 0.1 0.2
 
 	int flowercount = 15
 

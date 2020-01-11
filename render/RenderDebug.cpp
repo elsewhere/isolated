@@ -72,6 +72,9 @@ namespace demorender
 
 		glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &m_caps.maxVertexAttribs);
 
+		glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES, &m_caps.maxGeometryShaderOutputVertices);
+		glGetIntegerv(GL_MAX_GEOMETRY_TOTAL_OUTPUT_COMPONENTS, &m_caps.maxGeometryShaderTotalOutputComponents);
+
 		glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &m_caps.maxWorkGroupCountX);
 		glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &m_caps.maxWorkGroupCountY);
 		glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &m_caps.maxWorkGroupCountZ);
@@ -103,6 +106,10 @@ namespace demorender
 		g_debug << "  max varying floats: " << m_caps.maxVaryingFloats << std::endl;
 		g_debug << "  max varying vectors: " << m_caps.maxVaryingVectors << std::endl;
 		g_debug << "  max vertex attribs: " << m_caps.maxVertexAttribs << std::endl;
+
+		g_debug << "  max geometry shader output vertices " << m_caps.maxGeometryShaderOutputVertices << std::endl;
+		g_debug << "  max geometry shader output components " << m_caps.maxGeometryShaderTotalOutputComponents << std::endl;
+
 		g_debug << "  max compute work group count: " << m_caps.maxWorkGroupCountX << ", " << m_caps.maxWorkGroupCountY << ", " << m_caps.maxWorkGroupCountZ << std::endl;
 		g_debug << "  max compute work group size: " << m_caps.maxWorkGroupSizeX << ", " << m_caps.maxWorkGroupSizeY << ", " << m_caps.maxWorkGroupSizeZ << std::endl;
 		g_debug << "  max compute work group invocations: " << m_caps.maxWorkGroupInvocations << std::endl;

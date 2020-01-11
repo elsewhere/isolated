@@ -284,7 +284,7 @@ vec3 Math::cartesianToSphere(float x, float y, float z)
 	return value;
 }
 
-float Math::calcSmoothStep(float value, float limit1, float limit2)
+float Math::smoothStep(float value, float limit1, float limit2)
 { 
   if (value < limit1) return 0;
   if (value >= limit2) return 1; 

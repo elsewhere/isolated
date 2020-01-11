@@ -8,6 +8,7 @@ namespace demorender
 	// Shader
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 
+	GLhandleARB Shader::sm_activeProgram = GL_INVALID_VALUE;
 
 	Shader::Shader():
 		m_program(-1),
@@ -176,12 +177,17 @@ namespace demorender
 
 	void Shader::bind()
 	{
-		RenderStatistics::sm_shadersBound++;
-		m_hasBeenUsed = true;
+		//avoid repeatedly binding the same program 
+		if (sm_activeProgram != m_program)
+		{
+			m_hasBeenUsed = true;
+			setBound(true);
+			g_shaders->setBound(this);
+			glUseProgram(m_program);
+			RenderStatistics::sm_shadersBound++;
 
-		setBound(true);
-		g_shaders->setBound(this);
-		glUseProgram(m_program);
+			sm_activeProgram = m_program;
+		}
 	}
 
 	void Shader::debug(GLuint object, const std::string& type)

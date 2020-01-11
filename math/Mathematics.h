@@ -158,7 +158,7 @@ public:
 	static float randBetween(float max);
 	static bool randBool(float probability = 0.5f);
 
-	static float calcSmoothStep(float value, float limit1, float limit2);
+	static float smoothStep(float value, float limit1, float limit2);
 
 	// Vector( [-0.5f, 0.5f]*kerroin
 	static glm::vec3 randVector(float dx = 1.0f, float dy = 1.0f, float dz = 1.0f);
@@ -172,6 +172,14 @@ public:
 	static std::string toString(glm::vec4 &v);
 	static std::string toString(glm::mat4 &m);
 
+	template<typename T>
+	static T evaluateBezier(const T& p0, const T& p1, const T& p2, const T& p3, float t)
+	{
+		const float t2 = t * t;
+		const float t3 = t2 * t;
+		return p0 * (1.f - t)*(1.f - t)*(1.f - t) + p1 * 3.f*t*(1.f - t)*(1.f - t) + p2 * 3.f*t2*(1.f - t) + p3 * t3;
+
+	}
 private:
 	static Random sm_random;
 

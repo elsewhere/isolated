@@ -21,6 +21,7 @@ namespace demorender
 		enum RenderMode
 		{
 			TRIANGLES,
+			TRIANGLE_STRIP,
 			TRIANGLE_FAN,
 			LINES,
 			LINE_STRIP,

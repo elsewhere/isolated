@@ -20,11 +20,11 @@ FRAGMENT_SHADER
 
 	out vec4 finalColor;
 
-	uniform vec4 color;
+	uniform vec3 color;
 
 	void main() 
 	{
-		finalColor = color;
+		finalColor = vec4(color, 1.0);
 
 	}	
 }

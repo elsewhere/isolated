@@ -186,8 +186,8 @@ namespace democore
 		}
 		glfwSetErrorCallback(glfw_error_callback);
 
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // We want OpenGL 3.2
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4); // We want OpenGL 4.1
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 		m_pWindow = glfwCreateWindow(cfg.getScreenX(),
@@ -211,13 +211,13 @@ namespace democore
 		{
 			g_debug << "cannot initialize GLEW!" << std::endl;
 		}
-		if (!GLEW_VERSION_3_2)
+		if (!GLEW_VERSION_4_1)
 		{
-			g_debug << "OpenGL 3.2 is not available!" << std::endl;
+			g_debug << "OpenGL 4.1 is not available!" << std::endl;
 		}
 		else
 		{
-			g_debug << "found OpenGL 3.2 all right!" << std::endl;
+			g_debug << "found OpenGL 4.1!" << std::endl;
 		}
 		GL_DEBUG
 

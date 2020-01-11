@@ -74,6 +74,7 @@ namespace demorender
 		{
 			case TRIANGLES: primitiveType = GL_TRIANGLES; break;
 			case TRIANGLE_FAN: primitiveType = GL_TRIANGLE_FAN; break;
+			case TRIANGLE_STRIP: primitiveType = GL_TRIANGLE_STRIP; break;
 			case LINES: primitiveType = GL_LINES; verticesPerPrimitive = 2; break;
 			case LINE_STRIP: primitiveType = GL_LINE_STRIP; break;
 			default:

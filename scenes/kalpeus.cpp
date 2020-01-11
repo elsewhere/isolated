@@ -18,13 +18,17 @@ namespace
 // Flower
 ////////////////////////////////////////////////////////////////1////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Kalpeus::Flower::Petal::Petal(const glm::vec3& startPoint, const glm::vec3& endPoint, const float petalAngle)
+Kalpeus::Flower::Petal::Petal(Flower* parent, const glm::vec3& startPoint, const glm::vec3& endPoint, const float petalAngle):
+	m_startPoint(startPoint),
+	m_endPoint(endPoint),
+	m_parent(parent)
 {
 	g_params->useNamespace("kalpeus");
 	demomath::Range openingAngle = g_params->get<demomath::Range>("petalangle");
 
 	demomath::Range startPowerRange = g_params->get<demomath::Range>("petalstartpower");
 	demomath::Range endPowerRange = g_params->get<demomath::Range>("petalendpower");
+	demomath::Range endRotation = g_params->get<demomath::Range>("petalendrotation");
 
 	const float angle = openingAngle.getRandomValue();
 	const float startPower = startPowerRange.getRandomValue();
@@ -32,13 +36,77 @@ Kalpeus::Flower::Petal::Petal(const glm::vec3& startPoint, const glm::vec3& endP
 
 	const float angle1 = petalAngle - angle;
 	const float angle2 = petalAngle + angle;
-	glm::vec3 startVec1 = glm::vec3(sinf(angle1), cosf(angle1), 0.f) * startPower;
-	glm::vec3 startVec2 = glm::vec3(sinf(angle2), cosf(angle2), 0.f) * startPower;
-	glm::vec3 endVec = glm::vec3(sinf(petalAngle), cosf(petalAngle), 0.f) * endPower;
+	m_startDirection1 = glm::vec3(sinf(angle1), cosf(angle1), 0.f) * startPower;
+	m_startDirection2 = glm::vec3(sinf(angle2), cosf(angle2), 0.f) * startPower;
+	m_endDirection = glm::vec3(sinf(petalAngle), cosf(petalAngle), 0.f) * endPower;
 
-	m_debugLines.push_back(std::make_tuple(startPoint, startPoint + startVec1, glm::vec4(1.f, 0.f, 0.f, 1.f)));
-	m_debugLines.push_back(std::make_tuple(startPoint, startPoint + startVec2, glm::vec4(1.f, 0.f, 0.f, 1.f)));
-	m_debugLines.push_back(std::make_tuple(endPoint, endPoint + endVec, glm::vec4(1.f, 0.f, 0.f, 1.f)));
+	glm::mat4 endTransform = glm::rotate(endRotation.getRandomValue(), Math::randVectSphere());
+	m_endDirection = Math::transform(m_endDirection, endTransform);
+
+	m_debugLines.push_back(std::make_tuple(m_startPoint, startPoint + m_startDirection1, glm::vec4(1.f, 0.f, 0.f, 1.f)));
+	m_debugLines.push_back(std::make_tuple(m_startPoint, startPoint + m_startDirection2, glm::vec4(1.f, 0.f, 0.f, 1.f)));
+	m_debugLines.push_back(std::make_tuple(m_endPoint, endPoint + m_endDirection, glm::vec4(1.f, 0.f, 0.f, 1.f)));
+
+
+	createMesh();
+}
+
+void Kalpeus::Flower::Petal::createMesh()
+{
+	const int resolution = 10 ;
+	const float step = 1.f / resolution;
+
+	std::vector<glm::vec3> leftEdge;
+	std::vector<glm::vec3> rightEdge;
+
+	for (float t = 0.f; t < 1.f; t += step)
+	{
+		glm::vec3 leftPoint = Math::evaluateBezier<glm::vec3>(
+			m_startPoint, 
+			m_startPoint + m_startDirection1, 
+			m_endPoint - m_endDirection, 
+			m_endPoint, t);
+
+		glm::vec3 rightPoint = Math::evaluateBezier<glm::vec3>(
+			m_startPoint,
+			m_startPoint + m_startDirection2,
+			m_endPoint - m_endDirection,
+			m_endPoint, t);
+
+		leftEdge.push_back(leftPoint);
+		rightEdge.push_back(rightPoint);
+
+	}
+	for (size_t i = 0; i < leftEdge.size() - 1; i++)
+	{
+		m_debugLines.push_back(std::make_tuple(leftEdge[i], leftEdge[i + 1], glm::vec4(1.f, 1.f, 1.f, 1.f)));
+		m_debugLines.push_back(std::make_tuple(rightEdge[i], rightEdge[i + 1], glm::vec4(1.f, 1.f, 1.f, 1.f)));
+	}
+
+	MeshBuilder builder;
+	builder.start(false);
+	for (size_t i = 0; i < leftEdge.size(); i++)
+	{
+		builder.addVertex(leftEdge[i]);
+		builder.addVertex(rightEdge[i]);
+	}
+	builder.end();
+	m_mesh = builder.getMesh();
+}
+
+void Kalpeus::Flower::Petal::draw(demorender::Camera* pCamera, const glm::mat4& transform)
+{
+	Shader& s = g_shaders->getShader("flower");
+
+	s.bind();
+	glm::vec4 color = m_parent->getColor();
+	color.a = 1.f;
+	s.setUniform4fv("color", 1, (float *)&color);
+	s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&pCamera->getCameraMatrix()); GL_DEBUG;
+	s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&transform);
+
+	m_mesh->bind(&s);
+	m_mesh->draw(demorender::Mesh::TRIANGLE_STRIP);
 
 }
 
@@ -54,7 +122,7 @@ Kalpeus::Flower::Flower():
 
 		m_points.push_back(p);
 
-		Petal* petal = new Petal(glm::vec3(0.f), p, a);
+		Petal* petal = new Petal(this, glm::vec3(0.f), p, a);
 		m_petals.push_back(petal);
 
 		a += (2 * 3.141592f) / count;
@@ -66,7 +134,11 @@ Kalpeus::Flower::Flower():
 	const float scale = g_params->get<demomath::Range>("flowerscale").getRandomValue();
 	glm::vec3 flowerPos = glm::vec3(sinf(angle) * radius, height, cosf(angle) * radius);
 
-	m_color = glm::normalize(glm::vec3(Math::randFloat(), Math::randFloat(), Math::randFloat()));
+	glm::vec3 hue = glm::normalize(glm::vec3(Math::randFloat(), Math::randFloat(), Math::randFloat()));
+
+	float alpha = g_params->get<demomath::Range>("flowerpentaalpha").getRandomValue();
+
+	m_color = glm::vec4(hue, alpha);
 	glm::vec3 rotAngle = Math::randVectSphere();
 	
 	m_transform = glm::translate(flowerPos) * glm::scale(glm::vec3(scale)) * glm::rotate(Math::randFloat() * 90.f, rotAngle);
@@ -151,14 +223,25 @@ void Kalpeus::Flower::draw(demorender::Camera* pCamera)
 	Shader& s = g_shaders->getShader("flower");
 
 	s.bind();
-	s.setUniform3fv("color", 1, (float *)&m_color);
+	s.setUniform4fv("color", 1, (float *)&m_color);
 	s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&pCamera->getCameraMatrix()); GL_DEBUG;
 	s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&m_transform);
 
+	glDepthMask(GL_FALSE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	m_pentaMesh->bind(&s);
 	m_pentaMesh->draw();
+	glDepthMask(GL_TRUE);
+	glDisable(GL_BLEND);
 
-	m_lines->draw(pCamera, LineRenderer::Mode::LINES);
+	for (const auto f : m_petals)
+	{
+		f->draw(pCamera, m_transform);
+	}
+
+
+//	m_lines->draw(pCamera, LineRenderer::Mode::LINES);
 
 }
 
