@@ -5,6 +5,8 @@
 #include <map>
 #include "../glm/glm.hpp"
 
+#include "Mesh.h"
+
 namespace demorender
 {
 	class MeshBuilder
@@ -28,7 +30,7 @@ namespace demorender
 		void addTriangleColor(const glm::vec4& color1, const glm::vec4& color2, const glm::vec4& color3);
 		void addTriangleIndices(int v1, int v2, int v3);
 
-		class Mesh* getMesh();
+		class Mesh* getMesh(demorender::Mesh::Usage usage);
 
 
 		void generatePlane(int xres, int zres, float scale);

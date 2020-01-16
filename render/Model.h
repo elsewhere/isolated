@@ -14,7 +14,7 @@ namespace demorender
 		~Model();
 
 		void debugDraw();
-		void draw(Mesh::RenderMode mode = Mesh::TRIANGLES);
+		void draw(Mesh::RenderMode mode = Mesh::RenderMode::TRIANGLES);
 		void bind(class Shader* shader);
 		void setMesh(const std::string& name);
 		void setMesh(demorender::Mesh *pMesh);

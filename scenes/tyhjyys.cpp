@@ -38,7 +38,7 @@ Tyhjyys::TyhjyysLight::TyhjyysLight()
 	}
 
 	builder->end();
-	m_pMesh = builder->getMesh();
+	m_pMesh = builder->getMesh(Mesh::Usage::STATIC);
 }
 
 Tyhjyys::TyhjyysLight::~TyhjyysLight()
@@ -116,9 +116,9 @@ void Tyhjyys::createMesh()
 	const int xres = 100;
 	const float scale = 250.f;
 
-	MeshBuilder *builder = new MeshBuilder();
-	builder->generatePlane(xres, zres, scale);
-	m_pMesh = builder->getMesh();
+	MeshBuilder builder;
+	builder.generatePlane(xres, zres, scale);
+	m_pMesh = builder.getMesh(Mesh::Usage::STATIC);
 }
 
 void Tyhjyys::init()

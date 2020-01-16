@@ -90,7 +90,7 @@ namespace demorender
 		}
 	}
 
-	Mesh* MeshBuilder::getMesh()
+	Mesh* MeshBuilder::getMesh(demorender::Mesh::Usage usage)
 	{
 		int positionCount = m_positions.size();
 		int uvCount = m_uvs.size();
@@ -177,7 +177,7 @@ namespace demorender
 		
 		g_debug << "MeshBuilder getMesh - creating mesh with " << vertices.size() << " vertices" << std::endl;
 		Mesh *mesh = new Mesh();
-		mesh->generate(&vertices, m_indexed ? &faces : 0, true);// m_normals.size() == 0);
+		mesh->generate(usage, &vertices, m_indexed ? &faces : 0, true);
 		mesh->setStreamFlags(Mesh::VERTEX_STREAM | (hasUvs ? Mesh::UV_STREAM : 0) | (hasNormals ? Mesh::NORMAL_STREAM : 0));
 		return mesh;
 	}

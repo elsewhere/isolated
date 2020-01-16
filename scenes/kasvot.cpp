@@ -97,7 +97,7 @@ void Kasvot::createMesh()
 
 	MeshBuilder *builder = new MeshBuilder();
 	builder->generatePlane(xres, zres, scale);
-	m_pMesh = builder->getMesh();
+	m_pMesh = builder->getMesh(Mesh::Usage::STATIC);
 }
 
 void Kasvot::init()

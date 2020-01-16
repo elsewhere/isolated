@@ -63,7 +63,7 @@ namespace demorender
 			}
 		}
 
-		m_mesh->generate(&temp, nullptr, false);
+		m_mesh->generate(Mesh::Usage::STATIC, &temp, nullptr, false);
 		m_mesh->setStreamFlags(Mesh::COLOR_STREAM | Mesh::VERTEX_STREAM);
 
 	}
@@ -85,6 +85,6 @@ namespace demorender
 
 		m_mesh->bind(&s);
 
-		m_mesh->draw(mode == Mode::LINES ? Mesh::LINES : Mesh::LINE_STRIP);
+		m_mesh->draw(mode == Mode::LINES ? Mesh::RenderMode::LINES : Mesh::RenderMode::LINE_STRIP);
 	}
 }

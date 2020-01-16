@@ -178,7 +178,6 @@ public:
 		const float t2 = t * t;
 		const float t3 = t2 * t;
 		return p0 * (1.f - t)*(1.f - t)*(1.f - t) + p1 * 3.f*t*(1.f - t)*(1.f - t) + p2 * 3.f*t2*(1.f - t) + p3 * t3;
-
 	}
 private:
 	static Random sm_random;

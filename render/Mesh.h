@@ -18,13 +18,23 @@ namespace demorender
 			COLOR_STREAM = (1 << 4)
 		};
 
-		enum RenderMode
+		enum class RenderMode
 		{
 			TRIANGLES,
 			TRIANGLE_STRIP,
 			TRIANGLE_FAN,
 			LINES,
 			LINE_STRIP,
+			TRIANGLES_ADJACENCY,
+			LINES_ADJACENCY
+		};
+
+		enum class Usage
+		{
+			STATIC,
+			DYNAMIC,
+			STREAM
+
 		};
 
 		struct Vertex
@@ -51,19 +61,20 @@ namespace demorender
 		void load(const std::string& name);
 		void generateCube();
 		void generateSquare();
-		void generate(std::vector<Vertex>* vertices, std::vector<Face>* faces = 0, bool calcNormals = true);
+		void generate(Usage usage, std::vector<Vertex>* vertices, std::vector<Face>* faces = nullptr, bool calcNormals = true);
 
+		void updateVertices(const void* data, size_t size);
 		int getVertexCount();
 		int getFaceCount();
 
 		void setStreamFlags(unsigned int streams);
 		void bind(class Shader* shader);
 
-		void draw(RenderMode mode = TRIANGLES);
+		void draw(RenderMode mode = RenderMode::TRIANGLES);
 		void debugDraw();
 
 		void calculateNormals();
-		void createBuffers();
+		void createBuffers(Usage usage);
 
 	private:
 		unsigned int m_streamFlags;
@@ -72,9 +83,11 @@ namespace demorender
 		bool m_indexed;
 		unsigned int m_VAO;
 
+		Usage m_usage;
+
 		Face* m_pFaces;
 		Vertex* m_pVertices;
-		class Buffer* m_vertexBuffer;
-		class Buffer* m_indexBuffer;
+		std::unique_ptr<class Buffer> m_vertexBuffer;
+		std::unique_ptr<class Buffer> m_indexBuffer;
 	};
 }

@@ -39,7 +39,7 @@ namespace demorender
 		m_pFaces(nullptr),
 		m_vertexCount(0),
 		m_faceCount(0),
-		m_streamFlags(VERTEX_STREAM | UV_STREAM | NORMAL_STREAM)
+		m_streamFlags(StreamId::VERTEX_STREAM | StreamId::UV_STREAM | StreamId::NORMAL_STREAM)
 	{
 	}
 
@@ -62,7 +62,7 @@ namespace demorender
 		GLint polygonModeBackup[2];
 		glGetIntegerv(GL_POLYGON_MODE, polygonModeBackup);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		draw(TRIANGLES);
+		draw(RenderMode::TRIANGLES);
 		glPolygonMode(GL_FRONT_AND_BACK, polygonModeBackup[1]);
 
 	}
@@ -72,13 +72,15 @@ namespace demorender
 		int verticesPerPrimitive = 3;
 		switch (mode)
 		{
-			case TRIANGLES: primitiveType = GL_TRIANGLES; break;
-			case TRIANGLE_FAN: primitiveType = GL_TRIANGLE_FAN; break;
-			case TRIANGLE_STRIP: primitiveType = GL_TRIANGLE_STRIP; break;
-			case LINES: primitiveType = GL_LINES; verticesPerPrimitive = 2; break;
-			case LINE_STRIP: primitiveType = GL_LINE_STRIP; break;
+			case RenderMode::TRIANGLES: primitiveType = GL_TRIANGLES; break;
+			case RenderMode::TRIANGLE_FAN: primitiveType = GL_TRIANGLE_FAN; break;
+			case RenderMode::TRIANGLE_STRIP: primitiveType = GL_TRIANGLE_STRIP; break;
+			case RenderMode::LINES: primitiveType = GL_LINES; verticesPerPrimitive = 2; break;
+			case RenderMode::LINE_STRIP: primitiveType = GL_LINE_STRIP; break;
+			case RenderMode::TRIANGLES_ADJACENCY: primitiveType = GL_TRIANGLES_ADJACENCY; break;
+
 			default:
-				g_debug << "Trying to render with invalid primitive type " << mode << std::endl;
+				g_debug << "Trying to render with invalid primitive type " << (int)mode << std::endl;
 
 
 		};
@@ -111,7 +113,7 @@ namespace demorender
 		}
 
 		const size_t vertexSize = 12;// sizeof(Vertex);
-		if (m_streamFlags & VERTEX_STREAM)
+		if (m_streamFlags & StreamId::VERTEX_STREAM)
 		{
 			glEnableVertexAttribArray(shader->attrib("vertexPosition")); GL_DEBUG;
 			glVertexAttribPointer(shader->attrib("vertexPosition"), 3, GL_FLOAT, GL_FALSE, vertexSize * sizeof(GLfloat), NULL); GL_DEBUG;
@@ -193,7 +195,7 @@ namespace demorender
 			1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.f, 0.f, 0.f, 1.f, 1.f, 1.f, 1.f,
 			1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.f, 0.f, 0.f, 1.f, 1.f, 1.f, 1.f };
 
-		m_vertexBuffer = new Buffer();
+		m_vertexBuffer = std::make_unique<Buffer>();
 		m_vertexBuffer->init(GL_ARRAY_BUFFER, sizeof(cubeVertexData), cubeVertexData, GL_STATIC_DRAW);
 
 		m_indexed = false;
@@ -221,7 +223,7 @@ namespace demorender
 			0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1 //left down
 		};
 		//upload raw mesh data to the VBO 
-		m_vertexBuffer = new Buffer();
+		m_vertexBuffer = std::make_unique<Buffer>();
 		m_vertexBuffer->init(GL_ARRAY_BUFFER, sizeof(squareVertexData), squareVertexData, GL_STATIC_DRAW);
 
 		m_indexed = false;
@@ -229,7 +231,7 @@ namespace demorender
 		m_vertexCount = 6;
 	}
 
-	void Mesh::generate(std::vector<Vertex>* vertices, std::vector<Face>* faces, bool calcNormals)
+	void Mesh::generate(Usage usage, std::vector<Vertex>* vertices, std::vector<Face>* faces, bool calcNormals)
 	{
 		m_indexed = faces != nullptr;
 
@@ -269,12 +271,12 @@ namespace demorender
 			if (calcNormals)
 				calculateNormals();
 		}
-		createBuffers();
-
+		createBuffers(usage);
 	}
 
-	void Mesh::createBuffers()
+	void Mesh::createBuffers(Usage usage)
 	{
+		m_usage = usage;
 		//generate VAO 
 		glGenVertexArrays(1, &m_VAO); GL_DEBUG;
 		glBindVertexArray(m_VAO); GL_DEBUG;
@@ -303,8 +305,17 @@ namespace demorender
 		//upload raw mesh data to the VBO 
 		//TODO: is it possible to just send m_pVertices? 
 
-		m_vertexBuffer = new Buffer();
-		m_vertexBuffer->init(GL_ARRAY_BUFFER, vertexBytes, vertexData, GL_STATIC_DRAW);
+		GLenum bufferMode = GL_INVALID_ENUM;
+
+		switch (m_usage)
+		{
+			case Usage::STATIC: bufferMode = GL_STATIC_DRAW; break;
+			case Usage::DYNAMIC: bufferMode = GL_DYNAMIC_DRAW; break;
+			case Usage::STREAM: bufferMode = GL_STREAM_DRAW; break;
+		}
+
+		m_vertexBuffer = std::make_unique<Buffer>();
+		m_vertexBuffer->init(GL_ARRAY_BUFFER, vertexBytes, vertexData, bufferMode);
 
 		delete[] vertexData;
 
@@ -323,8 +334,8 @@ namespace demorender
 				*indexPtr++ = f.v2;
 				*indexPtr++ = f.v3;
 			}
-			m_indexBuffer = new Buffer();
-			m_indexBuffer->init(GL_ELEMENT_ARRAY_BUFFER, faceBytes, indexData, GL_STATIC_DRAW);
+			m_indexBuffer = std::make_unique<Buffer>();
+			m_indexBuffer->init(GL_ELEMENT_ARRAY_BUFFER, faceBytes, indexData, bufferMode);
 
 			delete[] indexData;
 		}
@@ -332,6 +343,11 @@ namespace demorender
 		{
 			m_faceCount = m_vertexCount / 3;
 		}
+	}
+
+	void Mesh::updateVertices(const void* data, size_t size)
+	{
+		m_vertexBuffer->fill(size, data);
 	}
 
 	void Mesh::calculateNormals()

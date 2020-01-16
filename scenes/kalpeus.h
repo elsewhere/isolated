@@ -7,7 +7,7 @@ class Kalpeus : public democore::Scene
 {
 
 public:
-	Kalpeus():m_pMesh(nullptr) {};
+	Kalpeus() {};
 	~Kalpeus() {};
 	
 	void init();
@@ -21,7 +21,7 @@ private:
 	class Flower
 	{
 	public:
-		Flower();
+		Flower(bool dynamic);
 		~Flower();
 
 		void draw(demorender::Camera* camera);
@@ -29,12 +29,20 @@ private:
 
 		glm::vec4 getColor() { return m_color; }
 
+		enum class Type
+		{
+			STATIC,
+			DYNAMIC,
+		};
+
+		Type getType() { return m_type; }
+
 	private:
 		class Petal
 		{
 		public:
 			Petal(Flower* parent, const glm::vec3& startPoint, const glm::vec3& endPoint, float petalAngle);
-			~Petal();
+			~Petal() {};
 
 			void draw(demorender::Camera* pCamera, const glm::mat4& transform);
 			std::vector<std::tuple<glm::vec3, glm::vec3, glm::vec4>> m_debugLines;
@@ -51,6 +59,9 @@ private:
 		};
 
 		void createMesh();
+
+		Type m_type;
+
 		std::vector<glm::vec3> m_points;
 		glm::mat4 m_transform;
 
@@ -64,18 +75,12 @@ private:
 	std::vector<Flower*> m_flowers;
 
 	void createMesh();
-	void drawTerrain();
 	glm::vec3 m_cameraPosition;
 	glm::vec3 m_cameraTarget;
 	glm::vec3 m_cameraUp;
 
 	demorender::Camera *m_camera;
 
-	demorender::Mesh *m_pMesh;
-
-	float m_lightValue = 0.f;
-	glm::vec3 m_lightPos;
-	float m_lightRadius = 100.f;
 
 	std::unique_ptr<demorender::LineRenderer> m_lines;
 

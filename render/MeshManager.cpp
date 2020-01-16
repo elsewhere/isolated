@@ -96,7 +96,7 @@ namespace demorender
 				}
 
 				std::string meshName = filename.substr(0, filename.length() - 4);
-				Mesh *mesh = builder->getMesh();
+				Mesh *mesh = builder->getMesh(Mesh::Usage::STATIC);
 				if (mesh)
 				{
 					addMesh(meshName, mesh);

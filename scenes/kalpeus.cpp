@@ -47,71 +47,103 @@ Kalpeus::Flower::Petal::Petal(Flower* parent, const glm::vec3& startPoint, const
 	m_debugLines.push_back(std::make_tuple(m_startPoint, startPoint + m_startDirection2, glm::vec4(1.f, 0.f, 0.f, 1.f)));
 	m_debugLines.push_back(std::make_tuple(m_endPoint, endPoint + m_endDirection, glm::vec4(1.f, 0.f, 0.f, 1.f)));
 
-
 	createMesh();
 }
 
 void Kalpeus::Flower::Petal::createMesh()
 {
-	const int resolution = 10 ;
-	const float step = 1.f / resolution;
-
-	std::vector<glm::vec3> leftEdge;
-	std::vector<glm::vec3> rightEdge;
-
-	for (float t = 0.f; t < 1.f; t += step)
-	{
-		glm::vec3 leftPoint = Math::evaluateBezier<glm::vec3>(
-			m_startPoint, 
-			m_startPoint + m_startDirection1, 
-			m_endPoint - m_endDirection, 
-			m_endPoint, t);
-
-		glm::vec3 rightPoint = Math::evaluateBezier<glm::vec3>(
-			m_startPoint,
-			m_startPoint + m_startDirection2,
-			m_endPoint - m_endDirection,
-			m_endPoint, t);
-
-		leftEdge.push_back(leftPoint);
-		rightEdge.push_back(rightPoint);
-
-	}
-	for (size_t i = 0; i < leftEdge.size() - 1; i++)
-	{
-		m_debugLines.push_back(std::make_tuple(leftEdge[i], leftEdge[i + 1], glm::vec4(1.f, 1.f, 1.f, 1.f)));
-		m_debugLines.push_back(std::make_tuple(rightEdge[i], rightEdge[i + 1], glm::vec4(1.f, 1.f, 1.f, 1.f)));
-	}
-
 	MeshBuilder builder;
-	builder.start(false);
-	for (size_t i = 0; i < leftEdge.size(); i++)
+
+	if (m_parent->getType() == Type::STATIC)
 	{
-		builder.addVertex(leftEdge[i]);
-		builder.addVertex(rightEdge[i]);
+		const int resolution = 10;
+		const float step = 1.f / resolution;
+
+		std::vector<glm::vec3> leftEdge;
+		std::vector<glm::vec3> rightEdge;
+
+		for (float t = 0.f; t < 1.f; t += step)
+		{
+			glm::vec3 leftPoint = Math::evaluateBezier<glm::vec3>(
+				m_startPoint,
+				m_startPoint + m_startDirection1,
+				m_endPoint - m_endDirection,
+				m_endPoint, t);
+
+			glm::vec3 rightPoint = Math::evaluateBezier<glm::vec3>(
+				m_startPoint,
+				m_startPoint + m_startDirection2,
+				m_endPoint - m_endDirection,
+				m_endPoint, t);
+
+			leftEdge.push_back(leftPoint);
+			rightEdge.push_back(rightPoint);
+		}
+		for (size_t i = 0; i < leftEdge.size() - 1; i++)
+		{
+			m_debugLines.push_back(std::make_tuple(leftEdge[i], leftEdge[i + 1], glm::vec4(1.f, 1.f, 1.f, 1.f)));
+			m_debugLines.push_back(std::make_tuple(rightEdge[i], rightEdge[i + 1], glm::vec4(1.f, 1.f, 1.f, 1.f)));
+		}
+
+		builder.start(false);
+		for (size_t i = 0; i < leftEdge.size(); i++)
+		{
+			builder.addVertex(leftEdge[i]);
+			builder.addVertex(rightEdge[i]);
+		}
+		builder.end();
+		m_mesh = builder.getMesh(Mesh::Usage::STATIC);
 	}
-	builder.end();
-	m_mesh = builder.getMesh();
+	else if (m_parent->getType() == Type::DYNAMIC)
+	{
+
+		builder.start(false);
+		builder.addVertex(m_startPoint);
+		builder.addVertex(m_startPoint + m_startDirection1);
+		builder.addVertex(m_startPoint);
+		builder.addVertex(m_startPoint + m_startDirection2);
+		builder.addVertex(m_endPoint - m_endDirection);
+		builder.addVertex(m_endPoint);
+		builder.end();
+		m_mesh = builder.getMesh(Mesh::Usage::DYNAMIC);
+	}
 }
 
 void Kalpeus::Flower::Petal::draw(demorender::Camera* pCamera, const glm::mat4& transform)
 {
-	Shader& s = g_shaders->getShader("flower");
+	if (m_parent->getType() == Type::STATIC)
+	{
+		Shader& s = g_shaders->getShader("flower");
 
-	s.bind();
-	glm::vec4 color = m_parent->getColor();
-	color.a = 1.f;
-	s.setUniform4fv("color", 1, (float *)&color);
-	s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&pCamera->getCameraMatrix()); GL_DEBUG;
-	s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&transform);
+		s.bind();
+		glm::vec4 color = m_parent->getColor();
+		color.a = 1.f;
+		s.setUniform4fv("color", 1, (float *)&color);
+		s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&pCamera->getCameraMatrix()); GL_DEBUG;
+		s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&transform);
 
-	m_mesh->bind(&s);
-	m_mesh->draw(demorender::Mesh::TRIANGLE_STRIP);
+		m_mesh->bind(&s);
+		m_mesh->draw(demorender::Mesh::RenderMode::TRIANGLE_STRIP);
+	}
+	else
+	{
+		Shader& s = g_shaders->getShader("dynamicflower");
 
+		s.bind(); 
+		glm::vec4 color = m_parent->getColor();
+		color.a = 1.f;
+		s.setUniform4fv("flowerColor", 1, (float *)&color);
+		s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&transform);
+		s.setUniformMatrix4fv("viewMatrix", 1, GL_FALSE, (float *)&pCamera->getViewMatrix()); GL_DEBUG;
+		s.setUniformMatrix4fv("projectionMatrix", 1, GL_FALSE, (float *)&pCamera->getProjectionMatrix()); GL_DEBUG;
+		m_mesh->bind(&s);
+		m_mesh->draw(demorender::Mesh::RenderMode::TRIANGLES_ADJACENCY);
+	}
 }
 
-Kalpeus::Flower::Flower():
-	m_pentaMesh(nullptr)
+Kalpeus::Flower::Flower(bool dynamic):
+	m_pentaMesh(nullptr),
+	m_type(dynamic ? Type::DYNAMIC : Type::STATIC)
 {
 	int count = 5; 
 
@@ -134,12 +166,15 @@ Kalpeus::Flower::Flower():
 	const float scale = g_params->get<demomath::Range>("flowerscale").getRandomValue();
 	glm::vec3 flowerPos = glm::vec3(sinf(angle) * radius, height, cosf(angle) * radius);
 
-	glm::vec3 hue = glm::normalize(glm::vec3(Math::randFloat(), Math::randFloat(), Math::randFloat()));
+	glm::vec3 hue = (m_type == Type::STATIC) ? glm::vec3(1.f) : glm::vec3(1.f, 0.f, 0.f);// glm::normalize(glm::vec3(Math::randFloat(), Math::randFloat(), Math::randFloat()));
 
 	float alpha = g_params->get<demomath::Range>("flowerpentaalpha").getRandomValue();
 
 	m_color = glm::vec4(hue, alpha);
 	glm::vec3 rotAngle = Math::randVectSphere();
+
+	rotAngle.y = 1.f;
+	rotAngle = glm::normalize(rotAngle);
 	
 	m_transform = glm::translate(flowerPos) * glm::scale(glm::vec3(scale)) * glm::rotate(Math::randFloat() * 90.f, rotAngle);
 
@@ -213,7 +248,7 @@ void Kalpeus::Flower::createMesh()
 	builder.addTriangleVertex(b, c, d);
 
 	builder.end();
-	m_pentaMesh = builder.getMesh();
+	m_pentaMesh = builder.getMesh(Mesh::Usage::STATIC);
 
 
 }
@@ -254,27 +289,11 @@ void Kalpeus::Flower::update()
 // Kalpeus
 ////////////////////////////////////////////////////////////////1////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Kalpeus::createMesh()
-{
-	if (m_pMesh)
-		delete m_pMesh;
-
-	const int zres = 100;
-	const int xres = 100;
-	const float scale = 250.f;
-
-	MeshBuilder *builder = new MeshBuilder();
-	builder->generatePlane(xres, zres, scale);
-	m_pMesh = builder->getMesh();
-}
-
 void Kalpeus::init()
 {
 	m_flowers.clear();
 	g_params->useNamespace("kalpeus");
 	m_camera = new demorender::Camera(1.f, 1000.f, 45.f);
-
-	createMesh();
 
 	m_lines = std::make_unique<demorender::LineRenderer>();
 
@@ -295,7 +314,7 @@ void Kalpeus::init()
 	int flowerCount = g_params->get<int>("flowercount");
 	for (int i = 0; i < flowerCount; i++)
 	{
-		Flower *f = new Flower();
+		Flower *f = new Flower(i < flowerCount / 2);
 		m_flowers.push_back(f);
 	}
 }
@@ -311,9 +330,6 @@ void Kalpeus::update()
 
 	const float a = m_pos * 2.f;
 	
-	m_lightPos = glm::vec3(0.f);
-	m_lightValue = 1.f;
-
 	glm::vec3 cameraStart = glm::vec3(0, 0, -240.f);
 	glm::vec3 cameraEnd = glm::vec3(0, 0, 240.f);
 
@@ -328,39 +344,11 @@ void Kalpeus::update()
 		f->update();
 }
 
-void Kalpeus::drawTerrain()
-{
-	glm::mat4 model = glm::mat4(1.f);
-
-	Shader& s = g_shaders->getShader("effect_ikuisuusplane");
-	s.bind();
-
-	g_textures->bindTexture("heightmap1", GL_TEXTURE0);
-	g_textures->bindTexture("kivitesti", GL_TEXTURE1);
-	s.setUniform1f("time", m_pos);
-	s.setUniform1i("heightmap", 0);
-	s.setUniform1i("stone", 1);
-	s.setUniform1f("terrainScale", 1.2f);
-	s.setUniform1f("terrainHeightScale", 24.f);
-	s.setUniform3fv("lightpos", 1, (float *)&m_lightPos );
-
-	s.setUniform1f("lightvalue", m_lightValue);
-	s.setUniform1f("lightradius", m_lightRadius);
-
-	s.setUniformMatrix4fv("camera", 1, false, (float *)&m_camera->getCameraMatrix());
-	s.setUniformMatrix4fv("model", 1, false, (float *)&model);
-
-	m_pMesh->bind(&s);
-	m_pMesh->draw();
-
-//	m_lines->draw(m_camera, LineRenderer::Mode::LINE_STRIP);
-}
-
 void Kalpeus::debug()
 {
-	g_screenText.log<std::string>("lightPos", Math::toString(m_lightPos));
-	g_screenText.log<float>("m_lightValue", m_lightValue);
-	g_screenText.log<float>("m_lightRadius", m_lightRadius);
+//	g_screenText.log<std::string>("lightPos", Math::toString(m_lightPos));
+//	g_screenText.log<float>("m_lightValue", m_lightValue);
+//	g_screenText.log<float>("m_lightRadius", m_lightRadius);
 }
 
 void Kalpeus::draw()
@@ -372,8 +360,6 @@ void Kalpeus::draw()
 	m_camera->lookAt(m_cameraPosition,
 		m_cameraTarget,
 		m_cameraUp);
-
-	drawTerrain();
 
 	for (auto f : m_flowers)
 		f->draw(m_camera);
