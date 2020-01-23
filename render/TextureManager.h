@@ -10,6 +10,7 @@ namespace demorender
 	class TextureParameters;
 	class Texture;
 	class Cubemap;
+	class DepthMap;
 
 	class TextureManager
 	{
@@ -23,6 +24,7 @@ namespace demorender
 		//textures
 		Texture* getTexture(const std::string& name);
 		Cubemap* getCubemap(const std::string& name);
+		DepthMap* getDepthMap(const std::string& name);
 		void addTextureParameters(const std::string& name, TextureParameters* params);
 		void loadImages();
 		void createTextures();
@@ -48,6 +50,7 @@ namespace demorender
 		std::map<std::string, std::unique_ptr<Image>> m_images;
 		std::map<std::string, std::unique_ptr<Texture>> m_textures;
 		std::map<std::string, std::unique_ptr<Cubemap>> m_cubemaps;
+		std::map<std::string, std::unique_ptr<DepthMap>> m_depthmaps;
 		std::map<std::string, std::unique_ptr<TextureParameters>> m_textureParameters;
 		std::string m_lastBoundTexture[8];
 

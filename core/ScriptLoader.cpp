@@ -527,6 +527,8 @@ namespace democore
 					params.m_type = demorender::TextureParameters::CUBEMAP;
 				else if (tokens[2] == "texture")
 					params.m_type = demorender::TextureParameters::TEXTURE_2D;
+				else if (tokens[2] == "depth")
+					params.m_type = demorender::TextureParameters::DEPTH;
 				else
 					error("cannot parse texture type");
 			}
@@ -579,97 +581,6 @@ namespace democore
 				std::string err = std::string("unknown symbol \"")+tokens[0]+ std::string("\"");
 				error(err.c_str());
 			}
-		}
-
-		return true;
-	}
-
-	bool ScriptLoader::parseRenderTarget(demorender::Image &image, bool createImage)
-	{
-		std::vector<std::string> tokens;
-
-		int width = 0;
-		int height = 0;
-
-		getNextLine(tokens);
-		if (tokens[0] != "{")
-		{
-			error("Rendertarget must start with {");
-			return false;
-		}
-
-		//read until the closing curly brace
-		while (true)
-		{
-			tokens.clear();
-			getNextLine(tokens);
-			if (tokens[0] == "}")
-			{
-				break;
-			}
-			if (tokens[1] != "=")
-			{
-				error("syntax error");
-				return false;
-			}
-
-			//read in values
-			if (tokens[0] == "width")
-			{
-				if (!StringUtils::convertStringToNumber<int>(width, tokens[2], std::dec))
-					error("cannot parse rendertarget width!");
-			}
-			else if (tokens[0] == "height")
-			{
-				if (!StringUtils::convertStringToNumber<int>(height, tokens[2], std::dec))
-					error("cannot parse rendertarget height!");
-			}
-			else if (tokens[0] == "size")
-			{
-				int size = 0;
-				if (!StringUtils::convertStringToNumber<int>(size, tokens[2], std::dec))
-				{
-					error("cannot parse rendertarget size!");
-				}
-				else
-				{
-					if (size < 1)
-					{
-						error("invalid size for rendertarget!");
-						size = 1;
-					}
-					int screenWidth, screenHeight;
-					g_system->getWindowSize(screenWidth, screenHeight);
-
-					width = screenWidth / size;
-					height = screenHeight / size;
-				}
-
-			}
-			else
-			{
-				std::string err = std::string("unknown symbol \"")+tokens[0]+ std::string("\"");
-				error(err.c_str());
-			}
-		}
-		if (height > 0 && width > 0)
-		{
-			if (createImage)
-			{
-				demorender::Image *temp = demorender::ImageFactory::createEmpty(width, height);
-				image = *temp;
-			}
-			else if (height != image.getHeight() || width != image.getWidth())
-			{
-				//need to resize
-				//should release memory here but who cares with dev mode...
-				demorender::Image *temp = demorender::ImageFactory::createEmpty(width, height);
-				image = *temp;
-			}
-		}
-		else
-		{
-			error("rendertarget definition incomplete!");
 		}
 
 		return true;
@@ -932,21 +843,6 @@ namespace democore
 					demorender::TextureParameters* textureparams = new demorender::TextureParameters();
 					parseTexture(*textureparams);
 					demorender::g_textures->addTextureParameters(tokens[1], textureparams);
-				}
-				else if (tokens[0] == "rendertarget")
-				{
-					//image exists?
-					demorender::Image *image = demorender::g_textures->image(tokens[1]);
-
-					bool createImage = image == 0;
-					//image does not exist
-					if (createImage)
-					{
-						image = new demorender::Image();
-					}
-
-					parseRenderTarget(*image, createImage);
-					demorender::g_textures->addImage(tokens[1], image);
 				}
 				else if (tokens[0] == "bpm")
 				{

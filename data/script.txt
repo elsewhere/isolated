@@ -180,8 +180,6 @@ texture test.jpg
 ;;     postprocessing rendertargets                                                             ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; TODO: make dynamic
-
 texture main
 {
 	width = 1024;
@@ -317,6 +315,15 @@ texture oldman
 {
 	filename = oldman.png
 }
+
+/*
+texture shadowmaptest
+{
+	type = depth
+	width = 1024
+	height = 1024
+}
+*/
 
 texture dynamictest
 {

@@ -86,6 +86,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		g_meshes->init();
 		g_meshes->loadMeshes();
 
+		g_renderDebug->init();
+
 		Math::init();
 		g_postProcess->init();
 //		static_cast<Demo*>(context)->addScene("tyhjyys", new Tyhjyys());

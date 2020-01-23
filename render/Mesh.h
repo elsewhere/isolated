@@ -85,8 +85,8 @@ namespace demorender
 
 		Usage m_usage;
 
-		Face* m_pFaces;
-		Vertex* m_pVertices;
+		std::vector<Face> m_faces;
+		std::vector<Vertex> m_vertices;
 		std::unique_ptr<class Buffer> m_vertexBuffer;
 		std::unique_ptr<class Buffer> m_indexBuffer;
 	};

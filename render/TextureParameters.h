@@ -16,7 +16,8 @@ namespace demorender
 		enum Type
 		{
 			TEXTURE_2D,
-			CUBEMAP
+			CUBEMAP,
+			DEPTH,
 		};
 		TextureParameters();
 		~TextureParameters();

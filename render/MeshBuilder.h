@@ -31,7 +31,7 @@ namespace demorender
 		void addTriangleIndices(int v1, int v2, int v3);
 
 		class Mesh* getMesh(demorender::Mesh::Usage usage);
-
+		const std::vector<glm::vec3>& getVertices() { return m_positions; }
 
 		void generatePlane(int xres, int zres, float scale);
 

@@ -201,6 +201,7 @@
     <ClInclude Include="render\Camera.h" />
     <ClInclude Include="render\Cubemap.h" />
     <ClInclude Include="render\CubemapRenderer.h" />
+    <ClInclude Include="render\DepthMap.h" />
     <ClInclude Include="render\Font.h" />
     <ClInclude Include="render\Image.h" />
     <ClInclude Include="render\ImageFactory.h" />
@@ -219,6 +220,7 @@
     <ClInclude Include="render\RenderUtils.h" />
     <ClInclude Include="render\Shader.h" />
     <ClInclude Include="render\ShaderManager.h" />
+    <ClInclude Include="render\ShadowMap.h" />
     <ClInclude Include="render\Texture.h" />
     <ClInclude Include="render\TextureManager.h" />
     <ClInclude Include="render\TextureParameters.h" />
@@ -278,6 +280,7 @@
     <ClCompile Include="render\Camera.cpp" />
     <ClCompile Include="render\Cubemap.cpp" />
     <ClCompile Include="render\CubemapRenderer.cpp" />
+    <ClCompile Include="render\DepthMap.cpp" />
     <ClCompile Include="render\Font.cpp" />
     <ClCompile Include="render\Image.cpp" />
     <ClCompile Include="render\ImageFactory.cpp" />
@@ -296,6 +299,7 @@
     <ClCompile Include="render\RenderUtils.cpp" />
     <ClCompile Include="render\Shader.cpp" />
     <ClCompile Include="render\ShaderManager.cpp" />
+    <ClCompile Include="render\ShadowMap.cpp" />
     <ClCompile Include="render\Texture.cpp" />
     <ClCompile Include="render\TextureManager.cpp" />
     <ClCompile Include="render\TextureParameters.cpp" />

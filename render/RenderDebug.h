@@ -58,10 +58,12 @@ namespace demorender
 		const RenderCaps getCaps();
 
 		void resetGL();
+		void init();
 		void drawString(const std::string& str, int x, int y, float scale, glm::vec3 color);
 		void drawTexture(const std::string& name, int x, int y, float scale = 1.f);
 		void drawTexture(const GLuint textureId, int x, int y, float scale = 1.f);
 		void drawDepthTexture(GLuint textureId, class Camera *pCamera, int x, int y, float scale = 1.f);
+		void drawDepthTextureOrtho(GLuint textureId, int x, int y, float scale = 1.f);
 
 	private:
 		RenderDebug();

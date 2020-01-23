@@ -35,8 +35,6 @@ namespace demorender
 		m_vertexBuffer(nullptr),
 		m_indexBuffer(nullptr),
 		m_indexed(false),
-		m_pVertices(nullptr),
-		m_pFaces(nullptr),
 		m_vertexCount(0),
 		m_faceCount(0),
 		m_streamFlags(StreamId::VERTEX_STREAM | StreamId::UV_STREAM | StreamId::NORMAL_STREAM)
@@ -235,11 +233,8 @@ namespace demorender
 	{
 		m_indexed = faces != nullptr;
 
-		if (m_pVertices)
-			delete[] m_pVertices;
-		if (m_pFaces)
-			delete[] m_pFaces;
-
+		m_faces.clear();
+		m_vertices.clear();
 		//TODO: also clear opengl buffers
 
 		if (EXTRA_DEBUG)
@@ -251,22 +246,16 @@ namespace demorender
 		}
 
 		m_vertexCount = vertices->size();
-		m_pVertices = new Vertex[m_vertexCount];
 
 		//copy vertices
-		Vertex* vptr = m_pVertices;
-		for (auto v : *vertices)
-			*vptr++ = v;
+		std::copy(vertices->begin(), vertices->end(), std::back_inserter(m_vertices));
 
 		//copy faces and calc normals if applicable
 		if (m_indexed)
 		{
 			m_faceCount = faces->size();
-			m_pFaces = new Face[m_faceCount];
 
-			Face* fptr = m_pFaces;
-			for (auto f : *faces)
-				*fptr++ = f;
+			std::copy(faces->begin(), faces->end(), std::back_inserter(m_faces));
 
 			if (calcNormals)
 				calculateNormals();
@@ -288,7 +277,7 @@ namespace demorender
 
 		for (int i = 0; i < m_vertexCount; i++)
 		{
-			Vertex &v = m_pVertices[i];
+			const Vertex &v = m_vertices[i];
 			*vertexPtr++ = v.position.x;
 			*vertexPtr++ = v.position.y;
 			*vertexPtr++ = v.position.z;
@@ -329,7 +318,7 @@ namespace demorender
 
 			for (int i = 0; i < m_faceCount; i++)
 			{
-				Face& f = m_pFaces[i];
+				const Face& f = m_faces[i];
 				*indexPtr++ = f.v1;
 				*indexPtr++ = f.v2;
 				*indexPtr++ = f.v3;
@@ -359,27 +348,27 @@ namespace demorender
 		}
 		for (int i = 0; i < m_vertexCount; i++)
 		{
-			m_pVertices[i].normal = glm::vec3(0);
+			m_vertices[i].normal = glm::vec3(0);
 		}
 
 		//calculate face normals
 		for (int j = 0; j < m_faceCount; j++)
 		{
-			Face& f = m_pFaces[j];
+			Face& f = m_faces[j];
 			//TODO: experiment with removing normalize
-			glm::vec3 v1 = glm::normalize(m_pVertices[f.v3].position - m_pVertices[f.v1].position);
-			glm::vec3 v2 = glm::normalize(m_pVertices[f.v2].position - m_pVertices[f.v1].position);
+			glm::vec3 v1 = glm::normalize(m_vertices[f.v3].position - m_vertices[f.v1].position);
+			glm::vec3 v2 = glm::normalize(m_vertices[f.v2].position - m_vertices[f.v1].position);
 
 			glm::vec3 n = glm::cross(v1, v2);
 			f.normal = n;
-			m_pVertices[f.v1].normal += n;
-			m_pVertices[f.v2].normal += n;
-			m_pVertices[f.v3].normal += n;
+			m_vertices[f.v1].normal += n;
+			m_vertices[f.v2].normal += n;
+			m_vertices[f.v3].normal += n;
 		}
 
 		for (int i = 0; i < m_vertexCount; i++)
 		{
-			m_pVertices[i].normal = glm::normalize(m_pVertices[i].normal);
+			m_vertices[i].normal = glm::normalize(m_vertices[i].normal);
 		}
 	}
 }

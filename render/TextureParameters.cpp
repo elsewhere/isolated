@@ -55,6 +55,8 @@ namespace demorender
 			ss << "TEXTURE_2D" << "\n";
 		else if (m_type == CUBEMAP)
 			ss << "CUBEMAP" << "\n";
+		else if (m_type == DEPTH)
+			ss << "DEPTH" << "\n";
 
 		return ss.str();
 	}

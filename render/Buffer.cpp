@@ -89,11 +89,17 @@ namespace demorender
 			return;
 		}
 
-		glBindBuffer(m_type, m_id);
-		GLvoid* pBuffer = glMapBuffer(m_type, GL_WRITE_ONLY);
-		memcpy(pBuffer, data, dataSize);
-		glUnmapBuffer(m_type);
 
+		glBindBuffer(m_type, m_id); GL_DEBUG;
+		glBufferSubData(m_type, 0, dataSize, data); GL_DEBUG;
+		glBindBuffer(m_type, 0); GL_DEBUG;
+		/*
+
+		glBindBuffer(m_type, m_id); GL_DEBUG;
+		GLvoid* pBuffer = glMapBuffer(m_type, GL_WRITE_ONLY); GL_DEBUG;
+		memcpy(pBuffer, data, dataSize); GL_DEBUG;
+		glUnmapBuffer(m_type); GL_DEBUG;
+		*/
 	}
 	
 	void Buffer::bind()

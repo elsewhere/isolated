@@ -207,6 +207,8 @@
     <ClInclude Include="scenes\kasvot.h" />
     <ClInclude Include="scenes\tunne.h" />
     <ClInclude Include="scenes\kalpeus.h" />
+    <ClInclude Include="render\ShadowMap.h" />
+    <ClInclude Include="render\DepthMap.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\setupdialog.aps">
@@ -352,5 +354,7 @@
     <ClCompile Include="scenes\kasvot.cpp" />
     <ClCompile Include="scenes\tunne.cpp" />
     <ClCompile Include="scenes\kalpeus.cpp" />
+    <ClCompile Include="render\ShadowMap.cpp" />
+    <ClCompile Include="render\DepthMap.cpp" />
   </ItemGroup>
 </Project>

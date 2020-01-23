@@ -42,6 +42,20 @@ namespace demorender
 		}
 	}
 
+	DepthMap *TextureManager::getDepthMap(const std::string& name)
+	{
+		if (m_depthmaps.find(name) != m_depthmaps.end())
+		{
+			return m_depthmaps[name].get();
+		}
+		else
+		{
+			g_debug << "could not find depthmap " << name << std::endl;
+			return nullptr;
+		}
+	}
+
+
 	TextureManager* g_textures
 	{
 		if (sm_instance == nullptr)
@@ -305,7 +319,6 @@ namespace demorender
 					}
 				}
 
-//				std::unique_ptr<Texture> texture = std::make_unique<Texture>(*pParams, pImage);
 				auto texture = std::make_unique<Texture>();
 
 				if (texture->create(*pParams, pImage))
@@ -320,7 +333,6 @@ namespace demorender
 						default: videoMemoryConsumption += texels * 4;
 					}
 					m_textures[param.first] = std::move(texture);
-
 					textureCount++;
 				}
 				else
@@ -414,11 +426,23 @@ namespace demorender
 				{
 					g_debug << "cubemap create failed " << param.first << std::endl;
 				}
-
+			}
+			else if (pParams->m_type == TextureParameters::DEPTH)
+			{
+				g_debug << "creating depth map " << param.first << std::endl;
+				auto depthmap = std::make_unique<DepthMap>();
+				if (depthmap->create(*pParams))
+				{
+					m_depthmaps[param.first] = std::move(depthmap);
+					textureCount++;
+				}
+				else
+				{
+					g_debug << "depthmap create failed " << param.first << std::endl;
+				}
 			}
 		}
 		g_profiler.endProfile("Texture creation");
-
 	}
 
 	Image* TextureManager::image(const std::string& name)

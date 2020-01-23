@@ -25,9 +25,19 @@ namespace demorender
 
 	RenderDebug::RenderDebug()
 	{
+		initCaps();
+	}
+
+	RenderDebug::~RenderDebug()
+	{
+
+	}
+
+	void RenderDebug::init()
+	{
 		int width, height;
 		democore::g_system->getWindowSize(width, height);
-		
+
 		m_pOrtho = new OrthoCamera(0.f, width * 1.f, 0.f, height * 1.f);
 
 		m_pSquare = new Model();
@@ -35,12 +45,6 @@ namespace demorender
 
 		m_pFont = new Font();
 		m_pFont->load("arial.ttf");
-
-		initCaps();
-	}
-	RenderDebug::~RenderDebug()
-	{
-
 	}
 
 	RenderDebug* RenderDebug::inst()
@@ -204,6 +208,26 @@ namespace demorender
 		shader.setUniformMatrix4fv("model", 1, GL_FALSE, (float *)&testiModelMatrix); GL_DEBUG;
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
+	}
+
+	void RenderDebug::drawDepthTextureOrtho(GLuint textureId, int x, int y, float scale)
+	{
+		glm::mat4 testiTrans = glm::scale(glm::vec3(1.f));
+
+		Shader& shader = g_shaders->getShader("debug_depthtextureortho");
+		shader.bind();
+		shader.setUniformMatrix4fv("camera", 1, GL_FALSE, (float *)&m_pOrtho->getCameraMatrix()); GL_DEBUG;
+		m_pSquare->bind(&shader);
+
+		glBindTexture(GL_TEXTURE_2D, textureId);
+		shader.setUniform1i("tex", 0); GL_DEBUG;
+
+		float aspect = democore::g_system->getAspectRatio();
+		glm::mat4 testiModelMatrix = glm::translate(x * 1.f, y * 1.f, 0.f);
+		glm::mat4 scaling = glm::scale(glm::vec3(scale, scale, 1.f));
+		testiModelMatrix *= scaling;
+		shader.setUniformMatrix4fv("model", 1, GL_FALSE, (float *)&testiModelMatrix); GL_DEBUG;
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
 	void RenderDebug::setDebugging(bool debugging)

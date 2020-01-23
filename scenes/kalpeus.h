@@ -24,7 +24,7 @@ private:
 		Flower(bool dynamic);
 		~Flower();
 
-		void draw(demorender::Camera* camera);
+		void draw(glm::mat4 cameraMatrix);
 		void update();
 
 		glm::vec4 getColor() { return m_color; }
@@ -44,7 +44,8 @@ private:
 			Petal(Flower* parent, const glm::vec3& startPoint, const glm::vec3& endPoint, float petalAngle);
 			~Petal() {};
 
-			void draw(demorender::Camera* pCamera, const glm::mat4& transform);
+			void draw(glm::mat4 cameraMatrix, const glm::mat4& transform);
+			void update();
 			std::vector<std::tuple<glm::vec3, glm::vec3, glm::vec4>> m_debugLines;
 
 			void createMesh();
@@ -74,12 +75,17 @@ private:
 
 	std::vector<Flower*> m_flowers;
 
-	void createMesh();
+	void drawTerrain();
+
 	glm::vec3 m_cameraPosition;
 	glm::vec3 m_cameraTarget;
 	glm::vec3 m_cameraUp;
 
 	demorender::Camera *m_camera;
+
+	demorender::Mesh* m_pMesh = nullptr;
+
+	std::unique_ptr<demorender::ShadowMap> m_shadowMap;
 
 
 	std::unique_ptr<demorender::LineRenderer> m_lines;
