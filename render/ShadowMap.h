@@ -15,6 +15,7 @@ namespace demorender
 		void unbind();
 
 		glm::mat4 getLightMatrix();
+		int getDepthMapID();
 
 		void debugDraw();
 

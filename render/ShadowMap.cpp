@@ -32,19 +32,24 @@ namespace demorender
 	glm::mat4 ShadowMap::getLightMatrix()
 	{
 		const float nearplane = 1.f;
-		const float farplane = 100.f;
+		const float farplane = 50.f;
 
-		const float size = 50.f;
+		const float size = 20.f;
 		glm::mat4 projection = glm::ortho(-size, size, -size, size, nearplane, farplane); 
 
-		glm::vec3 lightPosition = glm::vec3(10.f, -20.f, 5.f);
+		glm::vec3 lightPosition = glm::vec3(0.f, 10.f, 0.f);// glm::vec3(10.f, -20.f, 5.f);
 		glm::vec3 lightTarget = glm::vec3(0.f);
-		glm::vec3 lightUp = glm::vec3(0.f, 1.f, 0.f);
+		glm::vec3 lightUp = glm::vec3(1.f, 0.f, 0.f);
 
 		glm::mat4 view = glm::lookAt(lightPosition, lightTarget, lightUp);
 
 		return projection * view;
 
+	}
+
+	int ShadowMap::getDepthMapID()
+	{
+		return m_depthMap->getID();
 	}
 
 	void ShadowMap::debugDraw()

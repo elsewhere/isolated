@@ -209,6 +209,7 @@
     <ClInclude Include="scenes\kalpeus.h" />
     <ClInclude Include="render\ShadowMap.h" />
     <ClInclude Include="render\DepthMap.h" />
+    <ClInclude Include="scenes\shadowtest.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\setupdialog.aps">
@@ -356,5 +357,6 @@
     <ClCompile Include="scenes\kalpeus.cpp" />
     <ClCompile Include="render\ShadowMap.cpp" />
     <ClCompile Include="render\DepthMap.cpp" />
+    <ClCompile Include="scenes\shadowtest.cpp" />
   </ItemGroup>
 </Project>

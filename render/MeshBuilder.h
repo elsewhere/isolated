@@ -34,6 +34,7 @@ namespace demorender
 		const std::vector<glm::vec3>& getVertices() { return m_positions; }
 
 		void generatePlane(int xres, int zres, float scale);
+		void generateCube(float scale);
 
 	private:
 		bool m_indexed;

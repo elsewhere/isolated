@@ -24,7 +24,7 @@ private:
 		Flower(bool dynamic);
 		~Flower();
 
-		void draw(glm::mat4 cameraMatrix);
+		void draw(glm::mat4 cameraMatrix, glm::mat4 lightMatrix);
 		void update();
 
 		glm::vec4 getColor() { return m_color; }
@@ -44,7 +44,7 @@ private:
 			Petal(Flower* parent, const glm::vec3& startPoint, const glm::vec3& endPoint, float petalAngle);
 			~Petal() {};
 
-			void draw(glm::mat4 cameraMatrix, const glm::mat4& transform);
+			void draw(glm::mat4 cameraMatrix, const glm::mat4& transform, glm::mat4 lightMatrix);
 			void update();
 			std::vector<std::tuple<glm::vec3, glm::vec3, glm::vec4>> m_debugLines;
 

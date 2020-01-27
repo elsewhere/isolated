@@ -182,6 +182,62 @@ namespace demorender
 		return mesh;
 	}
 
+	void MeshBuilder::generateCube(float scale)
+	{
+		glm::vec3 v0 = glm::vec3(-1, -1, -1) * scale;
+		glm::vec3 v1 = glm::vec3( 1, -1, -1) * scale;
+		glm::vec3 v2 = glm::vec3( 1,  1, -1) * scale;
+		glm::vec3 v3 = glm::vec3(-1,  1, -1) * scale;
+
+		glm::vec3 v4 = glm::vec3(-1, -1, 1) * scale;
+		glm::vec3 v5 = glm::vec3(1, -1, 1) * scale;
+		glm::vec3 v6 = glm::vec3(1, 1, 1) * scale;
+		glm::vec3 v7 = glm::vec3(-1, 1, 1) * scale;
+
+		/*      
+				v0__________ v1
+		         /|        /|
+		        / |       / |
+		       /  |      /  |
+		    v3/___|_____/v2 |
+			  | v4|_____|___| v5
+			  |  /      |  /
+			  | /       | / 
+			  |/        |/  
+			v7/_________/ v6
+
+		*/
+
+		start(false);
+
+		//top side
+		addTriangleVertex(v0, v1, v2);
+		addTriangleVertex(v0, v2, v3);
+
+		//right side
+		addTriangleVertex(v2, v1, v5);
+		addTriangleVertex(v2, v5, v6);
+
+		//left side		
+		addTriangleVertex(v0, v3, v7);
+		addTriangleVertex(v0, v7, v4);
+
+		//front side
+		addTriangleVertex(v3, v2, v6);
+		addTriangleVertex(v3, v6, v7);
+
+		//back side
+		addTriangleVertex(v1, v0, v4);
+		addTriangleVertex(v1, v4, v5);
+
+		//bottom side
+		addTriangleVertex(v7, v6, v5);
+		addTriangleVertex(v7, v5, v4);
+
+		end();
+
+	}
+
 	void MeshBuilder::generatePlane(int xres, int zres, float scale)
 	{
 /*

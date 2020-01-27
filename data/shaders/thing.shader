@@ -2,28 +2,21 @@ VERTEX_SHADER
 {
 	#version 330
 
-	uniform mat4 camera;
-	uniform mat4 model;
+	uniform mat4 cameraMatrix;
+	uniform mat4 modelMatrix;
 
 	uniform mat4 lightMatrix;
 
 	in vec3 vertexPosition;
 	in vec2 vertexTextureCoordinate;
 
-	out vec2 textureCoordinate;
-	out vec3 worldpos;
-
 	out vec4 lightFragPos;
 
-	void main() 
-	{
-	    textureCoordinate = vertexTextureCoordinate;
-	    vec3 vertex = vertexPosition;
+	void main() {
+	    // Apply all matrix transformations to vert
 
-	    vec4 pos = model * vec4(vertex, 1);
-	    worldpos = pos.xyz;
 	    lightFragPos = lightMatrix * vec4(vertexPosition, 1.0);
-	    gl_Position = camera * pos;
+	    gl_Position = cameraMatrix * modelMatrix * vec4(vertexPosition, 1.0);
 	}
 }
 
@@ -31,14 +24,11 @@ FRAGMENT_SHADER
 {
 	#version 330
 
-	uniform sampler2D texturemap;
-
 	out vec4 finalColor;
 
-	in vec2 textureCoordinate;
-	in vec3 worldpos;
 	in vec4 lightFragPos;
 
+	uniform vec4 color;
 	uniform sampler2D shadowMap;
 
 	float shadowFunc(vec4 pos)
@@ -56,19 +46,9 @@ FRAGMENT_SHADER
 	    return shadow;
 	}
 
-
 	void main() 
 	{
-		vec4 color  = texture(texturemap, textureCoordinate);// * (1.0 - shadowFunc(lightFragPos));
-		color.a = 1.0;
-/*
-	    vec3 projCoords = lightFragPos.xyz / lightFragPos.w;
-	    // transform to [0,1] range
-	    projCoords = projCoords * 0.5 + 0.5;
-
-//	    color.xy = projCoords.xy;
-
-*/
-		finalColor = color;
+		vec3 col = color.xyz;// * (1.0 - shadowFunc(lightFragPos));
+		finalColor = vec4(col, 1.0);
 	}	
 }

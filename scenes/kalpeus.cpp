@@ -114,7 +114,7 @@ void Kalpeus::Flower::Petal::createMesh()
 	}
 }
 
-void Kalpeus::Flower::Petal::draw(glm::mat4 cameraMatrix, const glm::mat4& transform)
+void Kalpeus::Flower::Petal::draw(glm::mat4 cameraMatrix, const glm::mat4& transform, glm::mat4 lightMatrix)
 {
 	if (m_parent->getType() == Type::STATIC)
 	{
@@ -123,9 +123,12 @@ void Kalpeus::Flower::Petal::draw(glm::mat4 cameraMatrix, const glm::mat4& trans
 		s.bind();
 		glm::vec4 color = m_parent->getColor();
 		color.a = 1.f;
+
+		s.setUniform1i("shadowMap", 1);
 		s.setUniform4fv("color", 1, (float *)&color);
 		s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&cameraMatrix); GL_DEBUG;
 		s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&transform);
+		s.setUniformMatrix4fv("lightMatrix", 1, GL_FALSE, (float *)&lightMatrix);
 
 		m_mesh->bind(&s);
 		m_mesh->draw(demorender::Mesh::RenderMode::TRIANGLE_STRIP);
@@ -262,6 +265,7 @@ void Kalpeus::Flower::createMesh()
 	glm::vec3 e = v3 + (v0 - v3) * ratio;
 
 	//pentagram polygons
+/*
 	MeshBuilder builder;
 	builder.start(false);
 
@@ -278,12 +282,15 @@ void Kalpeus::Flower::createMesh()
 	builder.addTriangleVertex(b, c, d);
 
 	builder.end();
+	*/
+	MeshBuilder builder;
+	builder.generateCube(0.3f);
 	m_pentaMesh = builder.getMesh(Mesh::Usage::STATIC);
 
 
 }
 
-void Kalpeus::Flower::draw(glm::mat4 cameraMatrix)
+void Kalpeus::Flower::draw(glm::mat4 cameraMatrix, glm::mat4 lightMatrix)
 {
 	Shader& s = g_shaders->getShader("flower");
 
@@ -291,6 +298,7 @@ void Kalpeus::Flower::draw(glm::mat4 cameraMatrix)
 	s.setUniform4fv("color", 1, (float *)&m_color);
 	s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&cameraMatrix); GL_DEBUG;
 	s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&m_transform);
+	s.setUniformMatrix4fv("lightMatrix", 1, GL_FALSE, (float *)&lightMatrix);
 
 	glDepthMask(GL_FALSE);
 	glEnable(GL_BLEND);
@@ -302,7 +310,7 @@ void Kalpeus::Flower::draw(glm::mat4 cameraMatrix)
 
 	for (const auto f : m_petals)
 	{
-		f->draw(cameraMatrix, m_transform);
+//		f->draw(cameraMatrix, m_transform, lightMatrix);
 	}
 
 
@@ -370,6 +378,7 @@ void Kalpeus::init()
 	m_pMesh = builder.getMesh(Mesh::Usage::STATIC);
 
 
+
 	m_shadowMap = std::make_unique<ShadowMap>();
 }
 
@@ -413,9 +422,13 @@ void Kalpeus::drawTerrain()
 	s.bind();
 
 	g_textures->bindTexture("kivitesti", GL_TEXTURE0);
+	g_textures->bindTexture(m_shadowMap->getDepthMapID(), GL_TEXTURE1);
 	s.setUniform1i("texturemap", 0);
+	s.setUniform1i("shadowMap", 1);
+
 	s.setUniformMatrix4fv("camera", 1, false, (float *)&m_camera->getCameraMatrix());
 	s.setUniformMatrix4fv("model", 1, false, (float *)&model);
+	s.setUniformMatrix4fv("lightMatrix", 1, false, (float *)&m_shadowMap->getLightMatrix());
 
 	m_pMesh->bind(&s);
 	m_pMesh->draw();
@@ -430,12 +443,12 @@ void Kalpeus::draw()
 	
 	drawTerrain();
 	for (auto f : m_flowers)
-		f->draw(m_shadowMap->getLightMatrix());
+		f->draw(m_shadowMap->getLightMatrix(), glm::mat4(1.f));
 
 	m_shadowMap->unbind();
 
 	g_renderTargets->bindMain();
-
+	/*
 	m_camera->lookAt(m_cameraPosition,
 		m_cameraTarget,
 		m_cameraUp);
@@ -443,8 +456,9 @@ void Kalpeus::draw()
 	drawTerrain();
 
 	for (auto f : m_flowers)
-		f->draw(m_camera->getCameraMatrix());
-
+		f->draw(m_camera->getCameraMatrix(), m_shadowMap->getLightMatrix());
+		*/
+//
 	m_shadowMap->debugDraw();
 //	const float focus = 0.1f;
 

@@ -219,6 +219,7 @@ namespace demorender
 		shader.setUniformMatrix4fv("camera", 1, GL_FALSE, (float *)&m_pOrtho->getCameraMatrix()); GL_DEBUG;
 		m_pSquare->bind(&shader);
 
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, textureId);
 		shader.setUniform1i("tex", 0); GL_DEBUG;
 
