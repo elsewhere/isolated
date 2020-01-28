@@ -127,7 +127,17 @@ void ShadowTest::drawGeometry(bool shadowPass)
 
 	if (shadowPass)
 	{
-		
+		Shader& s = g_shaders->getShader("depthonly");
+
+		for (auto t : m_things)
+		{
+			s.bind();
+			s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_shadowMap->getLightMatrix()); GL_DEBUG;
+			s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&t->transform); GL_DEBUG;
+			t->pMesh->bind(&s);
+			t->pMesh->draw();
+		}
+
 	}
 	else
 	{
@@ -138,8 +148,8 @@ void ShadowTest::drawGeometry(bool shadowPass)
 			s.bind();
 			s.setUniform4fv("color", 1, (float *)&t->color);
 			s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_camera->getCameraMatrix()); GL_DEBUG;
-			s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&t->transform);
-			s.setUniformMatrix4fv("lightMatrix", 1, GL_FALSE, (float *)&m_shadowMap->getLightMatrix());
+			s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&t->transform); GL_DEBUG;
+			s.setUniformMatrix4fv("lightMatrix", 1, GL_FALSE, (float *)&m_shadowMap->getLightMatrix()); GL_DEBUG;
 
 //			glDepthMask(GL_FALSE);
 //			glEnable(GL_BLEND);
@@ -162,8 +172,8 @@ void ShadowTest::drawTerrain()
 	s.setUniform1i("texturemap", 0);
 	s.setUniform1i("shadowMap", 1);
 
-	s.setUniformMatrix4fv("camera", 1, false, (float *)&m_camera->getCameraMatrix());
-	s.setUniformMatrix4fv("model", 1, false, (float *)&model);
+	s.setUniformMatrix4fv("cameraMatrix", 1, false, (float *)&m_camera->getCameraMatrix());
+	s.setUniformMatrix4fv("modelMatrix", 1, false, (float *)&model);
 	s.setUniformMatrix4fv("lightMatrix", 1, false, (float *)&m_shadowMap->getLightMatrix());
 
 	m_terrain->bind(&s);
@@ -181,9 +191,9 @@ void ShadowTest::draw()
 {
 	g_params->useNamespace("shadowtest");
 
-//	m_shadowMap->bind();
-//	drawGeometry(true);
-//	m_shadowMap->unbind();
+	m_shadowMap->bind();
+	drawGeometry(true);
+	m_shadowMap->unbind();
 
 	g_renderTargets->bindMain();
 
