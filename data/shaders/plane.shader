@@ -53,7 +53,8 @@ FRAGMENT_SHADER
 
 	void main() 
 	{
-		vec4 color  = texture(texturemap, textureCoordinate) * (1.0 - shadowFunc(lightFragPos));
+		float shadowValue = 0.4 + 0.6 * (1.0 - shadowFunc(lightFragPos));
+		vec4 color  = texture(texturemap, textureCoordinate) * shadowValue;
 		color.a = 1.0;
 /*
 	    vec3 projCoords = lightFragPos.xyz / lightFragPos.w;

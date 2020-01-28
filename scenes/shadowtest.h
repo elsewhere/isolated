@@ -25,6 +25,9 @@ private:
 		glm::mat4 transform;
 
 		glm::vec4 color;
+
+		glm::vec3 pos;
+		float scale;
 		
 
 	};

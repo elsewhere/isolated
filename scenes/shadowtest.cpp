@@ -81,16 +81,15 @@ void ShadowTest::init()
 		float r = Math::randBetween(1.f, 50.f);
 		float a = Math::randFloat() * 2 * 3.141592f;
 
-		glm::vec3 pos = glm::vec3(sinf(a) * r, Math::randBetween(2.5f, 5.5f), cosf(a) * r);
-
-		t->transform = glm::mat4(1.f);
+		t->pos = glm::vec3(sinf(a) * r, Math::randBetween(2.5f, 5.5f), cosf(a) * r);
 
 		t->pMesh = builder.getMesh(demorender::Mesh::Usage::STATIC);
-		t->transform = glm::translate(pos);
+		t->transform = glm::translate(t->pos);
 
 		glm::vec3 col = glm::normalize(Math::randVectSphere());
 		t->color = glm::normalize(glm::vec4(col, 1.f));
 		
+		t->scale = Math::randFloat(0.5f, 2.f);
 		m_things.push_back(t);
 	}
 
@@ -120,6 +119,17 @@ void ShadowTest::update()
 
 	m_cameraTarget = glm::vec3(0.f);
 	m_cameraTarget.y = 0.f;// ::vec3(0.f);
+
+	for (auto thing : m_things)
+	{
+		glm::vec3 pos = thing->pos;
+		
+		glm::vec3 angle = glm::normalize(glm::vec3(sinf(pos.x), cosf(pos.y), sinf(pos.z)) * 100.f);
+
+
+		thing->transform = glm::translate(thing->pos) * glm::rotate(m_pos * 100.f, angle) * glm::scale(glm::vec3(thing->scale));
+		
+	}
 }
 
 void ShadowTest::drawGeometry(bool shadowPass)
