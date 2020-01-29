@@ -439,13 +439,13 @@ void Kalpeus::draw()
 {
 	g_params->useNamespace("Kalpeus");
 
-	m_shadowMap->bind();
+//	m_shadowMap->bind();
 	
 	drawTerrain();
 	for (auto f : m_flowers)
 		f->draw(m_shadowMap->getLightMatrix(), glm::mat4(1.f));
 
-	m_shadowMap->unbind();
+//	m_shadowMap->unbind();
 
 	g_renderTargets->bindMain();
 	/*

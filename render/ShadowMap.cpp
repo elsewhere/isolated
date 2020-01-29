@@ -13,15 +13,27 @@ namespace demorender
 		g_debug << "creating shadow map\n";
 		m_depthMap = std::make_unique<DepthMap>();
 		m_depthMap->create(params);
+
+		m_viewMatrix = glm::mat4(1.f);
 	}
 
 	ShadowMap::~ShadowMap()
 	{
 	}
 
-	void ShadowMap::bind()
+	void ShadowMap::prepare(const demorender::Light& light)
 	{
 		m_depthMap->bind();
+
+		m_light = light;
+		if (m_light.getType() == Light::Type::DIRECTIONAL)
+		{
+			m_viewMatrix = glm::lookAt(m_light.getPosition(), m_light.getTarget(), m_light.getUp());
+		}
+		else if (m_light.getType() == Light::Type::POINT)
+		{
+
+		}
 	}
 
 	void ShadowMap::unbind()
@@ -31,25 +43,19 @@ namespace demorender
 
 	glm::mat4 ShadowMap::getLightMatrix()
 	{
-
-//		static float t = 0.f;
-//		t += 0.001f;
-
 		const float nearplane = 1.f;
 		const float farplane = 100.f;
 
-		const float size = 50.f;
-		glm::mat4 projection = glm::ortho(-size, size, -size, size, nearplane, farplane); 
+		if (m_light.getType() == Light::Type::DIRECTIONAL)
+		{
+			const float size = 60.f;
+			glm::mat4 projection = glm::ortho(-size, size, -size, size, nearplane, farplane);
+			return projection * m_viewMatrix;
+		}
+		else if (m_light.getType() == Light::Type::POINT)
+		{
 
-		glm::vec3 lightPosition = glm::vec3(2.f, 10.f, 0.f);// glm::vec3(10.f, -20.f, 5.f);
-//		glm::vec3 lightPosition = glm::vec3(3 * sinf(t), 10.f, 0.f);// glm::vec3(10.f, -20.f, 5.f);
-		glm::vec3 lightTarget = glm::vec3(0.f);
-		glm::vec3 lightUp = glm::vec3(1.f, 0.f, 0.f);
-
-		glm::mat4 view = glm::lookAt(lightPosition, lightTarget, lightUp);
-
-		return projection * view;
-
+		}
 	}
 
 	int ShadowMap::getDepthMapID()

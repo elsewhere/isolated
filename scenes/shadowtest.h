@@ -45,6 +45,8 @@ private:
 
 	std::vector<Thing*> m_things;
 
+	demorender::Light m_light;
+
 	std::unique_ptr<demorender::ShadowMap> m_shadowMap;
 	std::unique_ptr<demorender::LineRenderer> m_lines;
 

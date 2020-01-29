@@ -4,6 +4,8 @@
 
 namespace demorender
 {
+	class Light;
+
 	class ShadowMap
 	{
 	public:
@@ -11,7 +13,7 @@ namespace demorender
 		ShadowMap();
 		~ShadowMap();
 
-		void bind();
+		void prepare(const demorender::Light& light);
 		void unbind();
 
 		glm::mat4 getLightMatrix();
@@ -20,6 +22,8 @@ namespace demorender
 		void debugDraw();
 
 	private:
+		demorender::Light m_light;
+		glm::mat4 m_viewMatrix;
 
 		std::unique_ptr<DepthMap> m_depthMap;
 

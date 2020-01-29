@@ -9,48 +9,6 @@ using namespace demomath;
 using namespace demorender;
 using namespace glm;
 
-namespace
-{
-	static const std::string skyboxTexture = "nebula";
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Ground
-////////////////////////////////////////////////////////////////1////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-/*
-void ShadowTest::Flower::draw(glm::mat4 cameraMatrix, glm::mat4 lightMatrix)
-{
-	Shader& s = g_shaders->getShader("flower");
-
-	s.bind();
-	s.setUniform4fv("color", 1, (float *)&m_color);
-	s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&cameraMatrix); GL_DEBUG;
-	s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&m_transform);
-	s.setUniformMatrix4fv("lightMatrix", 1, GL_FALSE, (float *)&lightMatrix);
-
-	glDepthMask(GL_FALSE);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	m_pentaMesh->bind(&s);
-	m_pentaMesh->draw();
-	glDepthMask(GL_TRUE);
-	glDisable(GL_BLEND);
-
-	for (const auto f : m_petals)
-	{
-//		f->draw(cameraMatrix, m_transform, lightMatrix);
-	}
-
-
-//	m_lines->draw(pCamera, LineRenderer::Mode::LINES);
-
-}
-*/
-
 void ShadowTest::init()
 {
 	g_params->useNamespace("shadowtest");
@@ -201,7 +159,12 @@ void ShadowTest::draw()
 {
 	g_params->useNamespace("shadowtest");
 
-	m_shadowMap->bind();
+	m_light.setType(Light::Type::DIRECTIONAL);
+	m_light.setPosition(glm::vec3(2.f, 10.f, 0.f));
+	m_light.setTarget(glm::vec3(0.f));
+	m_light.setUp(glm::vec3(1.f, 0.f, 0.f));
+
+	m_shadowMap->prepare(m_light);
 	drawGeometry(true);
 	m_shadowMap->unbind();
 
