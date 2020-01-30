@@ -48,7 +48,7 @@ FRAGMENT_SHADER
 
 	void main() 
 	{
-		vec3 col = color.xyz;// * (1.0 - shadowFunc(lightFragPos));
+		vec3 col = color.xyz * (1.0 - 0.4 * shadowFunc(lightFragPos));
 		finalColor = vec4(col, 1.0);
 	}	
 }

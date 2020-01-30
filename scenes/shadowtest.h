@@ -28,12 +28,12 @@ private:
 
 		glm::vec3 pos;
 		float scale;
-		
-
 	};
 
 	void drawGeometry(bool shadowPass);
 	void drawTerrain();
+
+	void updateLights();
 
 	glm::vec3 m_cameraPosition;
 	glm::vec3 m_cameraTarget;
@@ -45,7 +45,8 @@ private:
 
 	std::vector<Thing*> m_things;
 
-	demorender::Light m_light;
+	demorender::Light m_directionalLight;
+	demorender::Light m_pointLight;
 
 	std::unique_ptr<demorender::ShadowMap> m_shadowMap;
 	std::unique_ptr<demorender::LineRenderer> m_lines;

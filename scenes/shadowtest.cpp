@@ -83,16 +83,30 @@ void ShadowTest::update()
 		glm::vec3 pos = thing->pos;
 		
 		glm::vec3 angle = glm::normalize(glm::vec3(sinf(pos.x), cosf(pos.y), sinf(pos.z)) * 100.f);
-
-
 		thing->transform = glm::translate(thing->pos) * glm::rotate(m_pos * 100.f, angle) * glm::scale(glm::vec3(thing->scale));
-		
 	}
+	updateLights();
+}
+
+void ShadowTest::updateLights()
+{
+	m_directionalLight.setType(Light::Type::DIRECTIONAL);
+	m_directionalLight.setPosition(glm::vec3(2.f, 10.f, 0.f));
+	m_directionalLight.setTarget(glm::vec3(0.f));
+	m_directionalLight.setUp(glm::vec3(1.f, 0.f, 0.f));
+
+	const float a = m_pos * 200.f;
+	const float radius = 15.f;
+	const float height = 15.f;
+	m_pointLight.setType(Light::Type::POINT);
+	m_pointLight.setPosition(glm::vec3(radius * sinf(a), height, radius * cosf(a)));
+	m_pointLight.setTarget(glm::vec3(0.f));
+	m_pointLight.setUp(glm::vec3(1.f, 0.f, 0.f));
+
 }
 
 void ShadowTest::drawGeometry(bool shadowPass)
 {
-
 	if (shadowPass)
 	{
 		Shader& s = g_shaders->getShader("depthonly");
@@ -105,26 +119,33 @@ void ShadowTest::drawGeometry(bool shadowPass)
 			t->pMesh->bind(&s);
 			t->pMesh->draw();
 		}
-
 	}
 	else
 	{
 		Shader& s = g_shaders->getShader("thing");
 
+		s.bind();
 		for (auto t : m_things)
 		{
-			s.bind();
 			s.setUniform4fv("color", 1, (float *)&t->color);
 			s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_camera->getCameraMatrix()); GL_DEBUG;
 			s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&t->transform); GL_DEBUG;
 			s.setUniformMatrix4fv("lightMatrix", 1, GL_FALSE, (float *)&m_shadowMap->getLightMatrix()); GL_DEBUG;
 
-//			glDepthMask(GL_FALSE);
-//			glEnable(GL_BLEND);
-//			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			t->pMesh->bind(&s);
 			t->pMesh->draw();
 		}
+
+		//draw point light		
+		glm::mat4 model = glm::translate(m_pointLight.getPosition()) * glm::scale(glm::vec3(1.f));;
+
+		s.setUniform4f("color", 1.f, 1.f, 1.f, 1.f);
+		s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_camera->getCameraMatrix()); GL_DEBUG;
+		s.setUniformMatrix4fv("lightMatrix", 1, GL_FALSE, (float *)&m_shadowMap->getLightMatrix()); GL_DEBUG;
+		s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&model); GL_DEBUG;
+
+		m_things[0]->pMesh->bind(&s);
+		m_things[0]->pMesh->draw();
 	}
 }
 
@@ -150,21 +171,15 @@ void ShadowTest::drawTerrain()
 }
 void ShadowTest::debug()
 {
-//	g_screenText.log<std::string>("lightPos", Math::toString(m_lightPos));
-//	g_screenText.log<float>("m_lightValue", m_lightValue);
-//	g_screenText.log<float>("m_lightRadius", m_lightRadius);
+	m_shadowMap->debugDraw();
 }
 
 void ShadowTest::draw()
 {
 	g_params->useNamespace("shadowtest");
 
-	m_light.setType(Light::Type::DIRECTIONAL);
-	m_light.setPosition(glm::vec3(2.f, 10.f, 0.f));
-	m_light.setTarget(glm::vec3(0.f));
-	m_light.setUp(glm::vec3(1.f, 0.f, 0.f));
-
-	m_shadowMap->prepare(m_light);
+	m_shadowMap->prepare(m_directionalLight);
+//	m_shadowMap->prepare(m_pointLight);
 	drawGeometry(true);
 	m_shadowMap->unbind();
 
@@ -179,7 +194,5 @@ void ShadowTest::draw()
 	drawTerrain();
 	drawGeometry(false);
 //	m_lines->draw(m_camera, LineRenderer::Mode::LINES);
-
-	m_shadowMap->debugDraw();
 
 }

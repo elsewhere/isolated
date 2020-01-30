@@ -22,8 +22,16 @@ namespace demorender
 		void debugDraw();
 
 	private:
+		enum class Type
+		{
+			ORTHO,
+			PERSPECTIVE,
+		};
+
+		Type m_type;
 		demorender::Light m_light;
 		glm::mat4 m_viewMatrix;
+		glm::mat4 m_projectionMatrix;
 
 		std::unique_ptr<DepthMap> m_depthMap;
 
