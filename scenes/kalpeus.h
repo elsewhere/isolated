@@ -3,6 +3,8 @@
 #include "../globals.h"
 #include "../render/LineRenderer.h"
 
+#include "../render/ShadowMap.h"
+
 class Kalpeus : public democore::Scene
 {
 

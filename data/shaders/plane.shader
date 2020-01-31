@@ -38,14 +38,20 @@ FRAGMENT_SHADER
 	float shadowFunc(vec4 pos)
 	{
 	    vec3 projCoords = lightFragPos.xyz / lightFragPos.w;
-	    // transform to [0,1] range
-	    projCoords = projCoords * 0.5 + 0.5;
+
+	    projCoords = projCoords * 0.5 + 0.5; //[0, 1]
 	    // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
 	    float closestDepth = texture(shadowMap, projCoords.xy).r; 
 	    // get depth of current fragment from light's perspective
 	    float currentDepth = projCoords.z;
 	    // check whether current frag pos is in shadow
-	    float shadow = (currentDepth > closestDepth)  ? 1.0 : 0.0;
+
+	    float bias = 0.003;
+	    float shadow = ((currentDepth - bias) > closestDepth)  ? 1.0 : 0.0;
+
+	    //fix parts outside the frustum
+		if(projCoords.z > 1.0)
+		    shadow = 0.0;
 
 	    return shadow;
 	}
@@ -56,14 +62,7 @@ FRAGMENT_SHADER
 		float shadowValue = 0.4 + 0.6 * (1.0 - shadowFunc(lightFragPos));
 		vec4 color  = texture(texturemap, textureCoordinate) * shadowValue;
 		color.a = 1.0;
-/*
-	    vec3 projCoords = lightFragPos.xyz / lightFragPos.w;
-	    // transform to [0,1] range
-	    projCoords = projCoords * 0.5 + 0.5;
 
-//	    color.xy = projCoords.xy;
-
-*/
 		finalColor = color;
 	}	
 }

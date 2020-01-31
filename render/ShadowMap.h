@@ -1,16 +1,22 @@
 #pragma once
 
+#include "Light.h"
 #include "../Globals.h"
 
 namespace demorender
 {
-	class Light;
+	struct ShadowMapParameters
+	{
+		int width = 1024;
+		int height = 1024;
+		bool cullFrontFaces = true;
+	};
 
 	class ShadowMap
 	{
 	public:
 
-		ShadowMap();
+		ShadowMap(const ShadowMapParameters& params);
 		~ShadowMap();
 
 		void prepare(const demorender::Light& light);
@@ -28,8 +34,9 @@ namespace demorender
 			PERSPECTIVE,
 		};
 
+		ShadowMapParameters m_params;
 		Type m_type;
-		demorender::Light m_light;
+		Light m_light;
 		glm::mat4 m_viewMatrix;
 		glm::mat4 m_projectionMatrix;
 

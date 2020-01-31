@@ -3,16 +3,17 @@
 
 namespace demorender
 {
-	ShadowMap::ShadowMap()
+	ShadowMap::ShadowMap(const ShadowMapParameters& params):
+		m_params(params)
 	{
-		TextureParameters params;
-		params.m_type = TextureParameters::DEPTH;
-		params.m_width = 1024;
-		params.m_height = 1024;
+		TextureParameters textureParams;
+		textureParams.m_type = TextureParameters::DEPTH;
+		textureParams.m_width = m_params.width;
+		textureParams.m_height = m_params.height;
 
 		g_debug << "creating shadow map\n";
 		m_depthMap = std::make_unique<DepthMap>();
-		m_depthMap->create(params);
+		m_depthMap->create(textureParams);
 
 		m_viewMatrix = glm::mat4(1.f);
 		m_type = Type::ORTHO;
@@ -49,11 +50,24 @@ namespace demorender
 			m_viewMatrix = glm::lookAt(m_light.getPosition(), m_light.getTarget(), m_light.getUp());
 			m_projectionMatrix = glm::perspective(90.f, 1.f, nearplane, farplane);
 		}
+
+		if (m_params.cullFrontFaces)
+		{
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_FRONT);
+
+		}
 	}
 
 	void ShadowMap::unbind()
 	{
 		m_depthMap->unbind();
+
+		if (m_params.cullFrontFaces)
+		{
+			glDisable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
+		}
 	}
 
 	glm::mat4 ShadowMap::getLightMatrix()

@@ -6,6 +6,7 @@ namespace
 }
 
 namespace demorender
+
 {
 	DepthMap::DepthMap():m_ID(-1)
 		, m_hasBeenBound(false)
@@ -53,8 +54,11 @@ namespace demorender
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, m_params.m_width, m_params.m_height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL); GL_DEBUG;
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); GL_DEBUG;
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); GL_DEBUG;
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); GL_DEBUG;
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); GL_DEBUG;
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER); GL_DEBUG;
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER); GL_DEBUG;
+
+		float border[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, m_FBO); GL_DEBUG;
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_ID, 0); GL_DEBUG;

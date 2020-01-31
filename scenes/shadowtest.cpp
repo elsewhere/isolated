@@ -3,6 +3,7 @@
 #include "../glm/gtx/transform.hpp"
 
 #include "../render/LineRenderer.h"
+#include "../render/ShadowMap.h"
 
 using namespace democore;
 using namespace demomath;
@@ -25,7 +26,9 @@ void ShadowTest::init()
 		m_lines->addPoint(v, c);
 	}
 	
-	m_shadowMap = std::make_unique<ShadowMap>();
+	ShadowMapParameters params;
+
+	m_shadowMap = std::make_unique<ShadowMap>(params);
 
 	m_things.clear();
 
@@ -178,8 +181,8 @@ void ShadowTest::draw()
 {
 	g_params->useNamespace("shadowtest");
 
-	m_shadowMap->prepare(m_directionalLight);
-//	m_shadowMap->prepare(m_pointLight);
+//	m_shadowMap->prepare(m_directionalLight);
+	m_shadowMap->prepare(m_pointLight);
 	drawGeometry(true);
 	m_shadowMap->unbind();
 

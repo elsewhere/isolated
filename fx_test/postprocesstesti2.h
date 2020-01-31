@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../globals.h"
+#include "../render/Light.h"
 
 class PostProcessTesti2 : public democore::Scene
 {

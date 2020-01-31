@@ -378,8 +378,8 @@ void Kalpeus::init()
 	m_pMesh = builder.getMesh(Mesh::Usage::STATIC);
 
 
-
-	m_shadowMap = std::make_unique<ShadowMap>();
+	ShadowMapParameters params;
+	m_shadowMap = std::make_unique<ShadowMap>(params);
 }
 
 void Kalpeus::update()

@@ -2,10 +2,10 @@
 
 #include "../globals.h"
 #include "../render/LineRenderer.h"
+#include "../render/ShadowMap.h"
 
 class ShadowTest : public democore::Scene
 {
-
 public:
 	ShadowTest() {};
 	~ShadowTest() {};
