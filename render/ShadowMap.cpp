@@ -6,12 +6,14 @@ namespace demorender
 	ShadowMap::ShadowMap(const ShadowMapParameters& params):
 		m_params(params)
 	{
+
 		TextureParameters textureParams;
-		textureParams.m_type = TextureParameters::DEPTH;
+		textureParams.m_type = params.cubeMap ? TextureParameters::DEPTH_CUBEMAP : TextureParameters::DEPTH;
 		textureParams.m_width = m_params.width;
 		textureParams.m_height = m_params.height;
 
-		g_debug << "creating shadow map\n";
+		g_debug << "creating shadow map " << textureParams.m_width << "x" << textureParams.m_height << " " << (params.cubeMap ? "cube map" : "texture") << "\n";
+
 		m_depthMap = std::make_unique<DepthMap>();
 		m_depthMap->create(textureParams);
 

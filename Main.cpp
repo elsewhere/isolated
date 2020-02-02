@@ -14,9 +14,13 @@
 #include "fx_test/cubemaptesti2.h"
 #include "fx_test/particletesti2.h"
 #include "fx_test/particletesti3.h"
+
+#include "scenes/shadowtest.h"
+
 #include "scenes/huuru.h"
 
 */
+#include "scenes/shadowtest2.h"
 //#include "fx_test/computetest.h"
 //#include "fx_test/computetest2.h"
 
@@ -32,7 +36,6 @@
 #include "scenes/kasvot.h"
 #include "scenes/tunne.h"
 #include "scenes/kalpeus.h"
-#include "scenes/shadowtest.h"
 
 democore::Debugger g_debug;
 democore::Profiler g_profiler;
@@ -41,7 +44,7 @@ democore::ErrorLog g_screenText;
 
 glm::vec3 g_clearColor = glm::vec3(0, 0, 0);
 
-const std::string g_prodName = "Isafjördur";
+const std::string g_prodName = "Tyhjyys";
 
 using namespace democore;
 using namespace demorender;
@@ -95,7 +98,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 //		static_cast<Demo*>(context)->addScene("kasvot", new Kasvot());
 //		static_cast<Demo*>(context)->addScene("tunne", new Tunne());
 //		static_cast<Demo*>(context)->addScene("kalpeus", new Kalpeus());
-		static_cast<Demo*>(context)->addScene("shadowtest", new ShadowTest());
+//		static_cast<Demo*>(context)->addScene("shadowtest", new ShadowTest());
+		static_cast<Demo*>(context)->addScene("shadowtest2", new ShadowTest2());
 
 		//init the prodand play
 		g_textures->createTextures();

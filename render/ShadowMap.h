@@ -10,6 +10,7 @@ namespace demorender
 		int width = 1024;
 		int height = 1024;
 		bool cullFrontFaces = true;
+		bool cubeMap = false;
 	};
 
 	class ShadowMap

@@ -213,26 +213,38 @@ namespace demorender
 		//top side
 		addTriangleVertex(v0, v1, v2);
 		addTriangleVertex(v0, v2, v3);
+		addTriangleUv(glm::vec2(0.f, 0.f), glm::vec2(1.f, 0.f), glm::vec2(1.f, 1.f));
+		addTriangleUv(glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f), glm::vec2(0.f, 1.f));
 
 		//right side
 		addTriangleVertex(v2, v1, v5);
 		addTriangleVertex(v2, v5, v6);
+		addTriangleUv(glm::vec2(0.f, 0.f), glm::vec2(1.f, 0.f), glm::vec2(1.f, 1.f));
+		addTriangleUv(glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f), glm::vec2(0.f, 1.f));
 
 		//left side		
 		addTriangleVertex(v0, v3, v7);
 		addTriangleVertex(v0, v7, v4);
+		addTriangleUv(glm::vec2(0.f, 0.f), glm::vec2(1.f, 0.f), glm::vec2(1.f, 1.f));
+		addTriangleUv(glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f), glm::vec2(0.f, 1.f));
 
 		//front side
 		addTriangleVertex(v3, v2, v6);
 		addTriangleVertex(v3, v6, v7);
+		addTriangleUv(glm::vec2(0.f, 0.f), glm::vec2(1.f, 0.f), glm::vec2(1.f, 1.f));
+		addTriangleUv(glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f), glm::vec2(0.f, 1.f));
 
 		//back side
 		addTriangleVertex(v1, v0, v4);
 		addTriangleVertex(v1, v4, v5);
+		addTriangleUv(glm::vec2(0.f, 0.f), glm::vec2(1.f, 0.f), glm::vec2(1.f, 1.f));
+		addTriangleUv(glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f), glm::vec2(0.f, 1.f));
 
 		//bottom side
 		addTriangleVertex(v7, v6, v5);
 		addTriangleVertex(v7, v5, v4);
+		addTriangleUv(glm::vec2(0.f, 0.f), glm::vec2(1.f, 0.f), glm::vec2(1.f, 1.f));
+		addTriangleUv(glm::vec2(0.f, 0.f), glm::vec2(1.f, 1.f), glm::vec2(0.f, 1.f));
 
 		end();
 

@@ -1,4 +1,4 @@
-#include "ShadowTest.h"
+#include "ShadowTest2.h"
 #include "../render/MeshBuilder.h"
 #include "../glm/gtx/transform.hpp"
 
@@ -10,9 +10,9 @@ using namespace demomath;
 using namespace demorender;
 using namespace glm;
 
-void ShadowTest::init()
+void ShadowTest2::init()
 {
-	g_params->useNamespace("shadowtest");
+	g_params->useNamespace("ShadowTest2");
 	m_camera = new demorender::Camera(1.f, 1000.f, 45.f);
 
 	m_lines = std::make_unique<demorender::LineRenderer>();
@@ -30,24 +30,25 @@ void ShadowTest::init()
 
 	params.width = 1024;
 	params.height = 1024; 
+	params.cubeMap = true;
 
 	m_shadowMap = std::make_unique<ShadowMap>(params);
 
 	m_things.clear();
 
+	MeshBuilder builder;
+	builder.generateCube(1.f);
+
+
+	m_thingMesh = builder.getMesh(demorender::Mesh::Usage::STATIC);
 	for (int i = 0; i < 50; i++)
 	{
 		Thing* t = new Thing();
 
-		MeshBuilder builder;
-		builder.generateCube(1.f);
-
 		float r = Math::randBetween(1.f, 50.f);
-		float a = Math::randFloat() * 2 * 3.141592f;
 
-		t->pos = glm::vec3(sinf(a) * r, Math::randBetween(2.5f, 5.5f), cosf(a) * r);
+		t->pos = Math::randVectSphere(r);
 
-		t->pMesh = builder.getMesh(demorender::Mesh::Usage::STATIC);
 		t->transform = glm::translate(t->pos);
 
 		glm::vec3 col = glm::normalize(Math::randVectSphere());
@@ -64,15 +65,15 @@ void ShadowTest::init()
 	const int xres = 100;
 	const float scale = 100.f;
 
-	MeshBuilder builder;
-	builder.generatePlane(xres, zres, scale);
+//	MeshBuilder builder;
+	
+	builder.generateCube(100.f);
 	m_terrain = builder.getMesh(Mesh::Usage::STATIC);
-
 }
 
-void ShadowTest::update()
+void ShadowTest2::update()
 {
-	g_params->useNamespace("shadowtest");
+	g_params->useNamespace("ShadowTest2");
 
 	m_cameraUp = glm::vec3(0.f, 1.f, 0.f);
 
@@ -94,13 +95,8 @@ void ShadowTest::update()
 	updateLights();
 }
 
-void ShadowTest::updateLights()
+void ShadowTest2::updateLights()
 {
-	m_directionalLight.setType(Light::Type::DIRECTIONAL);
-	m_directionalLight.setPosition(glm::vec3(2.f, 10.f, 0.f));
-	m_directionalLight.setTarget(glm::vec3(0.f));
-	m_directionalLight.setUp(glm::vec3(1.f, 0.f, 0.f));
-
 	const float a = m_pos * 20.f;
 	const float radius = 15.f;
 	const float height = 15.f;
@@ -111,19 +107,19 @@ void ShadowTest::updateLights()
 
 }
 
-void ShadowTest::drawGeometry(bool shadowPass)
+void ShadowTest2::drawGeometry(bool shadowPass)
 {
 	if (shadowPass)
 	{
 		Shader& s = g_shaders->getShader("depthonly");
 
+		s.bind();
+		m_thingMesh->bind(&s);
 		for (auto t : m_things)
 		{
-			s.bind();
 			s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_shadowMap->getLightMatrix()); GL_DEBUG;
 			s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&t->transform); GL_DEBUG;
-			t->pMesh->bind(&s);
-			t->pMesh->draw();
+			m_thingMesh->draw();
 		}
 	}
 	else
@@ -131,6 +127,7 @@ void ShadowTest::drawGeometry(bool shadowPass)
 		Shader& s = g_shaders->getShader("thing");
 
 		s.bind();
+		m_thingMesh->bind(&s);
 		for (auto t : m_things)
 		{
 			s.setUniform4fv("color", 1, (float *)&t->color);
@@ -138,8 +135,7 @@ void ShadowTest::drawGeometry(bool shadowPass)
 			s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&t->transform); GL_DEBUG;
 			s.setUniformMatrix4fv("lightMatrix", 1, GL_FALSE, (float *)&m_shadowMap->getLightMatrix()); GL_DEBUG;
 
-			t->pMesh->bind(&s);
-			t->pMesh->draw();
+			m_thingMesh->draw();
 		}
 
 		//draw point light		
@@ -150,16 +146,16 @@ void ShadowTest::drawGeometry(bool shadowPass)
 		s.setUniformMatrix4fv("lightMatrix", 1, GL_FALSE, (float *)&m_shadowMap->getLightMatrix()); GL_DEBUG;
 		s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&model); GL_DEBUG;
 
-		m_things[0]->pMesh->bind(&s);
-		m_things[0]->pMesh->draw();
+		m_thingMesh->bind(&s);
+		m_thingMesh->draw();
 	}
 }
 
-void ShadowTest::drawTerrain()
+void ShadowTest2::drawTerrain()
 {
 	glm::mat4 model = glm::mat4(1.f);
 
-	Shader& s = g_shaders->getShader("plane");
+	Shader& s = g_shaders->getShader("shadowcube");
 	s.bind();
 
 	g_textures->bindTexture("kivitesti", GL_TEXTURE0);
@@ -175,16 +171,15 @@ void ShadowTest::drawTerrain()
 	m_terrain->draw();
 
 }
-void ShadowTest::debug()
+void ShadowTest2::debug()
 {
 	m_shadowMap->debugDraw();
 }
 
-void ShadowTest::draw()
+void ShadowTest2::draw()
 {
-	g_params->useNamespace("shadowtest");
+	g_params->useNamespace("ShadowTest2");
 
-//	m_shadowMap->prepare(m_directionalLight);
 	m_shadowMap->prepare(m_pointLight);
 	drawGeometry(true);
 	m_shadowMap->unbind();

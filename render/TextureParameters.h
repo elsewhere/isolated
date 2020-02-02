@@ -18,6 +18,7 @@ namespace demorender
 			TEXTURE_2D,
 			CUBEMAP,
 			DEPTH,
+			DEPTH_CUBEMAP,
 		};
 		TextureParameters();
 		~TextureParameters();

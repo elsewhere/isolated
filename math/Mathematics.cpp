@@ -411,7 +411,7 @@ vec3 Math::randVectSphere(float radius)
 
 	float u = sqrt(1.0f - t * t);
 
-	return vec3(sinf(s) * u, cosf(s) * u, t);
+	return vec3(sinf(s) * u, cosf(s) * u, t) * radius;
 }
 
 vec3 Math::randVectHemisphere(vec3& normal, float radius)

@@ -48,23 +48,57 @@ namespace demorender
 			g_debug << m_params.toString() << std::endl;
 		}
 
-		glGenFramebuffers(1, &m_FBO); GL_DEBUG;
-		glGenTextures(1, &m_ID); GL_DEBUG;
-		glBindTexture(GL_TEXTURE_2D, m_ID); GL_DEBUG;
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, m_params.m_width, m_params.m_height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL); GL_DEBUG;
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); GL_DEBUG;
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); GL_DEBUG;
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER); GL_DEBUG;
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER); GL_DEBUG;
+		if (params.m_type == TextureParameters::DEPTH)
+		{
+			glGenFramebuffers(1, &m_FBO); GL_DEBUG;
+			glGenTextures(1, &m_ID); GL_DEBUG;
+			glBindTexture(GL_TEXTURE_2D, m_ID); GL_DEBUG;
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, m_params.m_width, m_params.m_height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL); GL_DEBUG;
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); GL_DEBUG;
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); GL_DEBUG;
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER); GL_DEBUG;
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER); GL_DEBUG;
 
-		float border[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 
-		glBindFramebuffer(GL_FRAMEBUFFER, m_FBO); GL_DEBUG;
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_ID, 0); GL_DEBUG;
-		glDrawBuffer(GL_NONE); GL_DEBUG;
-		glReadBuffer(GL_NONE); GL_DEBUG;
-		glBindFramebuffer(GL_FRAMEBUFFER, 0); GL_DEBUG;
+			float border[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+			glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border);
+
+			glBindFramebuffer(GL_FRAMEBUFFER, m_FBO); GL_DEBUG;
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_ID, 0); GL_DEBUG;
+			glDrawBuffer(GL_NONE); GL_DEBUG;
+			glReadBuffer(GL_NONE); GL_DEBUG;
+			glBindFramebuffer(GL_FRAMEBUFFER, 0); GL_DEBUG;
+		}
+		else if (params.m_type == TextureParameters::DEPTH_CUBEMAP)
+		{
+			glGenFramebuffers(1, &m_FBO); GL_DEBUG;
+			glGenTextures(1, &m_ID); GL_DEBUG;
+			glBindTexture(GL_TEXTURE_CUBE_MAP, m_ID);
+
+			for (int i = 0; i < 6; ++i)
+			{
+				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT, m_params.m_width, m_params.m_height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL); GL_DEBUG;
+			}
+
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST); GL_DEBUG;
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST); GL_DEBUG;
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); GL_DEBUG;
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); GL_DEBUG;
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE); GL_DEBUG;
+
+			glBindFramebuffer(GL_FRAMEBUFFER, m_FBO); GL_DEBUG;
+			glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_ID, 0); GL_DEBUG;
+			glDrawBuffer(GL_NONE); GL_DEBUG;
+			glReadBuffer(GL_NONE); GL_DEBUG;
+			glBindFramebuffer(GL_FRAMEBUFFER, 0); GL_DEBUG;
+		}
+		else
+		{
+			g_error.log("Invalid mode for depth map\n");
+		}
+
 
 		if (EXTRA_DEBUG)
 		{

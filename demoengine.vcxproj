@@ -190,10 +190,6 @@
     <ClInclude Include="fx_test\postprocesstesti.h" />
     <ClInclude Include="fx_test\postprocesstesti2.h" />
     <ClInclude Include="Globals.h" />
-    <ClInclude Include="math\Bezier.h" />
-    <ClInclude Include="math\CatmullRom.h" />
-    <ClInclude Include="math\Curve.h" />
-    <ClInclude Include="math\LinearCurve.h" />
     <ClInclude Include="math\Mathematics.h" />
     <ClInclude Include="math\Range.h" />
     <ClInclude Include="objloader\OBJ_Loader.h" />
@@ -228,6 +224,7 @@
     <ClInclude Include="scenes\kalpeus.h" />
     <ClInclude Include="scenes\kasvot.h" />
     <ClInclude Include="scenes\shadowtest.h" />
+    <ClInclude Include="scenes\shadowtest2.h" />
     <ClInclude Include="scenes\tunne.h" />
     <ClInclude Include="scenes\tyhjyys.h" />
     <ClInclude Include="util\StringUtils.h" />
@@ -271,10 +268,6 @@
     <ClCompile Include="fx_test\postprocesstesti.cpp" />
     <ClCompile Include="fx_test\postprocesstesti2.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="math\Bezier.cpp" />
-    <ClCompile Include="math\CatmullRom.cpp" />
-    <ClCompile Include="math\Curve.cpp" />
-    <ClCompile Include="math\LinearCurve.cpp" />
     <ClCompile Include="math\Mathematics.cpp" />
     <ClCompile Include="math\Range.cpp" />
     <ClCompile Include="render\Buffer.cpp" />
@@ -307,6 +300,7 @@
     <ClCompile Include="scenes\kalpeus.cpp" />
     <ClCompile Include="scenes\kasvot.cpp" />
     <ClCompile Include="scenes\shadowtest.cpp" />
+    <ClCompile Include="scenes\shadowtest2.cpp" />
     <ClCompile Include="scenes\tunne.cpp" />
     <ClCompile Include="scenes\tyhjyys.cpp" />
     <ClCompile Include="util\StringUtils.cpp" />

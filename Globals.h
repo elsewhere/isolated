@@ -20,12 +20,8 @@
 #include "util/Stringutils.h"
 #define GLM_FORCE_RADIANS
 #include "glm/glm.hpp"
-//TODO: remove 
+
 #include "math/Range.h"
-#include "math/Curve.h"
-#include "math/LinearCurve.h"
-#include "math/CatmullRom.h"
-#include "math/Bezier.h"
 #include "math/Mathematics.h"
 
 #include "core/Debugger.h"

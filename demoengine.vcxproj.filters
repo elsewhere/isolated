@@ -128,18 +128,6 @@
     <ClInclude Include="math\Range.h">
       <Filter>Src\Math</Filter>
     </ClInclude>
-    <ClInclude Include="math\Bezier.h">
-      <Filter>Src\Math\Curve</Filter>
-    </ClInclude>
-    <ClInclude Include="math\CatmullRom.h">
-      <Filter>Src\Math\Curve</Filter>
-    </ClInclude>
-    <ClInclude Include="math\Curve.h">
-      <Filter>Src\Math\Curve</Filter>
-    </ClInclude>
-    <ClInclude Include="math\LinearCurve.h">
-      <Filter>Src\Math\Curve</Filter>
-    </ClInclude>
     <ClInclude Include="render\Image.h">
       <Filter>Src\Render</Filter>
     </ClInclude>
@@ -210,6 +198,7 @@
     <ClInclude Include="render\ShadowMap.h" />
     <ClInclude Include="render\DepthMap.h" />
     <ClInclude Include="scenes\shadowtest.h" />
+    <ClInclude Include="scenes\shadowtest2.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\setupdialog.aps">
@@ -276,18 +265,6 @@
     </ClCompile>
     <ClCompile Include="math\Range.cpp">
       <Filter>Src\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="math\Bezier.cpp">
-      <Filter>Src\Math\Curve</Filter>
-    </ClCompile>
-    <ClCompile Include="math\CatmullRom.cpp">
-      <Filter>Src\Math\Curve</Filter>
-    </ClCompile>
-    <ClCompile Include="math\Curve.cpp">
-      <Filter>Src\Math\Curve</Filter>
-    </ClCompile>
-    <ClCompile Include="math\LinearCurve.cpp">
-      <Filter>Src\Math\Curve</Filter>
     </ClCompile>
     <ClCompile Include="render\Image.cpp">
       <Filter>Src\Render</Filter>
@@ -358,5 +335,6 @@
     <ClCompile Include="render\ShadowMap.cpp" />
     <ClCompile Include="render\DepthMap.cpp" />
     <ClCompile Include="scenes\shadowtest.cpp" />
+    <ClCompile Include="scenes\shadowtest2.cpp" />
   </ItemGroup>
 </Project>

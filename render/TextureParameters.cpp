@@ -57,6 +57,8 @@ namespace demorender
 			ss << "CUBEMAP" << "\n";
 		else if (m_type == DEPTH)
 			ss << "DEPTH" << "\n";
+		else if (m_type == DEPTH_CUBEMAP)
+			ss << "DEPTH_CUBEMAP" << "\n";
 
 		return ss.str();
 	}
