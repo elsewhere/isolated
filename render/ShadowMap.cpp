@@ -65,7 +65,7 @@ namespace demorender
 					data.push_back(std::make_pair(glm::vec3(1.f, 0.f, 0.f), glm::vec3(0.f, -1.f, 0.f)));
 					data.push_back(std::make_pair(glm::vec3(-1.f, 0.f, 0.f), glm::vec3(0.f, -1.f, 0.f)));
 					data.push_back(std::make_pair(glm::vec3(0.f, 1.f, 0.f), glm::vec3(0.f, 0.f, 1.f)));
-					data.push_back(std::make_pair(glm::vec3(0.f, -1.f, 0.f), glm::vec3(0.f, 0.f, 1.f)));
+					data.push_back(std::make_pair(glm::vec3(0.f, -1.f, 0.f), glm::vec3(0.f, 0.f, -1.f)));
 					data.push_back(std::make_pair(glm::vec3(0.f, 0.f, 1.f), glm::vec3(0.f, -1.f, 0.f)));
 					data.push_back(std::make_pair(glm::vec3(0.f, 0.f, -1.f), glm::vec3(0.f, -1.f, 0.f)));
 
