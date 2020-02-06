@@ -11,6 +11,7 @@ namespace demorender
 		enum class Type
 		{
 			DIRECTIONAL,
+			SPOT,
 			POINT,
 		};
 

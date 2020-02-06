@@ -97,6 +97,7 @@ namespace demorender
 		else
 		{
 			g_error.log("Invalid mode for depth map\n");
+			return false;
 		}
 
 

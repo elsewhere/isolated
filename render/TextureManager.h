@@ -32,6 +32,7 @@ namespace demorender
 		void bindTexture(GLuint textureId, int texunit = GL_TEXTURE0_ARB);
 		void bindTextureToImage(const std::string& name, GLuint unit, GLenum access);
 		void bindCubemap(const std::string& name, int texunit = GL_TEXTURE0_ARB);
+		void bindCubemap(GLuint textureId, int texunit = GL_TEXTURE0_ARB);
 		void clearTextureUnits(); //for lazy programmers
 
 		//images

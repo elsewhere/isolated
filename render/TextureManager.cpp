@@ -196,6 +196,20 @@ namespace demorender
 	}
 
 
+	void TextureManager::bindCubemap(GLuint textureId, int texunit)
+	{
+		int texunitoffset = texunit - GL_TEXTURE0_ARB;
+		if (texunitoffset < 0 || texunitoffset > MAX_TEXTURES)
+		{
+			g_debug << "trying to bind cubemap with id " << textureId << " to an invalid texture unit << " << texunitoffset << "!" << std::endl;
+			return;
+		}
+		glActiveTexture(texunit);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, textureId);
+	}
+
+
 	void TextureManager::clearTextureUnits()
 	{
 		//this is slow but what the hell... 

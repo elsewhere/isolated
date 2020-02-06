@@ -31,7 +31,7 @@ void ShadowTest2::init()
 	params.width = 1024;
 	params.height = 1024; 
 	params.cubeMap = true;
-
+	
 	m_shadowMap = std::make_unique<ShadowMap>(params);
 
 	m_things.clear();
@@ -39,13 +39,14 @@ void ShadowTest2::init()
 	MeshBuilder builder;
 	builder.generateCube(1.f);
 
-
 	m_thingMesh = builder.getMesh(demorender::Mesh::Usage::STATIC);
+	m_thingMesh->setStreamFlags(Mesh::VERTEX_STREAM);
+
 	for (int i = 0; i < 50; i++)
 	{
 		Thing* t = new Thing();
 
-		float r = Math::randBetween(1.f, 50.f);
+		float r = Math::randBetween(10.f, 50.f);
 
 		t->pos = Math::randVectSphere(r);
 
@@ -67,8 +68,11 @@ void ShadowTest2::init()
 
 //	MeshBuilder builder;
 	
-	builder.generateCube(100.f);
+	builder.generateCube(60.f);
 	m_terrain = builder.getMesh(Mesh::Usage::STATIC);
+
+	m_pointLight.setType(Light::Type::POINT);
+
 }
 
 void ShadowTest2::update()
@@ -78,7 +82,7 @@ void ShadowTest2::update()
 	m_cameraUp = glm::vec3(0.f, 1.f, 0.f);
 
 	glm::vec3 cameraStart = glm::vec3(-30, 5.f, -40.f);
-	glm::vec3 cameraEnd = glm::vec3(70, 10.f, 20.f);
+	glm::vec3 cameraEnd = glm::vec3(40, 10.f, 20.f);
 
 	m_cameraPosition = cameraStart + (cameraEnd - cameraStart) * m_pos;
 
@@ -99,8 +103,9 @@ void ShadowTest2::updateLights()
 {
 	const float a = m_pos * 20.f;
 	const float radius = 15.f;
-	const float height = 15.f;
+	const float height = 0.f;
 	m_pointLight.setType(Light::Type::POINT);
+//	m_pointLight.setPosition(glm::vec3(0.f));//	
 	m_pointLight.setPosition(glm::vec3(radius * sinf(a), height, radius * cosf(a)));
 	m_pointLight.setTarget(glm::vec3(0.f));
 	m_pointLight.setUp(glm::vec3(1.f, 0.f, 0.f));
@@ -111,20 +116,29 @@ void ShadowTest2::drawGeometry(bool shadowPass)
 {
 	if (shadowPass)
 	{
-		Shader& s = g_shaders->getShader("depthonly");
+		Shader& s = g_shaders->getShader("cubedepthonly");
 
 		s.bind();
+		s.setUniform1f("farplane", m_shadowMap->getParams().farPlane); //TODO: get from shadowmap
+
+		auto transforms = m_shadowMap->getCubeTransforms();
+		s.setUniformMatrix4fv("shadowTransforms[0]", 1, GL_FALSE, (float *)&transforms[0]);
+		s.setUniformMatrix4fv("shadowTransforms[1]", 1, GL_FALSE, (float *)&transforms[1]);
+		s.setUniformMatrix4fv("shadowTransforms[2]", 1, GL_FALSE, (float *)&transforms[2]);
+		s.setUniformMatrix4fv("shadowTransforms[3]", 1, GL_FALSE, (float *)&transforms[3]);
+		s.setUniformMatrix4fv("shadowTransforms[4]", 1, GL_FALSE, (float *)&transforms[4]);
+		s.setUniformMatrix4fv("shadowTransforms[5]", 1, GL_FALSE, (float *)&transforms[5]);
+
 		m_thingMesh->bind(&s);
 		for (auto t : m_things)
 		{
-			s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_shadowMap->getLightMatrix()); GL_DEBUG;
 			s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&t->transform); GL_DEBUG;
 			m_thingMesh->draw();
 		}
 	}
 	else
 	{
-		Shader& s = g_shaders->getShader("thing");
+		Shader& s = g_shaders->getShader("cubething");
 
 		s.bind();
 		m_thingMesh->bind(&s);
@@ -159,13 +173,14 @@ void ShadowTest2::drawTerrain()
 	s.bind();
 
 	g_textures->bindTexture("kivitesti", GL_TEXTURE0);
-	g_textures->bindTexture(m_shadowMap->getDepthMapID(), GL_TEXTURE1);
+	g_textures->bindCubemap(m_shadowMap->getDepthMapID(), GL_TEXTURE1);
 	s.setUniform1i("texturemap", 0);
 	s.setUniform1i("shadowMap", 1);
+	s.setUniform3fv("lightPos", 1, (float *)&m_pointLight.getPosition());
+	s.setUniform1f("farplane", m_shadowMap->getParams().farPlane); 
 
 	s.setUniformMatrix4fv("cameraMatrix", 1, false, (float *)&m_camera->getCameraMatrix());
 	s.setUniformMatrix4fv("modelMatrix", 1, false, (float *)&model);
-	s.setUniformMatrix4fv("lightMatrix", 1, false, (float *)&m_shadowMap->getLightMatrix());
 
 	m_terrain->bind(&s);
 	m_terrain->draw();
