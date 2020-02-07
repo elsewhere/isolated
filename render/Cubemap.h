@@ -10,12 +10,12 @@ namespace demorender
 	public:
 		enum Side
 		{
-			POS_X,
-			NEG_X,
-			POS_Y,
-			NEG_Y,
-			POS_Z,
-			NEG_Z
+			POS_X = 0,
+			NEG_X = 1,
+			POS_Y = 2,
+			NEG_Y = 3,
+			POS_Z = 4,
+			NEG_Z = 5
 		};
 
 		Cubemap();

@@ -11,9 +11,12 @@ namespace demorender
 		int height = 1024;
 		float nearPlane = 1.f;
 		float farPlane = 150.f;
+		float orthoSize = 100.f;
 		bool cullFrontFaces = true;
 		bool cubeMap = false;
 	};
+
+	class CubemapRenderer;
 
 	class ShadowMap
 	{
@@ -30,9 +33,9 @@ namespace demorender
 
 		const ShadowMapParameters& getParams() { return m_params; }
 
+		glm::mat4 getCubeTransform(Cubemap::Side side);
 		void debugDraw();
 
-		std::vector<glm::mat4> getCubeTransforms() { return m_cubeTransforms;  }
 	private:
 		enum class Type
 		{
@@ -47,7 +50,7 @@ namespace demorender
 		glm::mat4 m_viewMatrix;
 		glm::mat4 m_projectionMatrix;
 
-		std::vector<glm::mat4> m_cubeTransforms;
+		std::unique_ptr<CubemapRenderer> m_cubemapRenderer;
 
 		std::unique_ptr<DepthMap> m_depthMap;
 

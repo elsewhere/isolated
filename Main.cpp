@@ -20,6 +20,7 @@
 #include "scenes/huuru.h"
 
 */
+#include "scenes/shadowtest.h"
 #include "scenes/shadowtest2.h"
 //#include "fx_test/computetest.h"
 //#include "fx_test/computetest2.h"
@@ -98,7 +99,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 //		static_cast<Demo*>(context)->addScene("kasvot", new Kasvot());
 //		static_cast<Demo*>(context)->addScene("tunne", new Tunne());
 //		static_cast<Demo*>(context)->addScene("kalpeus", new Kalpeus());
-//		static_cast<Demo*>(context)->addScene("shadowtest", new ShadowTest());
+		static_cast<Demo*>(context)->addScene("shadowtest", new ShadowTest());
 		static_cast<Demo*>(context)->addScene("shadowtest2", new ShadowTest2());
 
 		//init the prodand play

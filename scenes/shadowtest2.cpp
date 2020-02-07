@@ -93,8 +93,12 @@ void ShadowTest2::update()
 	{
 		glm::vec3 pos = thing->pos;
 		
+		glm::vec3 globalAngle = glm::normalize(glm::vec3(sinf(m_pos * 43.f), 1.f, cosf(m_pos * 37.f)));
 		glm::vec3 angle = glm::normalize(glm::vec3(sinf(pos.x), cosf(pos.y), sinf(pos.z)) * 100.f);
-		thing->transform = glm::translate(thing->pos) * glm::rotate(m_pos * 100.f, angle) * glm::scale(glm::vec3(thing->scale));
+		thing->transform = glm::rotate(m_pos * 100.f, glm::vec3(0.f, 1.f, 0.f)) * 
+						   glm::translate(thing->pos) * 
+						   glm::rotate(m_pos * 160.f, angle) * 
+						   glm::scale(glm::vec3(thing->scale));
 	}
 	updateLights();
 }
@@ -105,8 +109,8 @@ void ShadowTest2::updateLights()
 	const float radius = 15.f;
 	const float height = 0.f;
 	m_pointLight.setType(Light::Type::POINT);
-//	m_pointLight.setPosition(glm::vec3(0.f));//	
-	m_pointLight.setPosition(glm::vec3(radius * sinf(a), height, radius * cosf(a)));
+	m_pointLight.setPosition(glm::vec3(0.f));
+//	m_pointLight.setPosition(glm::vec3(radius * sinf(a), height, radius * cosf(a)));
 	m_pointLight.setTarget(glm::vec3(0.f));
 	m_pointLight.setUp(glm::vec3(1.f, 0.f, 0.f));
 
@@ -119,15 +123,14 @@ void ShadowTest2::drawGeometry(bool shadowPass)
 		Shader& s = g_shaders->getShader("cubedepthonly");
 
 		s.bind();
-		s.setUniform1f("farplane", m_shadowMap->getParams().farPlane); //TODO: get from shadowmap
+		s.setUniform1f("farplane", m_shadowMap->getParams().farPlane);
 
-		auto transforms = m_shadowMap->getCubeTransforms();
-		s.setUniformMatrix4fv("shadowTransforms[0]", 1, GL_FALSE, (float *)&transforms[0]);
-		s.setUniformMatrix4fv("shadowTransforms[1]", 1, GL_FALSE, (float *)&transforms[1]);
-		s.setUniformMatrix4fv("shadowTransforms[2]", 1, GL_FALSE, (float *)&transforms[2]);
-		s.setUniformMatrix4fv("shadowTransforms[3]", 1, GL_FALSE, (float *)&transforms[3]);
-		s.setUniformMatrix4fv("shadowTransforms[4]", 1, GL_FALSE, (float *)&transforms[4]);
-		s.setUniformMatrix4fv("shadowTransforms[5]", 1, GL_FALSE, (float *)&transforms[5]);
+		s.setUniformMatrix4fv("shadowTransforms[0]", 1, GL_FALSE, (float *)&m_shadowMap->getCubeTransform(Cubemap::POS_X));
+		s.setUniformMatrix4fv("shadowTransforms[1]", 1, GL_FALSE, (float *)&m_shadowMap->getCubeTransform(Cubemap::NEG_X));
+		s.setUniformMatrix4fv("shadowTransforms[2]", 1, GL_FALSE, (float *)&m_shadowMap->getCubeTransform(Cubemap::POS_Y));
+		s.setUniformMatrix4fv("shadowTransforms[3]", 1, GL_FALSE, (float *)&m_shadowMap->getCubeTransform(Cubemap::NEG_Y));
+		s.setUniformMatrix4fv("shadowTransforms[4]", 1, GL_FALSE, (float *)&m_shadowMap->getCubeTransform(Cubemap::POS_Z));
+		s.setUniformMatrix4fv("shadowTransforms[5]", 1, GL_FALSE, (float *)&m_shadowMap->getCubeTransform(Cubemap::NEG_Z));
 
 		m_thingMesh->bind(&s);
 		for (auto t : m_things)
