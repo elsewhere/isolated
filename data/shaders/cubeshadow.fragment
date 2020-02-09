@@ -1,6 +1,8 @@
 	uniform vec3 lightPos;
 	uniform float farplane;
 
+	uniform samplerCube shadowMap;
+
 	float shadowFunc(vec3 pos)
 	{
 	   // get vector between fragment position and light position

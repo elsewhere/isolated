@@ -44,9 +44,9 @@ FRAGMENT_SHADER
 		vec3 reflection = refract(eye, fragmentNormal, 0.5);
 
 		vec4 reflectionColor = texture(cubeMap, reflection);
-		vec4 baseColor = texture(textureMap, fragmentTextureCoordinate);
+		vec4 baseColor = vec4(0.8, 0.8, 0.8, 1.0);//texture(textureMap, fragmentTextureCoordinate);
 
-		vec3 col = mix(baseColor.xyz, reflectionColor.xyz, 0.0);
+		vec3 col = mix(baseColor.xyz, reflectionColor.xyz, 0.5);
 
 	    finalColor = vec4(col, 1.0);
 	}	

@@ -13,6 +13,7 @@ Prioriteetti 1
 - debug-piirto 2d:nä
 
 - cubemap-rendauksen refaktorointi
+- shaderin asettamattomien uniformien tsekkaus
 
 
 Prioriteetti 2

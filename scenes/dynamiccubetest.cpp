@@ -1,7 +1,8 @@
-#include "ShadowTest2.h"
+#include "DynamicCubeTest.h"
 #include "../render/MeshBuilder.h"
 #include "../glm/gtx/transform.hpp"
 
+#include "../render/CubemapRenderer.h"
 #include "../render/LineRenderer.h"
 #include "../render/ShadowMap.h"
 
@@ -10,9 +11,9 @@ using namespace demomath;
 using namespace demorender;
 using namespace glm;
 
-void ShadowTest2::init()
+void DynamicCubeTest::init()
 {
-	g_params->useNamespace("ShadowTest2");
+	g_params->useNamespace("DynamicCubeTest");
 	m_camera = new demorender::Camera(1.f, 1000.f, 45.f);
 
 	m_lines = std::make_unique<demorender::LineRenderer>();
@@ -74,11 +75,13 @@ void ShadowTest2::init()
 
 	m_pointLight.setType(Light::Type::POINT);
 
+	m_cubemapRenderer = std::make_unique<CubemapRenderer>();
+
 }
 
-void ShadowTest2::update()
+void DynamicCubeTest::update()
 {
-	g_params->useNamespace("ShadowTest2");
+	g_params->useNamespace("DynamicCubeTest");
 
 	m_cameraUp = glm::vec3(0.f, 1.f, 0.f);
 
@@ -104,7 +107,7 @@ void ShadowTest2::update()
 	updateLights();
 }
 
-void ShadowTest2::updateLights()
+void DynamicCubeTest::updateLights()
 {
 	const float a = m_pos * 20.f;
 	const float radius = 15.f;
@@ -117,7 +120,7 @@ void ShadowTest2::updateLights()
 
 }
 
-void ShadowTest2::drawGeometry(bool shadowPass)
+void DynamicCubeTest::drawGeometry(bool shadowPass, glm::mat4 cameraMatrix)
 {
 	if (shadowPass)
 	{
@@ -146,7 +149,7 @@ void ShadowTest2::drawGeometry(bool shadowPass)
 
 		s.bind();
 		m_thingMesh->bind(&s);
-		s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_camera->getCameraMatrix()); GL_DEBUG;
+		s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&cameraMatrix); GL_DEBUG;
 		s.setUniform3fv("lightPos", 1, (float *)&m_pointLight.getPosition()); GL_DEBUG;
 		s.setUniform1f("farplane", m_shadowMap->getParams().farPlane);
 		s.setUniform1i("shadowMap", 0);
@@ -156,11 +159,11 @@ void ShadowTest2::drawGeometry(bool shadowPass)
 		{
 			s.setUniform4fv("color", 1, (float *)&t->color);
 			s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&t->transform); GL_DEBUG;
-
 			m_thingMesh->draw();
 		}
 
-		//draw point light		
+		//draw point light	
+/*
 		glm::mat4 model = glm::translate(m_pointLight.getPosition()) * glm::scale(glm::vec3(1.f));;
 
 		s.setUniform4f("color", 1.f, 1.f, 1.f, 1.f);
@@ -169,10 +172,32 @@ void ShadowTest2::drawGeometry(bool shadowPass)
 
 		m_thingMesh->bind(&s);
 		m_thingMesh->draw();
+		*/
+
+		Shader& reflectionShader = g_shaders->getShader("cubereflection");
+		reflectionShader.bind();
+		m_thingMesh->bind(&reflectionShader);
+
+		glm::mat4 modelMatrix = glm::mat4(1.f);
+		modelMatrix *= glm::scale(glm::vec3(3.f));
+		reflectionShader.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&cameraMatrix); GL_DEBUG;
+		reflectionShader.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&modelMatrix); GL_DEBUG;
+		reflectionShader.setUniform3fv("cameraPosition", 1, (float *)&glm::vec3(0.f)); GL_DEBUG;
+		reflectionShader.setUniform1i("textureMap", 0);
+		reflectionShader.setUniform1i("cubeMap", 1);
+
+		g_textures->bindTexture("kivitesti", GL_TEXTURE0);
+		g_textures->bindCubemap("dynamictest", GL_TEXTURE1);
+
+		m_thingMesh->draw();
+
+//		uniform sampler2D textureMap;
+//		uniform samplerCube cubeMap;
+
 	}
 }
 
-void ShadowTest2::drawTerrain()
+void DynamicCubeTest::drawTerrain()
 {
 	glm::mat4 model = glm::mat4(1.f);
 
@@ -193,18 +218,29 @@ void ShadowTest2::drawTerrain()
 	m_terrain->draw();
 
 }
-void ShadowTest2::debug()
+void DynamicCubeTest::debug()
 {
 	m_shadowMap->debugDraw();
 }
 
-void ShadowTest2::draw()
+void DynamicCubeTest::draw()
 {
-	g_params->useNamespace("ShadowTest2");
+	g_params->useNamespace("DynamicCubeTest");
 
+	//render shadow map
 	m_shadowMap->prepare(m_pointLight);
-	drawGeometry(true);
+	drawGeometry(true, glm::mat4(1.f));
 	m_shadowMap->unbind();
+
+	//render reflection 
+	m_cubemapRenderer->setPosition(m_pointLight.getPosition(), m_camera->getNearPlane(), m_camera->getFarPlane());
+
+	for (int i = 0; i < 6; i++)
+	{
+		Cubemap::Side side = static_cast<Cubemap::Side>(i);
+		m_cubemapRenderer->bind("dynamictest", side);
+		drawGeometry(false, m_cubemapRenderer->getTransform(side));
+	}
 
 	g_renderTargets->bindMain();
 
@@ -215,7 +251,7 @@ void ShadowTest2::draw()
 	//draw geometry
 
 	drawTerrain();
-	drawGeometry(false);
+	drawGeometry(false, m_camera->getCameraMatrix());
 //	m_lines->draw(m_camera, LineRenderer::Mode::LINES);
 
 }

@@ -35,4 +35,13 @@ namespace demorender
 		return m_transforms[side];
 	}
 
+	void CubemapRenderer::bind(const std::string& name, Cubemap::Side side)
+	{
+		g_renderTargets->bindCubemapSide(name, side);
+	}
+
+	void CubemapRenderer::unbind()
+	{
+
+	}
 }

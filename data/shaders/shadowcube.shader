@@ -26,10 +26,8 @@ FRAGMENT_SHADER
 	#version 330
 
 	uniform sampler2D texturemap;
-	uniform samplerCube shadowMap;
 
 	out vec4 finalColor;
-
 	in vec2 textureCoordinate;
 
 	in vec3 fragPos;

@@ -199,6 +199,7 @@
     <ClInclude Include="render\DepthMap.h" />
     <ClInclude Include="scenes\shadowtest.h" />
     <ClInclude Include="scenes\shadowtest2.h" />
+    <ClInclude Include="scenes\dynamiccubetest.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\setupdialog.aps">
@@ -336,5 +337,6 @@
     <ClCompile Include="render\DepthMap.cpp" />
     <ClCompile Include="scenes\shadowtest.cpp" />
     <ClCompile Include="scenes\shadowtest2.cpp" />
+    <ClCompile Include="scenes\dynamiccubetest.cpp" />
   </ItemGroup>
 </Project>
