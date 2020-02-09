@@ -239,6 +239,7 @@ void DynamicCubeTest::draw()
 	{
 		Cubemap::Side side = static_cast<Cubemap::Side>(i);
 		m_cubemapRenderer->bind("dynamictest", side);
+		drawTerrain();
 		drawGeometry(false, m_cubemapRenderer->getTransform(side));
 	}
 

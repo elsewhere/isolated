@@ -35,9 +35,13 @@ namespace demorender
 		return m_transforms[side];
 	}
 
-	void CubemapRenderer::bind(const std::string& name, Cubemap::Side side)
+	void CubemapRenderer::bind(const std::string& name, Cubemap::Side side, bool clear)
 	{
 		g_renderTargets->bindCubemapSide(name, side);
+		if (clear)
+		{
+			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		}
 	}
 
 	void CubemapRenderer::unbind()

@@ -16,7 +16,7 @@ namespace demorender
 		const glm::mat4& getTransform(Cubemap::Side side);
 
 
-		void bind(const std::string& name, Cubemap::Side side);
+		void bind(const std::string& name, Cubemap::Side side, bool clear = true);
 		void unbind();
 
 

@@ -40,13 +40,13 @@ FRAGMENT_SHADER
 
 	void main() 
 	{
-		vec3 eye = normalize(fragmentPosition - cameraPosition);
-		vec3 reflection = refract(eye, fragmentNormal, 0.5);
+//		vec3 eye = normalize(fragmentPosition - cameraPosition);
+//		vec3 reflection = refract(eye, fragmentNormal, 0.5);
 
-		vec4 reflectionColor = texture(cubeMap, reflection);
-		vec4 baseColor = vec4(0.8, 0.8, 0.8, 1.0);//texture(textureMap, fragmentTextureCoordinate);
+		vec4 reflectionColor = texture(cubeMap, normalize(fragmentPosition));//eflection);
+		vec4 baseColor = vec4(0.5, 0.5, 1.0, 1.0);//texture(textureMap, fragmentTextureCoordinate);
 
-		vec3 col = mix(baseColor.xyz, reflectionColor.xyz, 0.5);
+		vec3 col = mix(baseColor.xyz, reflectionColor.xyz, 0.9);
 
 	    finalColor = vec4(col, 1.0);
 	}	
