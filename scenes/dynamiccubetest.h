@@ -14,7 +14,7 @@ public:
 	
 	void init();
 	void update();
-	void draw();
+	void draw(Scene::RenderPass pass) override;
 
 	void debug() override;
 	
@@ -33,6 +33,7 @@ private:
 
 	void drawGeometry(bool shadowPass, glm::mat4 cameraMatrix);
 	void drawTerrain();
+	void drawReflector();
 
 	void updateLights();
 
@@ -45,13 +46,13 @@ private:
 	demorender::Camera *m_camera;
 
 	demorender::Mesh* m_thingMesh = nullptr;
+	demorender::Mesh* m_reflector = nullptr;
 	std::vector<Thing*> m_things;
 
 	demorender::Light m_pointLight;
 
 
 	std::unique_ptr<demorender::CubemapRenderer> m_cubemapRenderer;
-	std::unique_ptr<demorender::ShadowMap> m_shadowMap;
 	std::unique_ptr<demorender::LineRenderer> m_lines;
 
 

@@ -277,7 +277,12 @@ namespace democore
 		for (auto e : activeEffects)
 		{
 			demorender::g_postProcess->startFrame();
- 			e->m_scene->draw();
+
+			//TODO: is hardcoding these a good idea? 
+			e->m_scene->draw(Scene::RenderPass::SHADOW);
+			e->m_scene->draw(Scene::RenderPass::REFLECTION);
+			e->m_scene->draw(Scene::RenderPass::MAIN);
+
 			demorender::g_postProcess->commit();
 			if (g_system->isDebug())
 			{

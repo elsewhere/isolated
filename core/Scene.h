@@ -10,6 +10,13 @@ namespace democore
 	{
 	public:
 
+		enum class RenderPass
+		{
+			SHADOW,
+			REFLECTION,
+			MAIN
+		};
+
 		Scene();
 		//pure virtual destructor so the correct one will be called once the effect is deleted. 
 		virtual ~Scene() = 0;
@@ -21,7 +28,7 @@ namespace democore
 		//updates the effect visuals. Called at a constant framerate so fixed values can and should be used. 
 		virtual void update() = 0;
 		//draws the effect
-		virtual void draw() = 0;
+		virtual void draw(RenderPass pass) = 0;
 
 		//prints out debug stuff
 		virtual void debug(); 

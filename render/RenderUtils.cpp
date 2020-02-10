@@ -80,7 +80,7 @@ namespace demorender
 
 		Shader& shader = g_shaders->getShader("simpletexture");
 		shader.bind();
-		shader.setUniformMatrix4fv("camera", 1, GL_FALSE, (float *)&m_pOrtho->getCameraMatrix()); GL_DEBUG;
+		shader.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_pOrtho->getCameraMatrix()); GL_DEBUG;
 		m_pSquare->bind(&shader);
 
 		g_textures->bindTexture(texture, GL_TEXTURE0); GL_DEBUG;
@@ -91,7 +91,7 @@ namespace demorender
 		glm::mat4 scaling = glm::scale(glm::vec3(scale, scale, 1.f));
 		testiModelMatrix *= scaling;
 
-		shader.setUniformMatrix4fv("model", 1, GL_FALSE, (float *)&testiModelMatrix); GL_DEBUG;
+		shader.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&testiModelMatrix); GL_DEBUG;
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 	}
