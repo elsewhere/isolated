@@ -26,25 +26,25 @@ namespace demorender
 	RenderDebug::RenderDebug()
 	{
 		initCaps();
-	}
-
-	RenderDebug::~RenderDebug()
-	{
-
-	}
-
-	void RenderDebug::init()
-	{
 		int width, height;
 		democore::g_system->getWindowSize(width, height);
 
 		m_pOrtho = new OrthoCamera(0.f, width * 1.f, 0.f, height * 1.f);
 
 		m_pSquare = new Model();
-		m_pSquare->setMesh("square");
+
+		Mesh *mesh = new Mesh();
+		mesh->generateSquare();
+		mesh->setStreamFlags(Mesh::VERTEX_STREAM | Mesh::UV_STREAM);
+		m_pSquare->setMesh(mesh);
 
 		m_pFont = new Font();
 		m_pFont->load("arial.ttf");
+	}
+
+	RenderDebug::~RenderDebug()
+	{
+
 	}
 
 	RenderDebug* RenderDebug::inst()

@@ -75,7 +75,6 @@ namespace demorender
 		GLint attrib(const std::string& name);
 		GLint uniform(const std::string& name);
 	private:
-
 		std::vector<std::string> m_feedbackVaryings;
 		std::map<const std::string, GLint> m_uniformCache;
 		std::map<const std::string, GLint> m_attribCache;

@@ -98,18 +98,22 @@ void DynamicCubeTest::update()
 	m_cameraTarget = glm::vec3(0.f);
 	m_cameraTarget.y = 0.f;// ::vec3(0.f);
 
+	float speed = 0.1f;
+
 	for (auto thing : m_things)
 	{
 		glm::vec3 pos = thing->pos;
 		
 		glm::vec3 globalAngle = glm::normalize(glm::vec3(sinf(m_pos * 43.f), 1.f, cosf(m_pos * 37.f)));
 		glm::vec3 angle = glm::normalize(glm::vec3(sinf(pos.x), cosf(pos.y), sinf(pos.z)) * 100.f);
-		thing->transform = glm::rotate(m_pos * 100.f, glm::vec3(0.f, 1.f, 0.f)) * 
+		thing->transform = glm::rotate(m_pos * 100.f * speed, glm::vec3(0.f, 1.f, 0.f)) * 
 						   glm::translate(thing->pos) * 
-						   glm::rotate(m_pos * 160.f, angle) * 
+						   glm::rotate(m_pos * 160.f * speed, angle) * 
 						   glm::scale(glm::vec3(thing->scale));
 	}
 	updateLights();
+
+	m_reflectorPosition = glm::vec3(0.f);// ::vec3(sinf(m_pos * 33.f), cosf(m_pos * 53.f) * 0.3f, cosf(m_pos * 33.f)) * 5.f;
 }
 
 void DynamicCubeTest::updateLights()
@@ -177,8 +181,7 @@ void DynamicCubeTest::drawReflector()
 	reflectionShader.bind();
 	m_thingMesh->bind(&reflectionShader);
 
-	glm::mat4 modelMatrix = glm::mat4(1.f);
-	modelMatrix *= glm::scale(glm::vec3(3.f));
+	glm::mat4 modelMatrix = glm::translate(m_reflectorPosition) * glm::scale(glm::vec3(3.f)) * glm::rotate(m_pos * -113.f, glm::normalize(glm::vec3(0.25f, 0.9f, -0.2f)));
 	reflectionShader.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_camera->getCameraMatrix()); GL_DEBUG;
 	reflectionShader.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&modelMatrix); GL_DEBUG;
 	reflectionShader.setUniform3fv("cameraPosition", 1, (float *)&glm::vec3(0.f)); GL_DEBUG;
@@ -199,7 +202,7 @@ void DynamicCubeTest::draw(Scene::RenderPass pass)
 	if (pass == RenderPass::REFLECTION)
 	{
 		//render reflection 
-		m_cubemapRenderer->setPosition(m_pointLight.getPosition(), m_camera->getNearPlane(), m_camera->getFarPlane());
+		m_cubemapRenderer->setPosition(m_reflectorPosition, m_camera->getNearPlane(), m_camera->getFarPlane());
 
 		for (int i = 0; i < 6; i++)
 		{

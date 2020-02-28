@@ -2,6 +2,7 @@
 
 #include "../Globals.h"
 #include "Config.h"
+#include "../render/LoadingScreen.h"
 
 #define g_system System::inst()
 
@@ -9,6 +10,7 @@ namespace demorender
 {
 	class Mesh;
 	class MeshInfo;
+	class LoadingScreen;
 }
 
 namespace democore
@@ -137,6 +139,7 @@ namespace democore
 		//timer
 		std::unique_ptr<Timer> m_timer;
 
+		std::unique_ptr<demorender::LoadingScreen> m_loadingScreen;
 		static System* sm_instance;
 	};
 }

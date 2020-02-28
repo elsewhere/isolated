@@ -203,6 +203,7 @@
     <ClInclude Include="render\ImageFactory.h" />
     <ClInclude Include="render\Light.h" />
     <ClInclude Include="render\LineRenderer.h" />
+    <ClInclude Include="render\LoadingScreen.h" />
     <ClInclude Include="render\Mesh.h" />
     <ClInclude Include="render\MeshBuilder.h" />
     <ClInclude Include="render\MeshManager.h" />
@@ -281,6 +282,7 @@
     <ClCompile Include="render\ImageFactory.cpp" />
     <ClCompile Include="render\Light.cpp" />
     <ClCompile Include="render\LineRenderer.cpp" />
+    <ClCompile Include="render\LoadingScreen.cpp" />
     <ClCompile Include="render\Mesh.cpp" />
     <ClCompile Include="render\MeshBuilder.cpp" />
     <ClCompile Include="render\MeshManager.cpp" />

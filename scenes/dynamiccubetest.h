@@ -49,6 +49,7 @@ private:
 	demorender::Mesh* m_reflector = nullptr;
 	std::vector<Thing*> m_things;
 
+	glm::vec3 m_reflectorPosition;
 	demorender::Light m_pointLight;
 
 

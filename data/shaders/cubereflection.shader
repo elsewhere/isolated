@@ -41,14 +41,14 @@ FRAGMENT_SHADER
 	void main() 
 	{
 		vec3 eyeToFrag = normalize(fragmentPosition - cameraPosition);
-		vec3 refractionDir  = refract(eyeToFrag, fragmentNormal, 0.5);
+		vec3 refractionDir  = refract(eyeToFrag, fragmentNormal, 0.9);
 		vec3 reflectionDir = reflect(eyeToFrag, fragmentNormal);
 
 		vec4 reflectionColor = texture(cubeMap, reflectionDir);
 		vec4 refractionColor = texture(cubeMap, refractionDir);
 		vec4 baseColor = vec4(0.5, 0.5, 1.0, 1.0);//texture(textureMap, fragmentTextureCoordinate);
 
-		const float refractionAmount = 0.2;
+		const float refractionAmount = 0.176;
 		vec4 transparencyColour = mix(reflectionColor, refractionColor, refractionAmount);
 
 		vec3 col = mix(baseColor.xyz, transparencyColour.xyz, 0.8);

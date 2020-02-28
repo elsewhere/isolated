@@ -44,7 +44,7 @@ namespace demorender
 			m_compute = glCreateShader(GL_COMPUTE_SHADER); GL_DEBUG;
 			if (!m_compute)
 			{
-				g_debug << "could not create computer shader" << std::endl;
+				g_debug << "could not create compute shader" << std::endl;
 			}
 			
 			const char *computeSource = info.computeSource.c_str();

@@ -12,7 +12,8 @@ Prioriteetti 1
 - jonkinsorttinen 2D-tuki edellämainittua varten 
 - debug-piirto 2d:nä
 
-- cubemap-rendauksen refaktorointi
+- curl noise 
+
 - shaderin asettamattomien uniformien tsekkaus
 
 
@@ -23,7 +24,6 @@ Prioriteetti 2
 	- clamppaaminen simpletexturessa auttaa. Miksi ihmeessä se bugaa? 
 - non-pow2 rendertargetit
 - frustum cull
-- dynaaminen cubemap
 - cubemap-debugrender
 
 Prioriteetti 3

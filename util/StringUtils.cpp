@@ -97,7 +97,7 @@ bool StringUtils::readFile(const std::string& path, std::vector<std::string>& bu
 	}
 	else
 	{
-		g_debug << "Could not open file " << path << "for reading" << std::endl;
+		g_debug << "Could not open file " << path << " for reading" << std::endl;
 		return false;
 	}
 }

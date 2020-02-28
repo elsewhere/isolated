@@ -232,6 +232,8 @@ namespace democore
 			RenderDebug::inst()->setDebugging(false);
 		}
 
+		m_loadingScreen = std::make_unique<demorender::LoadingScreen>();
+
 		setRunning(true);
 		return true;
 	}
@@ -334,55 +336,10 @@ namespace democore
 	{
 		if (m_loadingScreenSteps > 0)
 		{
-			/*
 			const float percentage = m_loadingScreenPosition / (float)m_loadingScreenSteps;
-			const int x = 1024 / 2;
-			const int y = 768 / 2;
-			const int THICKNESS = 5;
-			const int WIDTH = 200;
-			const int DISTANCE = 4;
-			
-			int startX = x - WIDTH/2;
-			int endX = startX + (int)(WIDTH*percentage);
-
-			float gc = powf(percentage, 4.0f);
-
-			glClearColor(0, 0, 0, 1);//g_clearColor.r * gc, g_clearColor.g * gc, g_clearColor.b * gc,1);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//GLFW TODO
-			setOrthoMode(1024, 768);
-
-			glDepthMask(GL_FALSE);
-			glDisable(GL_TEXTURE_2D);
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-			const float alpha = 1.0f - powf(percentage, 9);
-
-			//draw borders
-			glColor4f(1, 1, 1, alpha);
-			glBegin(GL_LINE_LOOP);
-			glVertex2i(x - WIDTH/2 - DISTANCE, y - THICKNESS/2 - DISTANCE);
-			glVertex2i(x + WIDTH/2 + DISTANCE, y - THICKNESS/2 - DISTANCE);
-			glVertex2i(x + WIDTH/2 + DISTANCE, y + THICKNESS/2 + DISTANCE);
-			glVertex2i(x - WIDTH/2 - DISTANCE, y + THICKNESS/2 + DISTANCE);
-			glEnd();
-
-			//draw bar
-			glColor4f(1, 1, 1, 0.5f * alpha);
-			glBegin(GL_QUADS);
-			glVertex2i(startX, y - THICKNESS/2);
-			glVertex2i(endX, y - THICKNESS/2);
-			glVertex2i(endX, y + THICKNESS/2);
-			glVertex2i(startX, y + THICKNESS/2);
-			glEnd();
-			glDisable(GL_BLEND);
-			glDepthMask(GL_TRUE);
-
-			setPerspectiveMode();
+			m_loadingScreen->draw(percentage);
 			glFlush();
 			swapBuffers();
-			*/
 		}
 	}
 

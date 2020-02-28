@@ -56,6 +56,22 @@ namespace demorender
 		return *m_shaders[name];
 	}
 
+	Shader* ShaderManager::createShaderFromFile(const std::string& path, const std::string& name)
+	{
+		ShaderInfo info;
+		if (parseShaderFile(path, info))
+		{
+			Shader *shader = new Shader();
+
+			shader->init(name, info);
+			return shader;
+		}
+		else
+		{
+			g_debug << "could not load shader " << name << " for some reason, won't work etc" << std::endl;
+		}
+	}
+
 	void ShaderManager::loadShaders()
 	{
 		int shaderIndex = 0;
@@ -89,13 +105,10 @@ namespace demorender
 				g_debug << "shader #" << shaderIndex << ": " << shaderName << std::endl;
 
 				std::string shaderPath = directory + filename;
-				ShaderInfo info;
-				if (parseShaderFile(shaderPath, info))
-				{
-					Shader *shader = new Shader();
 
-					shader->init(shaderName, info);
-					m_shaders[shaderName] = shader;
+				if (Shader* s = createShaderFromFile(shaderPath, shaderName))
+				{
+					m_shaders[shaderName] = s;
 				}
 				else
 				{
