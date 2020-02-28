@@ -19,6 +19,7 @@ namespace demorender
 		std::unique_ptr<class OrthoCamera> m_pOrtho;
 		std::unique_ptr<class Model> m_pSquare;
 
+		void drawRectangle(float startX, float startY, float endX, float endY, glm::vec3 color);
 		Shader* m_shader;
 
 	};
