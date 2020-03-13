@@ -22,7 +22,7 @@
 */
 //#include "scenes/shadowtest.h"
 //#include "scenes/shadowtest2.h"
-#include "scenes/dynamiccubetest.h"
+//#include "scenes/dynamiccubetest.h"
 //#include "fx_test/computetest.h"
 //#include "fx_test/computetest2.h"
 
@@ -37,6 +37,7 @@
 #include "scenes/tyhjyys.h"
 #include "scenes/kasvot.h"
 #include "scenes/tunne.h"
+#include "scenes/sauhu.h"
 #include "scenes/kalpeus.h"
 
 democore::Debugger g_debug;
@@ -46,7 +47,7 @@ democore::ErrorLog g_screenText;
 
 glm::vec3 g_clearColor = glm::vec3(0, 0, 0);
 
-const std::string g_prodName = "Tyhjyys";
+const std::string g_prodName = "isolation, in sunlight";
 
 using namespace democore;
 using namespace demorender;
@@ -97,10 +98,11 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 //		static_cast<Demo*>(context)->addScene("tyhjyys", new Tyhjyys());
 //		static_cast<Demo*>(context)->addScene("kasvot", new Kasvot());
 //		static_cast<Demo*>(context)->addScene("tunne", new Tunne());
+		static_cast<Demo*>(context)->addScene("sauhu", new Sauhu());
 //		static_cast<Demo*>(context)->addScene("kalpeus", new Kalpeus());
 //		static_cast<Demo*>(context)->addScene("shadowtest", new ShadowTest());
 //		static_cast<Demo*>(context)->addScene("shadowtest2", new ShadowTest2());
-		static_cast<Demo*>(context)->addScene("dynamiccubetest", new DynamicCubeTest());
+//		static_cast<Demo*>(context)->addScene("dynamiccubetest", new DynamicCubeTest());
 
 		//init the prodand play
 		g_textures->createTextures();

@@ -265,7 +265,7 @@ void Kalpeus::Flower::createMesh()
 	glm::vec3 e = v3 + (v0 - v3) * ratio;
 
 	//pentagram polygons
-/*
+
 	MeshBuilder builder;
 	builder.start(false);
 
@@ -282,9 +282,10 @@ void Kalpeus::Flower::createMesh()
 	builder.addTriangleVertex(b, c, d);
 
 	builder.end();
-	*/
+	/*
 	MeshBuilder builder;
 	builder.generateCube(0.3f);
+	*/
 	m_pentaMesh = builder.getMesh(Mesh::Usage::STATIC);
 
 
@@ -304,13 +305,13 @@ void Kalpeus::Flower::draw(glm::mat4 cameraMatrix, glm::mat4 lightMatrix)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	m_pentaMesh->bind(&s);
-	m_pentaMesh->draw();
+//	m_pentaMesh->draw();
 	glDepthMask(GL_TRUE);
 	glDisable(GL_BLEND);
 
 	for (const auto f : m_petals)
 	{
-//		f->draw(cameraMatrix, m_transform, lightMatrix);
+		f->draw(cameraMatrix, m_transform, lightMatrix);
 	}
 
 
@@ -435,35 +436,44 @@ void Kalpeus::drawTerrain()
 
 }
 
-void Kalpeus::draw()
+void Kalpeus::draw(RenderPass pass)
 {
 	g_params->useNamespace("Kalpeus");
 
-//	m_shadowMap->bind();
-	
-	drawTerrain();
-	for (auto f : m_flowers)
-		f->draw(m_shadowMap->getLightMatrix(), glm::mat4(1.f));
+	if (pass == RenderPass::SHADOW)
+	{
+		//	m_shadowMap->bind();
+	//	drawTerrain();
+	//	for (auto f : m_flowers)
+	//		f->draw(m_shadowMap->getLightMatrix(), glm::mat4(1.f));
 
-//	m_shadowMap->unbind();
+	//	m_shadowMap->unbind();
 
-	g_renderTargets->bindMain();
-	/*
-	m_camera->lookAt(m_cameraPosition,
-		m_cameraTarget,
-		m_cameraUp);
+	}
+	if (pass == RenderPass::MAIN)
+	{
+		g_renderTargets->bindMain();
 
-	drawTerrain();
+		m_camera->lookAt(m_cameraPosition,
+			m_cameraTarget,
+			m_cameraUp);
 
-	for (auto f : m_flowers)
-		f->draw(m_camera->getCameraMatrix(), m_shadowMap->getLightMatrix());
-		*/
-//
-	m_shadowMap->debugDraw();
-//	const float focus = 0.1f;
+		drawTerrain();
 
-	//	g_postProcess->addRadialGlow();
-	//	g_postProcess->addLens(focus, m_camera);
-	//	g_renderDebug->drawDepthTexture(g_renderTargets->getDepthTextureId("main"), m_camera, 512 + 256, 256, 512.f);
+		for (auto f : m_flowers)
+			f->draw(m_camera->getCameraMatrix(), m_shadowMap->getLightMatrix());
+
+		//	const float focus = 0.1f;
+
+		//	g_postProcess->addRadialGlow();
+		//	g_postProcess->addLens(focus, m_camera);
+		//	g_renderDebug->drawDepthTexture(g_renderTargets->getDepthTextureId("main"), m_camera, 512 + 256, 256, 512.f);
+	}
+	if (pass == RenderPass::POST)
+	{
+		//	m_shadowMap->debugDraw();
+
+	}
+
 
 }

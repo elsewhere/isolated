@@ -8,8 +8,6 @@ config-luokka
 
 Prioriteetti 1
 --------------
-- loading screen
-- jonkinsorttinen 2D-tuki edellämainittua varten 
 - debug-piirto 2d:nä
 
 - curl noise 

@@ -70,6 +70,7 @@ namespace demorender
 		{
 			g_debug << "could not load shader " << name << " for some reason, won't work etc" << std::endl;
 		}
+		return nullptr;
 	}
 
 	void ShaderManager::loadShaders()

@@ -55,13 +55,13 @@ GEOMETRY_SHADER
 		float dist = length(pos- vec4(cameraPosition, 1.0));
 		float bokehDist = abs(focusDistance - dist);
 		float bokeh = clamp(bokehDist * 0.05, 0.0, 1.0);
-		float bokehSize = pow(bokeh, 2.0) * 14.6f;
+		float bokehSize = pow(bokeh, 2.0) * 24.6f;
 
 	   float size = gl_in[0].gl_PointSize * (1.0 + bokehSize);
 	   color = gs_in[0].color;
 
 	   float alpha = sin((gs_in[0].energy / gs_in[0].maxEnergy) * 3.1415);
-	   alpha -= bokeh * 0.7;
+	   alpha -= bokeh * 0.9;
 	   alpha = max(0.0, alpha);
 	   color.w *= pow(alpha, 2.0);
 

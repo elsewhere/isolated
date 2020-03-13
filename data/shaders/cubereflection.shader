@@ -27,7 +27,6 @@ FRAGMENT_SHADER
 {
 	#version 330
 
-	uniform sampler2D textureMap;
 	uniform samplerCube cubeMap;
 
 	uniform vec3 cameraPosition;
@@ -46,7 +45,7 @@ FRAGMENT_SHADER
 
 		vec4 reflectionColor = texture(cubeMap, reflectionDir);
 		vec4 refractionColor = texture(cubeMap, refractionDir);
-		vec4 baseColor = vec4(0.5, 0.5, 1.0, 1.0);//texture(textureMap, fragmentTextureCoordinate);
+		vec4 baseColor = vec4(0.5, 0.5, 1.0, 1.0);
 
 		const float refractionAmount = 0.176;
 		vec4 transparencyColour = mix(reflectionColor, refractionColor, refractionAmount);

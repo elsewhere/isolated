@@ -282,6 +282,7 @@ namespace democore
 			e->m_scene->draw(Scene::RenderPass::SHADOW);
 			e->m_scene->draw(Scene::RenderPass::REFLECTION);
 			e->m_scene->draw(Scene::RenderPass::MAIN);
+			e->m_scene->draw(Scene::RenderPass::POST);
 
 			demorender::g_postProcess->commit();
 			if (g_system->isDebug())

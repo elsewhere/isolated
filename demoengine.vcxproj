@@ -225,6 +225,7 @@
     <ClInclude Include="scenes\dynamiccubetest.h" />
     <ClInclude Include="scenes\kalpeus.h" />
     <ClInclude Include="scenes\kasvot.h" />
+    <ClInclude Include="scenes\sauhu.h" />
     <ClInclude Include="scenes\shadowtest.h" />
     <ClInclude Include="scenes\shadowtest2.h" />
     <ClInclude Include="scenes\tunne.h" />
@@ -303,6 +304,7 @@
     <ClCompile Include="scenes\dynamiccubetest.cpp" />
     <ClCompile Include="scenes\kalpeus.cpp" />
     <ClCompile Include="scenes\kasvot.cpp" />
+    <ClCompile Include="scenes\sauhu.cpp" />
     <ClCompile Include="scenes\shadowtest.cpp" />
     <ClCompile Include="scenes\shadowtest2.cpp" />
     <ClCompile Include="scenes\tunne.cpp" />

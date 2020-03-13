@@ -112,15 +112,19 @@ void Tunne::debug()
 {
 }
 
-void Tunne::draw()
+void Tunne::draw(RenderPass pass)
 {
 	g_params->useNamespace("Kasvot");
 
-	g_renderTargets->bindMain();
+	if (pass == RenderPass::MAIN)
+	{
+		g_renderTargets->bindMain();
 
-	m_camera->lookAt(m_cameraPosition,
-		m_cameraTarget,
-		m_cameraUp);
+		m_camera->lookAt(m_cameraPosition,
+			m_cameraTarget,
+			m_cameraUp);
 
-	m_particles->draw(m_camera);
+		m_particles->draw(m_camera);
+
+	}
 }

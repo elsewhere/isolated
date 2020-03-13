@@ -13,7 +13,7 @@ public:
 	
 	void init();
 	void update();
-	void draw();
+	void draw(RenderPass pass);
 
 	void debug() override;
 	

@@ -14,7 +14,8 @@ namespace democore
 		{
 			SHADOW,
 			REFLECTION,
-			MAIN
+			MAIN,
+			POST,
 		};
 
 		Scene();

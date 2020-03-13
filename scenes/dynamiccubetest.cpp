@@ -185,10 +185,10 @@ void DynamicCubeTest::drawReflector()
 	reflectionShader.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_camera->getCameraMatrix()); GL_DEBUG;
 	reflectionShader.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&modelMatrix); GL_DEBUG;
 	reflectionShader.setUniform3fv("cameraPosition", 1, (float *)&glm::vec3(0.f)); GL_DEBUG;
-	reflectionShader.setUniform1i("textureMap", 0);
+//	reflectionShader.setUniform1i("textureMap", 0);
 	reflectionShader.setUniform1i("cubeMap", 1);
 
-	g_textures->bindTexture("kivitesti", GL_TEXTURE0);
+//	g_textures->bindTexture("kivitesti", GL_TEXTURE0);
 	g_textures->bindCubemap("dynamictest", GL_TEXTURE1);
 
 	m_reflector->draw();

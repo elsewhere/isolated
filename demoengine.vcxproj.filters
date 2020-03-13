@@ -201,6 +201,7 @@
     <ClInclude Include="scenes\shadowtest2.h" />
     <ClInclude Include="scenes\dynamiccubetest.h" />
     <ClInclude Include="render\LoadingScreen.h" />
+    <ClInclude Include="scenes\sauhu.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\setupdialog.aps">
@@ -340,5 +341,6 @@
     <ClCompile Include="scenes\shadowtest2.cpp" />
     <ClCompile Include="scenes\dynamiccubetest.cpp" />
     <ClCompile Include="render\LoadingScreen.cpp" />
+    <ClCompile Include="scenes\sauhu.cpp" />
   </ItemGroup>
 </Project>
