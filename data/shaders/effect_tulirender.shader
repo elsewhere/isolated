@@ -65,7 +65,7 @@ GEOMETRY_SHADER
 		float dist = length(pos- vec4(cameraPosition, 1.0));
 		float bokehDist = abs(focusDistance - dist);
 		float bokeh = clamp(bokehDist * 0.2, 0.0, 1.0);
-		float bokehSize = pow(bokeh, 2.0) * 25.0;
+		float bokehSize = pow(bokeh, 2.0) * 30.0;
 
 
 		float t = 1.0 - gs_in[0].energy / gs_in[0].maxEnergy;

@@ -11,7 +11,7 @@ democonfig
 	developermode = true;
 	song = Blear_Moon_-_03_-_Ongoing_cases.mp3
 	endtime = 341000
-	jumptime = 71000
+	jumptime = 46000
 }
 
 timeline
@@ -130,14 +130,16 @@ namespace tuli
 	vec3 cameraup = 0 1 0 	
 
 	float cameraradius = 10
-	float focusdistance = 4.0
-	float focusdistancespeed = 20.0;
-	float focusdistancerange = 1.0;
+	float focusdistance = 6.0
+	float focusdistancespeed = 30.0;
+	float focusdistancerange = 4s.0;
 
-	int glowiterations = 10
-	float glowspread = 0.007
+	float camerarotationfreq = 12.0;
+	float camerarotationamount = 0.3;
+	int glowiterations = 20
+	float glowspread = 0.001
 	float glowexponent = 1.0
-	float glowalpha = 1.0
+	float glowalpha = 0.9
 
 	
 }
@@ -191,6 +193,17 @@ event startfadeout
 {
 	time = 41000
 	length = 5000
+}
+event tulifadein
+{
+	time = 49000
+	length = 4000
+}
+event tulifadeout
+{
+	time = 95000
+	length = 4000
+	
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

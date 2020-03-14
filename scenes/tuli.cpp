@@ -86,6 +86,13 @@ void Tuli::update()
 	g_params->useNamespace("Tuli");
 
 	m_cameraUp = glm::vec3(0.f, 1.f, 0.f);
+
+
+
+	glm::mat4 cameraRotation = glm::rotate(sinf(m_pos * g_params->get<float>("camerarotationfreq")) * g_params->get<float>("camerarotationamount"), glm::vec3(0.f, 0.f, 1.f));
+
+	m_cameraUp = Math::transform(m_cameraUp, cameraRotation);
+
 	m_cameraPosition = g_params->get<glm::vec3>("cameraposition");// ::vec3(0.f, 0.f, -20.f);
 	m_cameraTarget = g_params->get<glm::vec3>("cameratarget");
 
@@ -102,7 +109,7 @@ void Tuli::update()
 
 
 	float focusDistance = g_params->get<float>("focusdistance");
-	focusDistance += focusDistance * sinf(m_pos * g_params->get<float>("focusdistancespeed")) * g_params->get<float>("focusdistancerange");
+	focusDistance += sinf(m_pos * g_params->get<float>("focusdistancespeed")) * g_params->get<float>("focusdistancerange");
 	m_particles->addRenderShaderUniform("focusDistance", focusDistance);
 	m_particles->addRenderShaderUniform("cameraPosition", m_cameraPosition);
 
@@ -116,7 +123,7 @@ void Tuli::debug()
 
 void Tuli::draw(RenderPass pass)
 {
-	g_params->useNamespace("Kasvot");
+	g_params->useNamespace("Tuli");
 
 	if (pass == RenderPass::MAIN)
 	{
@@ -128,9 +135,20 @@ void Tuli::draw(RenderPass pass)
 
 		m_particles->draw(m_camera);
 
-
 //		g_postProcess->addSobel();
-//		g_postProcess->addRadialGlow(5, 0.001f);
+		int iterations = g_params->get<int>("glowiterations");
+		float spread = g_params->get<float>("glowspread");
+		float exponent = g_params->get<float>("glowexponent");
+		float alpha = g_params->get<float>("glowalpha");
+		g_postProcess->addRadialGlow(iterations, spread, exponent, alpha);
+	}
+	if (pass == RenderPass::POST)
+	{
+		float fadevalue = g_sync->event("tulifadein").getValue() * (1.f - g_sync->event("tulifadeout").getValue());
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		g_renderUtils->fullscreenFade(glm::vec4(0.f, 0.f, 0.f, 1.f - fadevalue));
+		glDisable(GL_BLEND);
 
 	}
 }

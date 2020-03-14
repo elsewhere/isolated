@@ -128,7 +128,6 @@ void Sauhu::draw(RenderPass pass)
 
 		m_particles->draw(m_camera);
 
-
 //		g_postProcess->addSobel();
 //		g_postProcess->addRadialGlow(5, 0.001f);
 	}

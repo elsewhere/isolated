@@ -59,7 +59,7 @@ VERTEX_SHADER
 		   float b = randhash(seed++, 2.0) - 1.0;
 
 
-		   if (randhash(seed++, 1.0) > 0.3)
+		   if (randhash(seed++, 1.0) > 0.7)
 		   {
 			   a = floor(a * 10) / 10.0;
 			   b = floor(b * 10) / 10.0;
