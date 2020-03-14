@@ -20,9 +20,16 @@ namespace demorender
 		m_pSquare = new Mesh();
 		m_pSquare->generateSquare();
 		m_pSquare->setStreamFlags(Mesh::VERTEX_STREAM | Mesh::UV_STREAM);
+
+		m_pSquareOnlyVertices = new Mesh();
+		m_pSquareOnlyVertices->generateSquare();
+		m_pSquareOnlyVertices->setStreamFlags(Mesh::VERTEX_STREAM);
 	}
 	RenderUtils::~RenderUtils()
 	{
+		delete m_pSquare;
+		delete m_pSquareOnlyVertices;
+		delete m_pOrtho;
 
 	}
 
@@ -33,6 +40,26 @@ namespace demorender
 			sm_instance = new RenderUtils();
 		}
 		return sm_instance;
+	}
+
+	void RenderUtils::fullscreenFade(glm::vec4 color)
+	{
+		glDisable(GL_DEPTH_TEST);
+
+		glm::mat4 testiTrans = glm::scale(glm::vec3(1.f));
+
+		Shader& shader = g_shaders->getShader("singlecolor");
+		shader.bind();
+
+		m_pSquareOnlyVertices->bind(&shader);
+
+		shader.setUniformMatrix4fv("camera", 1, GL_FALSE, (float *)&m_pOrtho->getCameraMatrix()); GL_DEBUG;
+		shader.setUniform4f("color", color.x, color.y, color.z, color.a);
+		glm::mat4 modelMatrix = glm::mat4(1.f);
+		shader.setUniformMatrix4fv("model", 1, GL_FALSE, (float *)&modelMatrix); GL_DEBUG;
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		glEnable(GL_DEPTH_TEST);
 	}
 
 	void RenderUtils::fullscreenQuad(const std::string& texture, Shader& shader, bool ignoreAspect)
@@ -69,7 +96,6 @@ namespace demorender
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 	}
-
 
 	void RenderUtils::fullscreenQuad(const std::string& texture, bool ignoreAspect)
 	{

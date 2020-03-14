@@ -38,6 +38,8 @@
 #include "scenes/kasvot.h"
 #include "scenes/tunne.h"
 #include "scenes/sauhu.h"
+#include "scenes/tuli.h"
+
 #include "scenes/kalpeus.h"
 
 democore::Debugger g_debug;
@@ -96,10 +98,11 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		Math::init();
 		g_postProcess->init();
 //		static_cast<Demo*>(context)->addScene("tyhjyys", new Tyhjyys());
-//		static_cast<Demo*>(context)->addScene("kasvot", new Kasvot());
-//		static_cast<Demo*>(context)->addScene("tunne", new Tunne());
+		static_cast<Demo*>(context)->addScene("kasvot", new Kasvot());
+		static_cast<Demo*>(context)->addScene("tunne", new Tunne());
 		static_cast<Demo*>(context)->addScene("sauhu", new Sauhu());
-//		static_cast<Demo*>(context)->addScene("kalpeus", new Kalpeus());
+		static_cast<Demo*>(context)->addScene("tuli", new Tuli());
+		//		static_cast<Demo*>(context)->addScene("kalpeus", new Kalpeus());
 //		static_cast<Demo*>(context)->addScene("shadowtest", new ShadowTest());
 //		static_cast<Demo*>(context)->addScene("shadowtest2", new ShadowTest2());
 //		static_cast<Demo*>(context)->addScene("dynamiccubetest", new DynamicCubeTest());

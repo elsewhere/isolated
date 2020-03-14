@@ -174,28 +174,32 @@ void Kasvot::debug()
 {
 }
 
-void Kasvot::draw()
+void Kasvot::draw(RenderPass pass)
 {
-	g_params->useNamespace("Kasvot");
+	if (pass == RenderPass::MAIN)
+	{
+		g_params->useNamespace("Kasvot");
 
-	g_renderTargets->bindMain();
+		g_renderTargets->bindMain();
 
-	m_camera->lookAt(m_cameraPosition,
-		m_cameraTarget,
-		m_cameraUp);
+		m_camera->lookAt(m_cameraPosition,
+			m_cameraTarget,
+			m_cameraUp);
 
-	drawBackground();
-	drawTerrain();
+		drawBackground();
+		drawTerrain();
 
-	const float focus = 0.1f;
+		const float focus = 0.1f;
 
-//	g_postProcess->addRadialGlow( g_params->get<int>("glowiterations"), 
-//								  g_params->get<float>("glowspread"),
-//								  g_params->get<float>("glowexponent"),
-//								  g_params->get<float>("glowalpha"));
+		//	g_postProcess->addRadialGlow( g_params->get<int>("glowiterations"), 
+		//								  g_params->get<float>("glowspread"),
+		//								  g_params->get<float>("glowexponent"),
+		//								  g_params->get<float>("glowalpha"));
 
-	//	g_postProcess->addRadial();
-	//	g_postProcess->addLens(focus, m_camera);
-	//	g_renderDebug->drawDepthTexture(g_renderTargets->getDepthTextureId("main"), m_camera, 512 + 256, 256, 512.f);
+			//	g_postProcess->addRadial();
+			//	g_postProcess->addLens(focus, m_camera);
+			//	g_renderDebug->drawDepthTexture(g_renderTargets->getDepthTextureId("main"), m_camera, 512 + 256, 256, 512.f);
+
+	}
 
 }

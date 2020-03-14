@@ -4,12 +4,12 @@
 #include "../render/LineRenderer.h"
 #include "../fx/GPUParticleSystem.h"
 
-class Kasvot : public democore::Scene
+class Tuli : public democore::Scene
 {
 
 public:
-	Kasvot():m_pMesh(nullptr) {};
-	~Kasvot() {};
+	Tuli():m_pMesh(nullptr) {};
+	~Tuli() {};
 	
 	void init();
 	void update();
@@ -19,11 +19,11 @@ public:
 	
 private:
 
-	class KasvotParticles : public demofx::GPUParticleSystem
+	class TuliParticles : public demofx::GPUParticleSystem
 	{
 	public:
-		KasvotParticles();
-		~KasvotParticles();
+		TuliParticles();
+		~TuliParticles();
 
 		void setInitialData() override;
 
@@ -31,9 +31,6 @@ private:
 
 	};
 
-	void createMesh();
-	void drawBackground();
-	void drawTerrain();
 	glm::vec3 m_cameraPosition;
 	glm::vec3 m_cameraTarget;
 	glm::vec3 m_cameraUp;
@@ -41,9 +38,9 @@ private:
 	demorender::Camera *m_camera;
 
 	demorender::Mesh *m_pMesh;
-	demorender::Model *m_pSkybox;
+//	demorender::Model *m_pSkybox;
 
-	std::unique_ptr<KasvotParticles> m_particles;
+	std::unique_ptr<TuliParticles> m_particles;
 	std::unique_ptr<demorender::LineRenderer> m_lines;
 
 };

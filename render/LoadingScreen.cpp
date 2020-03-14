@@ -36,11 +36,11 @@ namespace demorender
 
 	void LoadingScreen::drawRectangle(float startX, float startY, float endX, float endY, glm::vec3 color)
 	{
-		m_shader->bind();
+		m_shader->bind(); GL_DEBUG;
 		m_shader->setUniformMatrix4fv("camera", 1, GL_FALSE, (float *)&m_pOrtho->getCameraMatrix()); GL_DEBUG;
-		m_pSquare->bind(m_shader);
+		m_pSquare->bind(m_shader); GL_DEBUG;
 
-		m_shader->setUniform3f("color", color.x, color.y, color.z);
+		m_shader->setUniform4f("color", color.x, color.y, color.z, 1.f); GL_DEBUG;
 
 		float aspect = democore::g_system->getAspectRatio();
 		glm::mat4 modelMatrix = glm::translate(startX, startY, 0.f);

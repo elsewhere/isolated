@@ -228,6 +228,7 @@
     <ClInclude Include="scenes\sauhu.h" />
     <ClInclude Include="scenes\shadowtest.h" />
     <ClInclude Include="scenes\shadowtest2.h" />
+    <ClInclude Include="scenes\tuli.h" />
     <ClInclude Include="scenes\tunne.h" />
     <ClInclude Include="scenes\tyhjyys.h" />
     <ClInclude Include="util\StringUtils.h" />
@@ -307,6 +308,7 @@
     <ClCompile Include="scenes\sauhu.cpp" />
     <ClCompile Include="scenes\shadowtest.cpp" />
     <ClCompile Include="scenes\shadowtest2.cpp" />
+    <ClCompile Include="scenes\tuli.cpp" />
     <ClCompile Include="scenes\tunne.cpp" />
     <ClCompile Include="scenes\tyhjyys.cpp" />
     <ClCompile Include="util\StringUtils.cpp" />

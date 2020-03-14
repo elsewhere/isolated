@@ -10,7 +10,7 @@ democonfig
 	sound = true;
 	developermode = true;
 	song = Blear_Moon_-_03_-_Ongoing_cases.mp3
-	endtime = 220000
+	endtime = 341000
 	jumptime = 71000
 }
 
@@ -23,7 +23,12 @@ timeline
 ;	shadowtest2 0 150000 666
 ;	shadowtest 0 150000 666
 ;	dynamiccubetest 0 150000 666
-	sauhu 0 150000 666
+;	sauhu 0 150000 666
+;	tuli 0 250000 666
+
+	sauhu 0 47000 666
+	tuli 47000 100000 666
+	kasvot 100000 150000 666
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -118,6 +123,25 @@ namespace sauhu
 	
 }
 
+namespace tuli
+{
+	vec3 cameraposition = 0 5 -6
+	vec3 cameratarget = 0 2 0 
+	vec3 cameraup = 0 1 0 	
+
+	float cameraradius = 10
+	float focusdistance = 4.0
+	float focusdistancespeed = 20.0;
+	float focusdistancerange = 1.0;
+
+	int glowiterations = 10
+	float glowspread = 0.007
+	float glowexponent = 1.0
+	float glowalpha = 1.0
+
+	
+}
+
 namespace kasvot
 {
 	vec3 cameraposition = 0 0 -9
@@ -158,10 +182,15 @@ bpm basicbeat0
 	offset = 0
 }
 
-event jokufadein
+event startfadein
 {
-	time = 159151
-	length = 1000
+	time = 4000
+	length = 15000
+}
+event startfadeout
+{
+	time = 41000
+	length = 5000
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

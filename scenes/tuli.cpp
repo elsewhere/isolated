@@ -1,4 +1,4 @@
-#include "Sauhu.h"
+#include "Tuli.h"
 #include "../render/MeshBuilder.h"
 #include "../glm/gtx/transform.hpp"
 
@@ -19,8 +19,8 @@ namespace
 // KasvotParticles
 ////////////////////////////////////////////////////////////////1////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Sauhu::SauhuParticles::SauhuParticles() :
-	GPUParticleSystem(1024 * 1024)
+Tuli::TuliParticles::TuliParticles() :
+	GPUParticleSystem(1024 * 128)
 {
 	addLogicShaderAttribute({ "particlePosition", 3 });
 	addLogicShaderAttribute({ "particleColor", 4 });
@@ -33,12 +33,12 @@ Sauhu::SauhuParticles::SauhuParticles() :
 	addRenderShaderAttribute({ "vertexMaxEnergy", 1 });
 }
 
-Sauhu::SauhuParticles::~SauhuParticles()
+Tuli::TuliParticles::~TuliParticles()
 {
 
 }
 
-void Sauhu::SauhuParticles::setInitialData()
+void Tuli::TuliParticles::setInitialData()
 {
 	m_pInitialData = new float[m_particleCount * m_particleSize];
 
@@ -57,7 +57,7 @@ void Sauhu::SauhuParticles::setInitialData()
 }
 
 
-void Sauhu::init()
+void Tuli::init()
 {
 	m_camera = new demorender::Camera(1.f, 1000.f, 45.f);
 
@@ -73,21 +73,21 @@ void Sauhu::init()
 		m_lines->addPoint(v, c);
 	}
 
-	m_particles = std::make_unique<SauhuParticles>();
-	m_particles->setShaders("effect_sauhu", "effect_sauhurender");
+	m_particles = std::make_unique<TuliParticles>();
+	m_particles->setShaders("effect_tuli", "effect_tulirender");
 	m_particles->setInitialData();
 	m_particles->createBuffers();
 }
 
 
 
-void Sauhu::update()
+void Tuli::update()
 {
-	g_params->useNamespace("sauhu");
+	g_params->useNamespace("Tuli");
 
 	m_cameraUp = glm::vec3(0.f, 1.f, 0.f);
 	m_cameraPosition = g_params->get<glm::vec3>("cameraposition");// ::vec3(0.f, 0.f, -20.f);
-	m_cameraTarget = glm::vec3(0.f);
+	m_cameraTarget = g_params->get<glm::vec3>("cameratarget");
 
 	glm::mat4 modelMatrix = glm::mat4(1.f);
 
@@ -102,7 +102,7 @@ void Sauhu::update()
 
 
 	float focusDistance = g_params->get<float>("focusdistance");
-	focusDistance += focusDistance * sinf(m_pos * 150.f);
+	focusDistance += focusDistance * sinf(m_pos * g_params->get<float>("focusdistancespeed")) * g_params->get<float>("focusdistancerange");
 	m_particles->addRenderShaderUniform("focusDistance", focusDistance);
 	m_particles->addRenderShaderUniform("cameraPosition", m_cameraPosition);
 
@@ -110,11 +110,11 @@ void Sauhu::update()
 	m_particles->update();
 }
 
-void Sauhu::debug()
+void Tuli::debug()
 {
 }
 
-void Sauhu::draw(RenderPass pass)
+void Tuli::draw(RenderPass pass)
 {
 	g_params->useNamespace("Kasvot");
 
@@ -131,13 +131,6 @@ void Sauhu::draw(RenderPass pass)
 
 //		g_postProcess->addSobel();
 //		g_postProcess->addRadialGlow(5, 0.001f);
-	}
-	if (pass == RenderPass::POST)
-	{
-		float fadevalue = g_sync->event("startfadein").getValue() * (1.f - g_sync->event("startfadeout").getValue());
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		g_renderUtils->fullscreenFade(glm::vec4(0.f, 0.f, 0.f, 1.f - fadevalue));
-		glDisable(GL_BLEND);
+
 	}
 }

@@ -15,6 +15,7 @@ namespace demorender
 		void fullscreenQuad(const std::string& texture, bool ignoreAspect = true);
 		void fullscreenQuad(const std::string& texture, Shader& shader, bool ignoreAspect = true);
 		void fullscreenQuad(Shader& shader, bool ignoreAspect = true);
+		void fullscreenFade(glm::vec4 color);
 
 	private:
 		RenderUtils();
@@ -23,6 +24,7 @@ namespace demorender
 		static RenderUtils* sm_instance;
 		class OrthoCamera* m_pOrtho;
 		class Mesh *m_pSquare;
+		class Mesh *m_pSquareOnlyVertices;
 
 	};
 }

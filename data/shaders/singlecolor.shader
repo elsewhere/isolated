@@ -6,7 +6,6 @@ VERTEX_SHADER
 	uniform mat4 model;
 
 	in vec3 vertexPosition;
-	in vec2 vertexTextureCoordinate;
 
 	void main() {
 	    // Apply all matrix transformations to vert
@@ -20,11 +19,11 @@ FRAGMENT_SHADER
 
 	out vec4 finalColor;
 
-	uniform vec3 color;
+	uniform vec4 color;
 
 	void main() 
 	{
-		finalColor = vec4(color, 1.0);
+		finalColor = color;
 
 	}	
 }
