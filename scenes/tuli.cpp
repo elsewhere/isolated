@@ -20,7 +20,7 @@ namespace
 ////////////////////////////////////////////////////////////////1////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Tuli::TuliParticles::TuliParticles() :
-	GPUParticleSystem(1024 * 128)
+	GPUParticleSystem(1024 * 256)
 {
 	addLogicShaderAttribute({ "particlePosition", 3 });
 	addLogicShaderAttribute({ "particleColor", 4 });
@@ -87,9 +87,8 @@ void Tuli::update()
 
 	m_cameraUp = glm::vec3(0.f, 1.f, 0.f);
 
-
-
-	glm::mat4 cameraRotation = glm::rotate(sinf(m_pos * g_params->get<float>("camerarotationfreq")) * g_params->get<float>("camerarotationamount"), glm::vec3(0.f, 0.f, 1.f));
+	const float rotation = Math::smoothStep(std::min<float>(m_pos * 3.f, 1.f), 0.f, 1.f);
+	glm::mat4 cameraRotation = glm::rotate(sinf(m_pos * g_params->get<float>("camerarotationfreq")) * g_params->get<float>("camerarotationamount"), glm::vec3(0.f, 0.f, 1.f)) * rotation;
 
 	m_cameraUp = Math::transform(m_cameraUp, cameraRotation);
 
@@ -136,10 +135,12 @@ void Tuli::draw(RenderPass pass)
 		m_particles->draw(m_camera);
 
 //		g_postProcess->addSobel();
+
+		const float glow = std::min<float>(1.f, m_pos * 2.f);
 		int iterations = g_params->get<int>("glowiterations");
 		float spread = g_params->get<float>("glowspread");
 		float exponent = g_params->get<float>("glowexponent");
-		float alpha = g_params->get<float>("glowalpha");
+		float alpha = g_params->get<float>("glowalpha") * glow;
 		g_postProcess->addRadialGlow(iterations, spread, exponent, alpha);
 	}
 	if (pass == RenderPass::POST)

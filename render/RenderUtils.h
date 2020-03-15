@@ -17,6 +17,8 @@ namespace demorender
 		void fullscreenQuad(Shader& shader, bool ignoreAspect = true);
 		void fullscreenFade(glm::vec4 color);
 
+		void orthoImage(const std::string& texture, glm::vec2 pos, float scale, float alpha);
+
 	private:
 		RenderUtils();
 		~RenderUtils();

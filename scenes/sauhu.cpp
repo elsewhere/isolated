@@ -116,7 +116,7 @@ void Sauhu::debug()
 
 void Sauhu::draw(RenderPass pass)
 {
-	g_params->useNamespace("Kasvot");
+	g_params->useNamespace("Sauhu");
 
 	if (pass == RenderPass::MAIN)
 	{
@@ -135,6 +135,20 @@ void Sauhu::draw(RenderPass pass)
 	{
 		float fadevalue = g_sync->event("startfadein").getValue() * (1.f - g_sync->event("startfadeout").getValue());
 		glEnable(GL_BLEND);
+
+		glm::vec3 grouppos = g_params->get<glm::vec3>("grouppos");
+		glm::vec3 titlepos = g_params->get<glm::vec3>("titlepos");
+
+		float grouptitle = sinf(g_sync->event("grouptitle").getValue() * 3.141592f);
+		float demotitle = sinf(g_sync->event("demotitle").getValue() * 3.141592f);
+
+		if (grouptitle > 0.001f)
+			g_renderUtils->orthoImage("grouptitle", glm::vec2(grouppos.x, grouppos.y), 0.5f, grouptitle);
+		if (demotitle > 0.001f)
+			g_renderUtils->orthoImage("demotitle", glm::vec2(titlepos.x, titlepos.y), 0.5f, demotitle);
+
+
+
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		g_renderUtils->fullscreenFade(glm::vec4(0.f, 0.f, 0.f, 1.f - fadevalue));
 		glDisable(GL_BLEND);

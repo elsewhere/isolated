@@ -42,11 +42,35 @@ namespace demorender
 		return sm_instance;
 	}
 
-	void RenderUtils::fullscreenFade(glm::vec4 color)
+	void RenderUtils::orthoImage(const std::string& texture, glm::vec2 pos, float scale, float alpha)
 	{
 		glDisable(GL_DEPTH_TEST);
 
-		glm::mat4 testiTrans = glm::scale(glm::vec3(1.f));
+		Shader& shader = g_shaders->getShader("simpletexturealpha");
+		shader.bind();
+		shader.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_pOrtho->getCameraMatrix()); GL_DEBUG;
+		m_pSquare->bind(&shader);
+
+		g_textures->bindTexture(texture, GL_TEXTURE0); GL_DEBUG;
+		shader.setUniform1i("tex", 0); GL_DEBUG;
+		shader.setUniform1f("alpha", alpha); GL_DEBUG;
+
+		const float aspect = democore::g_system->getAspectRatio();
+
+		Texture* tex = g_textures->getTexture(texture);
+		float pictureaspect = (float)tex->getWidth() / (float)tex->getHeight();
+
+		glm::mat4 modelMatrix = glm::scale(glm::vec3(scale * pictureaspect, scale * aspect, 1.f)); ;
+		glm::mat4 translation = glm::translate(pos.x, pos.y, 0.f);
+		modelMatrix *= translation;
+
+		shader.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&modelMatrix); GL_DEBUG;
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+	}
+
+	void RenderUtils::fullscreenFade(glm::vec4 color)
+	{
+		glDisable(GL_DEPTH_TEST);
 
 		Shader& shader = g_shaders->getShader("singlecolor");
 		shader.bind();
@@ -66,8 +90,6 @@ namespace demorender
 	{
 		glDisable(GL_DEPTH_TEST);
 
-		glm::mat4 testiTrans = glm::scale(glm::vec3(1.f));
-
 		shader.setUniformMatrix4fv("camera", 1, GL_FALSE, (float *)&m_pOrtho->getCameraMatrix()); GL_DEBUG;
 		m_pSquare->bind(&shader);
 
@@ -83,8 +105,6 @@ namespace demorender
 	void RenderUtils::fullscreenQuad(Shader& shader, bool ignoreAspect)
 	{
 		glDisable(GL_DEPTH_TEST);
-
-		glm::mat4 testiTrans = glm::scale(glm::vec3(1.f));
 
 		shader.setUniformMatrix4fv("camera", 1, GL_FALSE, (float *)&m_pOrtho->getCameraMatrix()); GL_DEBUG;
 		m_pSquare->bind(&shader);
@@ -102,7 +122,6 @@ namespace demorender
 		glDisable(GL_DEPTH_TEST);
 
 		const float scale = 1.f;
-		glm::mat4 testiTrans = glm::scale(glm::vec3(1.f));
 
 		Shader& shader = g_shaders->getShader("simpletexture");
 		shader.bind();
@@ -121,26 +140,4 @@ namespace demorender
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 	}
-
-/*
-	void RenderDebug::drawTexture(const std::string& name, int x, int y, float scale)
-	{
-		glm::mat4 testiTrans = glm::scale(glm::vec3(1.f));
-
-		Shader& shader = g_shaders->getShader("simpletexture");
-		shader.bind();
-		shader.setUniformMatrix4fv("camera", 1, GL_FALSE, (float *)&m_pOrtho->getCameraMatrix()); GL_DEBUG;
-		m_pSquare->bind(&shader);
-
-		g_textures->bindTexture(name, GL_TEXTURE0); GL_DEBUG;
-		shader.setUniform1i("tex", 0); GL_DEBUG;
-
-		float aspect = democore::g_system->getAspectRatio();
-		glm::mat4 testiModelMatrix = glm::translate(x * 1.f, y * 1.f, 0.f);
-		glm::mat4 scaling = glm::scale(glm::vec3(scale, scale, 1.f));
-		testiModelMatrix *= scaling;
-		shader.setUniformMatrix4fv("model", 1, GL_FALSE, (float *)&testiModelMatrix); GL_DEBUG;
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-	}
-	*/
 }
