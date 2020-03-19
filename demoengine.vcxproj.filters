@@ -204,6 +204,7 @@
     <ClInclude Include="scenes\sauhu.h" />
     <ClInclude Include="scenes\tuli.h" />
     <ClInclude Include="scenes\korona.h" />
+    <ClInclude Include="scenes\maailma.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\setupdialog.aps">
@@ -346,5 +347,6 @@
     <ClCompile Include="scenes\sauhu.cpp" />
     <ClCompile Include="scenes\tuli.cpp" />
     <ClCompile Include="scenes\korona.cpp" />
+    <ClCompile Include="scenes\maailma.cpp" />
   </ItemGroup>
 </Project>
