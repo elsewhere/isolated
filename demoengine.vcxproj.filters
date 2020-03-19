@@ -203,6 +203,7 @@
     <ClInclude Include="render\LoadingScreen.h" />
     <ClInclude Include="scenes\sauhu.h" />
     <ClInclude Include="scenes\tuli.h" />
+    <ClInclude Include="scenes\korona.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\setupdialog.aps">
@@ -344,5 +345,6 @@
     <ClCompile Include="render\LoadingScreen.cpp" />
     <ClCompile Include="scenes\sauhu.cpp" />
     <ClCompile Include="scenes\tuli.cpp" />
+    <ClCompile Include="scenes\korona.cpp" />
   </ItemGroup>
 </Project>

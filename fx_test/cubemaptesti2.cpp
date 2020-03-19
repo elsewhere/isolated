@@ -101,13 +101,13 @@ void CubemapTesti2::drawSurroundings()
 
 	g_textures->bindTexture("chess", GL_TEXTURE0); GL_DEBUG;
 	s.setUniform1i("tex", 0); GL_DEBUG;
-	s.setUniformMatrix4fv("camera", 1, GL_FALSE, (float *)&m_camera->getCameraMatrix()); GL_DEBUG;
+	s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_camera->getCameraMatrix()); GL_DEBUG;
 	m_pModelSurrounding->bind(&s);
 
 	for (int i = 0; i < 6; i++)
 	{
 		glm::mat4 modelMatrix = glm::translate(positions.at(i)) * glm::rotate(m_pos, rotations.at(i)) * glm::scale(glm::vec3(5.f));
-		s.setUniformMatrix4fv("model", 1, GL_FALSE, (float *)&modelMatrix); GL_DEBUG;
+		s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&modelMatrix); GL_DEBUG;
 		m_pModelSurrounding->draw();
 	}
 }

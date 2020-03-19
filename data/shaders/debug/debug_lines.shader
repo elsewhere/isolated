@@ -2,8 +2,8 @@ VERTEX_SHADER
 {
 	#version 330
 
-	uniform mat4 camera;
-	uniform mat4 model;
+	uniform mat4 cameraMatrix;
+	uniform mat4 modelMatrix;
 
 	in vec3 vertexPosition;
 	in vec4 vertexColor;
@@ -15,8 +15,8 @@ VERTEX_SHADER
 		color = vertexColor;
 	    vec3 vertex = vertexPosition;
 
-	    vec4 pos = model * vec4(vertex, 1);
-	    gl_Position = camera * pos;
+	    vec4 pos = modelMatrix * vec4(vertex, 1);
+	    gl_Position = cameraMatrix * pos;
 	}
 }
 

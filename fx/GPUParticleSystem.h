@@ -27,7 +27,7 @@ namespace demofx
 		virtual void setInitialData();
 		void createBuffers();
 		void update();
-		void draw(demorender::Camera *pCamera);
+		void draw(demorender::Camera *pCamera, int numParticles = -1);
 		void setShaders(const std::string& logicShader, const std::string& renderShader);
 
 		void addLogicShaderAttribute(GPUParticleSystem::ParticleAttribute attribute);

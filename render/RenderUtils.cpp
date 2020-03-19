@@ -77,10 +77,10 @@ namespace demorender
 
 		m_pSquareOnlyVertices->bind(&shader);
 
-		shader.setUniformMatrix4fv("camera", 1, GL_FALSE, (float *)&m_pOrtho->getCameraMatrix()); GL_DEBUG;
+		shader.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_pOrtho->getCameraMatrix()); GL_DEBUG;
 		shader.setUniform4f("color", color.x, color.y, color.z, color.a);
 		glm::mat4 modelMatrix = glm::mat4(1.f);
-		shader.setUniformMatrix4fv("model", 1, GL_FALSE, (float *)&modelMatrix); GL_DEBUG;
+		shader.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&modelMatrix); GL_DEBUG;
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		glEnable(GL_DEPTH_TEST);
@@ -90,7 +90,7 @@ namespace demorender
 	{
 		glDisable(GL_DEPTH_TEST);
 
-		shader.setUniformMatrix4fv("camera", 1, GL_FALSE, (float *)&m_pOrtho->getCameraMatrix()); GL_DEBUG;
+		shader.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_pOrtho->getCameraMatrix()); GL_DEBUG;
 		m_pSquare->bind(&shader);
 
 		g_textures->bindTexture(texture, GL_TEXTURE0); GL_DEBUG;
@@ -98,7 +98,7 @@ namespace demorender
 		float aspect = ignoreAspect ? 1.f : democore::g_system->getAspectRatio();
 		glm::mat4 testiModelMatrix = glm::translate(0.f, 0.f, 0.f);
 
-		shader.setUniformMatrix4fv("model", 1, GL_FALSE, (float *)&testiModelMatrix); GL_DEBUG;
+		shader.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&testiModelMatrix); GL_DEBUG;
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
@@ -106,13 +106,13 @@ namespace demorender
 	{
 		glDisable(GL_DEPTH_TEST);
 
-		shader.setUniformMatrix4fv("camera", 1, GL_FALSE, (float *)&m_pOrtho->getCameraMatrix()); GL_DEBUG;
+		shader.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_pOrtho->getCameraMatrix()); GL_DEBUG;
 		m_pSquare->bind(&shader);
 
 		float aspect = ignoreAspect ? 1.f : democore::g_system->getAspectRatio();
 		glm::mat4 testiModelMatrix = glm::translate(0.f, 0.f, 0.f);
 
-		shader.setUniformMatrix4fv("model", 1, GL_FALSE, (float *)&testiModelMatrix); GL_DEBUG;
+		shader.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&testiModelMatrix); GL_DEBUG;
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 	}

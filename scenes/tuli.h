@@ -38,6 +38,7 @@ private:
 	demorender::Camera *m_camera;
 
 	demorender::Mesh *m_pMesh;
+	int m_numParticles;
 //	demorender::Model *m_pSkybox;
 
 	std::unique_ptr<TuliParticles> m_particles;

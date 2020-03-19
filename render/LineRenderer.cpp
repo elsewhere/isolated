@@ -80,8 +80,8 @@ namespace demorender
 		s.bind();
 
 		glm::mat4 model(1.f);
-		s.setUniformMatrix4fv("camera", 1, false, (float *)&pCamera->getCameraMatrix());
-		s.setUniformMatrix4fv("model", 1, false, (float *)&model);
+		s.setUniformMatrix4fv("cameraMatrix", 1, false, (float *)&pCamera->getCameraMatrix());
+		s.setUniformMatrix4fv("modelMatrix", 1, false, (float *)&model);
 
 		m_mesh->bind(&s);
 

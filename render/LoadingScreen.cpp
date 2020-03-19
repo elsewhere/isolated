@@ -37,7 +37,7 @@ namespace demorender
 	void LoadingScreen::drawRectangle(float startX, float startY, float endX, float endY, glm::vec3 color)
 	{
 		m_shader->bind(); GL_DEBUG;
-		m_shader->setUniformMatrix4fv("camera", 1, GL_FALSE, (float *)&m_pOrtho->getCameraMatrix()); GL_DEBUG;
+		m_shader->setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_pOrtho->getCameraMatrix()); GL_DEBUG;
 		m_pSquare->bind(m_shader); GL_DEBUG;
 
 		m_shader->setUniform4f("color", color.x, color.y, color.z, 1.f); GL_DEBUG;
@@ -47,7 +47,7 @@ namespace demorender
 
 		glm::mat4 scaling = glm::scale(glm::vec3((endX - startX), (endY - startY), 1.f));
 		modelMatrix *= scaling;
-		m_shader->setUniformMatrix4fv("model", 1, GL_FALSE, (float *)&modelMatrix); GL_DEBUG;
+		m_shader->setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&modelMatrix); GL_DEBUG;
 		glDisable(GL_DEPTH_TEST);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glEnable(GL_DEPTH_TEST);

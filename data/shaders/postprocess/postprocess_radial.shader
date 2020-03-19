@@ -2,8 +2,8 @@ VERTEX_SHADER
 {
 	#version 330
 
-	uniform mat4 camera;
-	uniform mat4 model;
+	uniform mat4 cameraMatrix;
+	uniform mat4 modelMatrix;
 
 	in vec3 vertexPosition;
 	in vec2 vertexTextureCoordinate;
@@ -18,7 +18,7 @@ VERTEX_SHADER
 	    radialDirection = (vec2(0.0, 0.0) - (textureCoordinate - vec2(0.5))) / 256.0;
 	    
 	    // Apply all matrix transformations to vert
-	    gl_Position = camera * model * vec4(vertexPosition, 1);
+	    gl_Position = cameraMatrix * modelMatrix * vec4(vertexPosition, 1);
 	}
 }
 

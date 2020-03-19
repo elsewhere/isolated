@@ -12,6 +12,7 @@ using namespace glm;
 namespace
 {
 	static const std::string skyboxTexture = "nebula";
+	static const int numParticles = 1024 * 256;
 }
 
 
@@ -20,7 +21,7 @@ namespace
 ////////////////////////////////////////////////////////////////1////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Tuli::TuliParticles::TuliParticles() :
-	GPUParticleSystem(1024 * 256)
+	GPUParticleSystem(numParticles)
 {
 	addLogicShaderAttribute({ "particlePosition", 3 });
 	addLogicShaderAttribute({ "particleColor", 4 });
@@ -59,6 +60,8 @@ void Tuli::TuliParticles::setInitialData()
 
 void Tuli::init()
 {
+	m_numParticles = numParticles;
+
 	m_camera = new demorender::Camera(1.f, 1000.f, 45.f);
 
 	m_lines = std::make_unique<demorender::LineRenderer>();
@@ -132,7 +135,10 @@ void Tuli::draw(RenderPass pass)
 			m_cameraTarget,
 			m_cameraUp);
 
-		m_particles->draw(m_camera);
+
+		float fade = std::min(1.f, m_pos * 2.f);
+		int particles = (int)(m_numParticles * fade);
+		m_particles->draw(m_camera, particles);
 
 //		g_postProcess->addSobel();
 

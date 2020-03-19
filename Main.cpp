@@ -39,6 +39,7 @@
 #include "scenes/tunne.h"
 #include "scenes/sauhu.h"
 #include "scenes/tuli.h"
+#include "scenes/korona.h"
 
 #include "scenes/kalpeus.h"
 
@@ -102,6 +103,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		static_cast<Demo*>(context)->addScene("tunne", new Tunne());
 		static_cast<Demo*>(context)->addScene("sauhu", new Sauhu());
 		static_cast<Demo*>(context)->addScene("tuli", new Tuli());
+		static_cast<Demo*>(context)->addScene("korona", new Korona());
+
 		//		static_cast<Demo*>(context)->addScene("kalpeus", new Kalpeus());
 //		static_cast<Demo*>(context)->addScene("shadowtest", new ShadowTest());
 //		static_cast<Demo*>(context)->addScene("shadowtest2", new ShadowTest2());

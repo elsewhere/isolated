@@ -128,6 +128,8 @@ void Sauhu::draw(RenderPass pass)
 
 		m_particles->draw(m_camera);
 
+		g_postProcess->addGlow(10, 0.01f, 0.01f);// iterations, spread, spread, exponent, alpha);
+
 //		g_postProcess->addSobel();
 //		g_postProcess->addRadialGlow(5, 0.001f);
 	}
@@ -146,8 +148,6 @@ void Sauhu::draw(RenderPass pass)
 			g_renderUtils->orthoImage("grouptitle", glm::vec2(grouppos.x, grouppos.y), 0.5f, grouptitle);
 		if (demotitle > 0.001f)
 			g_renderUtils->orthoImage("demotitle", glm::vec2(titlepos.x, titlepos.y), 0.5f, demotitle);
-
-
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		g_renderUtils->fullscreenFade(glm::vec4(0.f, 0.f, 0.f, 1.f - fadevalue));

@@ -196,7 +196,7 @@ namespace demofx
 		std::swap(m_particleBuffer1, m_particleBuffer2);
 	}
 
-	void GPUParticleSystem::draw(Camera *pCamera)
+	void GPUParticleSystem::draw(Camera *pCamera, int numParticles)
 	{
 		//draw the contents of particlebuffer1
 		Shader& s = g_shaders->getShader(m_renderShader);
@@ -219,7 +219,7 @@ namespace demofx
 			offset += a.size;
 		}
 
-		glDrawArrays(GL_POINTS, 0, m_particleCount); GL_DEBUG;
+		glDrawArrays(GL_POINTS, 0, numParticles == -1 ? m_particleCount : numParticles); GL_DEBUG;
 
 		for (const auto& a : m_renderShaderAttributes)
 		{

@@ -63,8 +63,8 @@ void Tyhjyys::TyhjyysLight::draw(Camera* camera)
 	Shader& s = g_shaders->getShader("singlecolor");
 	s.bind();
 	s.setUniform3f("color", 1.1f, 1.f, 1.f); 
-	s.setUniformMatrix4fv("camera", 1, false, (float*)(&camera->getCameraMatrix()));
-	s.setUniformMatrix4fv("model", 1, false, (float *)&model);
+	s.setUniformMatrix4fv("cameraMatrix", 1, false, (float*)(&camera->getCameraMatrix()));
+	s.setUniformMatrix4fv("modelMatrix", 1, false, (float *)&model);
 
 	m_pMesh->bind(&s);
 	m_pMesh->draw();
@@ -197,8 +197,8 @@ void Tyhjyys::drawTerrain()
 	s.setUniform1f("lightvalue", m_lightValue);
 	s.setUniform1f("lightradius", m_lightRadius);
 
-	s.setUniformMatrix4fv("camera", 1, false, (float *)&m_camera->getCameraMatrix());
-	s.setUniformMatrix4fv("model", 1, false, (float *)&model);
+	s.setUniformMatrix4fv("cameraMatrix", 1, false, (float *)&m_camera->getCameraMatrix());
+	s.setUniformMatrix4fv("modelMatrix", 1, false, (float *)&model);
 
 	m_pMesh->bind(&s);
 	m_pMesh->draw();

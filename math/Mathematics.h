@@ -50,8 +50,7 @@ public:
 
 	static void init();
 
-	//some ugly template functions for stuff
-	template <class T> static T lerp(const float t, const T &a, const T &b)
+	template <class T> static T lerp(const T &a, const T &b, const float t)
 	{
 		return a + (b - a) * t;
 	};

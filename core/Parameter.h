@@ -83,8 +83,10 @@ namespace democore
 			}
 			catch (const std::bad_variant_access& exception)
 			{
-				g_debug << exception.what() << std::endl;
-				g_error.log(exception.what());
+				std::stringstream ss;
+				ss << exception.what() << " name = " << name << std::endl;
+				g_debug << ss.str();
+				g_error.log(ss.str());
 
 				return T();
 

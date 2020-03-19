@@ -427,8 +427,8 @@ void Kalpeus::drawTerrain()
 	s.setUniform1i("texturemap", 0);
 	s.setUniform1i("shadowMap", 1);
 
-	s.setUniformMatrix4fv("camera", 1, false, (float *)&m_camera->getCameraMatrix());
-	s.setUniformMatrix4fv("model", 1, false, (float *)&model);
+	s.setUniformMatrix4fv("cameraMatrix", 1, false, (float *)&m_camera->getCameraMatrix());
+	s.setUniformMatrix4fv("modelMatrix", 1, false, (float *)&model);
 	s.setUniformMatrix4fv("lightMatrix", 1, false, (float *)&m_shadowMap->getLightMatrix());
 
 	m_pMesh->bind(&s);

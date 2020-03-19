@@ -11,7 +11,7 @@ democonfig
 	developermode = true;
 	song = Blear_Moon_-_03_-_Ongoing_cases.mp3
 	endtime = 341000
-	jumptime = 46000
+	jumptime = 99900
 }
 
 timeline
@@ -28,7 +28,8 @@ timeline
 
 	sauhu 0 47000 666
 	tuli 47000 100000 666
-	kasvot 100000 150000 666
+	korona 100000 150000 666
+;	kasvot 100000 150000 666
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -143,9 +144,35 @@ namespace tuli
 	float glowspread = 0.001
 	float glowexponent = 1.0
 	float glowalpha = 0.9
+}
+
+namespace korona
+{
+	vec3 cameraposition = 0 0 -4
+	vec3 cameratargetstart = -0.9 0 0 
+	vec3 cameratargetend = 0.9 0 0 
+	vec3 cameraup = 0 1 0
+
+	vec3 moonpos = 0 0 0
+	float moonsizestart = 1.7
+	float moonsizeend = 1.4
+
+	float focusdistancestart = 3.0
+	float focusdistanceend = 5.0
+
+	int linecount = 7
+	range linewidth = 0.3 0.3
+	float linelength = 30
+	float linedistance = 7.0
+
+	int glowiterations = 20
+	float glowspread = 0.5
+	float glowexponent = 1.0
+	float glowalpha = 2.2
 
 	
 }
+
 
 namespace kasvot
 {
@@ -218,6 +245,16 @@ event tulifadeout
 {
 	time = 95000
 	length = 4000	
+}
+event koronafadein
+{
+	time = 100000
+	length = 4000
+}
+event koronafadeout
+{
+	time = 144000
+	length = 6000	
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
