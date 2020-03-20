@@ -108,6 +108,8 @@ void Maailma::update()
 
 	//	m_particles->addLogicShaderUniform("tex", 0);
 
+	m_particles->addLogicShaderUniform("effecttime", m_pos);
+
 	m_particles->addRenderShaderUniform("tex", 0);
 	m_particles->addRenderShaderUniform("viewMatrix", m_camera->getViewMatrix());
 	m_particles->addRenderShaderUniform("projectionMatrix", m_camera->getProjectionMatrix());
@@ -148,13 +150,12 @@ void Maailma::draw(RenderPass pass)
 
 		const float glow = std::min<float>(1.f, m_pos * 2.f);
 		int iterations = g_params->get<int>("glowiterations");
-		float spread = g_params->get<float>("glowspread");
+		float spreadx = g_params->get<float>("glowspreadx");
+		float spready = g_params->get<float>("glowspready");
 		float exponent = g_params->get<float>("glowexponent");
 		float alpha = g_params->get<float>("glowalpha") * glow;
 
-		g_postProcess->addGlow(iterations, spread, spread, exponent, alpha);
-		
-//		g_postProcess->addRadialGlow(iterations, spread, exponent, alpha);
+		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha);
 	}
 	if (pass == RenderPass::POST)
 	{

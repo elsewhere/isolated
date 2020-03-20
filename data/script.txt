@@ -164,8 +164,9 @@ namespace maailma
 	float camerarotationamount = 0.3;
 
 	int glowiterations = 20
-	float glowspread = 2.5
-	float glowexponent = 0.1
+	float glowspreadx = 5.5
+	float glowspready = 1.2
+	float glowexponent = -0.1
 	float glowalpha = 2.2
 }
 
@@ -282,7 +283,7 @@ event koronafadeout
 event maailmafadein
 {
 	time = 150000
-	length = 2000
+	length = 10000
 }
 event maailmafadeout
 {
@@ -424,10 +425,6 @@ texture downscale3_2
 	format = float16;
 }
 
-texture fabric
-{
-	filename = fabric.jpg
-}
 texture heightmap1
 {
 	filename = heightmap1.jpg
@@ -436,33 +433,13 @@ texture heightmap2
 {
 	filename = heightmap2.jpg
 }
-texture fjara
-{
-	filename = fjara.jpg
-}
 texture mustakivi
 {
 	filename = mustakivi.jpg
 }
-texture fjara_watermap
-{
-	filename = fjara_watermap.jpg
-}
-texture waternormals1
-{
-	filename = waternormals1.jpg
-}
-texture waternormals2
-{
-	filename = waternormals2.jpg
-}
 texture kivitesti
 {
 	filename = kivitesti.jpg
-}
-texture starparticle
-{
-	filename = starparticlee.png	
 }
 texture whiteparticle
 {
@@ -486,35 +463,12 @@ texture grouptitle
 	filename = traction.png
 }
 
-/*
-texture shadowmaptest
-{
-	type = depth
-	width = 1024
-	height = 1024
-}
-*/
-
 texture dynamictest
 {
 	type = cubemap;
 	format = rgba;
 	width = 1024;
 	height = 1024;
-}
-texture miramar
-{
-	type = cubemap;
-	format = rgba;
-	width = 1024;
-	height = 1024;
-
-	filenameposx = miramar_negx.jpg
-	filenamenegx = miramar_posx.jpg
-	filenameposy = miramar_posy.jpg
-	filenamenegy = miramar_negy.jpg
-	filenameposz = miramar_posz.jpg
-	filenamenegz = miramar_negz.jpg
 }
 texture fjaraenv
 {
@@ -529,26 +483,6 @@ texture fjaraenv
 	filenamenegy = fjara_negy.jpg
 	filenameposz = fjara_posz.jpg
 	filenamenegz = fjara_negz.jpg
-}
-texture nebula
-{
-	type = cubemap;
-	format = rgba;
-	width = 1024;
-	height = 1024;
-
-	filenameposx = nebula_negx.jpg
-	filenamenegx = nebula_posx.jpg
-	filenameposy = nebula_posy.jpg
-	filenamenegy = nebula_negy.jpg
-	filenameposz = nebula_posz.jpg
-	filenamenegz = nebula_negz.jpg
-
-}
-
-texture chess
-{
-	filename = chess.jpg
 }
 
 ; some whitespade needed :)

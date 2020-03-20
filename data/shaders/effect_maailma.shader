@@ -11,6 +11,9 @@ VERTEX_SHADER
 	#version 330
 
 	uniform float time;
+
+	uniform float effecttime;
+
 	in vec3 particlePosition;
 	in vec4 particleColor;
 	in float particleEnergy;
@@ -37,7 +40,7 @@ VERTEX_SHADER
 		float s = time * 0.1;
 //		position *= 10.3;
 		float x = (sin(position.x * 5.2 + 1.2 * s) + cos(position.y * 3.5 + 1.1 * s)) * 0.05;
-		float y = (cos(position.x * 1.5 + 0.7 * s) + cos(position.z * 2.1 - 1.4 * s)) * 0.15;
+		float y = (cos(position.x * 1.5 + 0.7 * s) + cos(position.z * 2.1 - 1.4 * s)) * 0.15 * effecttime;
 		float z = (sin(position.y * 7.0 + 1.1 * s) + cos(position.z * 6.3 + 0.5 * s)) * 0.02;
 
 		return vec3(x, y, z) * 0.1;
