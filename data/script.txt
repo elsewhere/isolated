@@ -11,7 +11,7 @@ democonfig
 	developermode = true;
 	song = Blear_Moon_-_03_-_Ongoing_cases.mp3
 	endtime = 341000
-	jumptime = 150000
+	jumptime = 200000
 }
 
 timeline
@@ -30,7 +30,7 @@ timeline
 	tuli 47000 100000 666
 	korona 100000 150000 666
 	maailma 150000 200000 666
-;	kasvot 100000 150000 666
+	kasvot 200000 250000 666
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -160,9 +160,6 @@ namespace maailma
 	float focusdistancespeed = 104.0;
 	float focusdistancerange = 3.0;
 
-	float camerarotationfreq = 12.0;
-	float camerarotationamount = 0.3;
-
 	int glowiterations = 20
 	float glowspreadx = 5.5
 	float glowspready = 1.2
@@ -200,13 +197,17 @@ namespace korona
 
 namespace kasvot
 {
-	vec3 cameraposition = 0 0 -9
+	vec3 cameraposition = 0 0 -6
 	vec3 cameratarget = 0 0 0 
 	vec3 cameraup = 0 1 0 	
 
 	vec3 lightpos = 0 20 0
 
 	float lightscale = 15.0
+
+	float focusdistance = 6.0
+	float focusdistancespeed = 20.0;
+	float focusdistancerange = 3.0;
 
 	int glowiterations = 10
 	float glowspread = 0.007

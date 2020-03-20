@@ -11,7 +11,8 @@ using namespace glm;
 
 namespace
 {
-	static const std::string skyboxTexture = "nebula";
+	static const std::string skyboxTexture = "fjaraenv";
+	constexpr int particleCount = 1024 * 512;
 }
 
 
@@ -20,7 +21,7 @@ namespace
 ////////////////////////////////////////////////////////////////1////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Kasvot::KasvotParticles::KasvotParticles() :
-	GPUParticleSystem(1024 * 1024)
+	GPUParticleSystem(particleCount)
 {
 	addLogicShaderAttribute({ "particlePosition", 3 });
 	addLogicShaderAttribute({ "particleColor", 4 });
@@ -42,10 +43,12 @@ void Kasvot::KasvotParticles::setInitialData()
 {
 	m_pInitialData = new float[m_particleCount * m_particleSize];
 
+	memset(m_pInitialData, 0, m_particleCount * m_particleSize * sizeof(float));
+	/*
 	float* dataptr = m_pInitialData;
 	for (int i = 0; i < m_particleCount; i++)
 	{
-		glm::vec3 position = Math::randVectSphere() * 5.f;
+		glm::vec3 position = glm::vec3(0.f);// Math::randVectSphere() * 5.f;
 		glm::vec4 color = glm::vec4(1.f);
 		float energy = Math::randFloat(0.5f, 1.5f);
 
@@ -54,37 +57,8 @@ void Kasvot::KasvotParticles::setInitialData()
 		writeData<float>(&dataptr, energy);
 		writeData<float>(&dataptr, energy);
 	}
+	*/
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Kasvot
-////////////////////////////////////////////////////////////////1////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
-	luo xz-planemeshi, y = 0
-	triangle-meshi
-
-	klassinen 
-
-    0    1    2    3    4    5    6    7
-	x----x----x----x----x----x----x----x
-	|  / |  / |  / |  / |  / |  / |  / |
-	| /  | /  | /  | /  | /  | /  | /  |
-	x----x----x----x----x----x----x----x
-	|  / |  / |  / |  / |  / |  / |  / |
-	| /  | /  | /  | /  | /  | /  | /  |
-	x----x----x----x----x----x----x----x
-	|  / |  / |  / |  / |  / |  / |  / |
-	| /  | /  | /  | /  | /  | /  | /  |
-	x----x----x----x----x----x----x----x
-	|  / |  / |  / |  / |  / |  / |  / |
-	| /  | /  | /  | /  | /  | /  | /  |
-	x----x----x----x----x----x----x----x
-
-	1x1-kokoinen, transformin skaalalla skaalataan
-	y-koordinaatti tulee heightmapista vertex shaderissa ?
-
-*/
 
 void Kasvot::createMesh()
 {
@@ -145,12 +119,12 @@ void Kasvot::update()
 
 	m_particles->addLogicShaderUniform("tex", 0);
 
-	m_particles->update();
-}
+	float focusDistance = g_params->get<float>("focusdistance");
+	focusDistance += sinf(m_pos * g_params->get<float>("focusdistancespeed")) * g_params->get<float>("focusdistancerange");
+	m_particles->addRenderShaderUniform("focusDistance", focusDistance);
+	m_particles->addRenderShaderUniform("cameraPosition", m_cameraPosition);
 
-void Kasvot::drawTerrain()
-{
-	m_particles->draw(m_camera);
+	m_particles->update();
 }
 
 void Kasvot::drawBackground()
@@ -186,8 +160,8 @@ void Kasvot::draw(RenderPass pass)
 			m_cameraTarget,
 			m_cameraUp);
 
-		drawBackground();
-		drawTerrain();
+//		drawBackground();
+		m_particles->draw(m_camera);
 
 		const float focus = 0.1f;
 

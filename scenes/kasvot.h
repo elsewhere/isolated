@@ -33,7 +33,6 @@ private:
 
 	void createMesh();
 	void drawBackground();
-	void drawTerrain();
 	glm::vec3 m_cameraPosition;
 	glm::vec3 m_cameraTarget;
 	glm::vec3 m_cameraUp;

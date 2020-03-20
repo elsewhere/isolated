@@ -32,6 +32,9 @@ GEOMETRY_SHADER
 	uniform mat4 modelMatrix;
 	uniform mat4 projectionMatrix;
 
+	uniform vec3 cameraPosition;
+	uniform float focusDistance;
+
 	layout (points) in;
 	layout (triangle_strip, max_vertices = 4) out;
 
@@ -47,25 +50,37 @@ GEOMETRY_SHADER
 
 	void main() 
 	{
-	   vec4 pos = viewMatrix * modelMatrix  * gl_in[0].gl_Position;
-	   float size = gl_in[0].gl_PointSize;
-	   color = gs_in[0].color;
+	   	vec4 pos = viewMatrix * modelMatrix  * gl_in[0].gl_Position;
 
-	   float alpha = sin((gs_in[0].energy / gs_in[0].maxEnergy) * 3.1415);
-	   color.w *= pow(alpha, 2.0);
+		float dist = length(pos- vec4(cameraPosition, 1.0));
+		float bokehDist = abs(focusDistance - dist);
+		float bokeh = clamp(bokehDist * 0.1, 0.0, 1.0);
+		float bokehSize = pow(bokeh, 2.5) * 25.0;
 
-	   textureCoordinate = vec2(0, 0);
-	   gl_Position = projectionMatrix * (pos + size * vec4(-1, -1, 0, 0));
-	   EmitVertex();
-	   textureCoordinate = vec2(1, 0);
-	   gl_Position = projectionMatrix * (pos + size * vec4(1, -1, 0, 0));
-	   EmitVertex();
-	   textureCoordinate = vec2(0, 1);
-	   gl_Position = projectionMatrix * (pos + size * vec4(-1, 1, 0, 0));
-	   EmitVertex();
-	   textureCoordinate = vec2(1, 1);
-	   gl_Position = projectionMatrix * (pos + size  * vec4(1, 1, 0, 0));
-	   EmitVertex();
+		float t = 1.0 - gs_in[0].energy / gs_in[0].maxEnergy;
+		float alpha = sin(t * 3.1415);
+		alpha -= bokeh * 0.97;
+
+		if (alpha > 0.01)
+		{
+		   float size = gl_in[0].gl_PointSize * (1.0 + bokehSize);
+		   color = gs_in[0].color;
+		   color.w *= pow(alpha, 4.0);
+
+		   textureCoordinate = vec2(0, 0);
+		   gl_Position = projectionMatrix * (pos + size * vec4(-1, -1, 0, 0));
+		   EmitVertex();
+		   textureCoordinate = vec2(1, 0);
+		   gl_Position = projectionMatrix * (pos + size * vec4(1, -1, 0, 0));
+		   EmitVertex();
+		   textureCoordinate = vec2(0, 1);
+		   gl_Position = projectionMatrix * (pos + size * vec4(-1, 1, 0, 0));
+		   EmitVertex();
+		   textureCoordinate = vec2(1, 1);
+		   gl_Position = projectionMatrix * (pos + size  * vec4(1, 1, 0, 0));
+		   EmitVertex();
+
+		}
 	}    	
 }
 
