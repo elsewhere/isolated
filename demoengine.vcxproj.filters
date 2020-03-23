@@ -205,6 +205,8 @@
     <ClInclude Include="scenes\tuli.h" />
     <ClInclude Include="scenes\korona.h" />
     <ClInclude Include="scenes\maailma.h" />
+    <ClInclude Include="fx\Feedback.h" />
+    <ClInclude Include="scenes\kauneus.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\setupdialog.aps">
@@ -348,5 +350,7 @@
     <ClCompile Include="scenes\tuli.cpp" />
     <ClCompile Include="scenes\korona.cpp" />
     <ClCompile Include="scenes\maailma.cpp" />
+    <ClCompile Include="fx\Feedback.cpp" />
+    <ClCompile Include="scenes\kauneus.cpp" />
   </ItemGroup>
 </Project>

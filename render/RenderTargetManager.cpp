@@ -251,6 +251,27 @@ namespace demorender
 								  //		return width + height * 10000; //super awesome hash function!
 	}
 
+	void RenderTargetManager::bindTexture(Texture* pTexture, const std::string& textureName)
+	{
+		int hash = textureHash(pTexture);
+		if (m_textureFbos.find(hash) == m_textureFbos.end())
+		{
+			//framebuffer object does not exist, create a new one that matches this texture 
+			TextureFBO* TextureFBO = new RenderTargetManager::TextureFBO(pTexture);
+			if (TextureFBO->init())
+			{
+				g_debug << "created a new TextureFBO for texture " << textureName << std::endl;
+				m_textureFbos[hash] = TextureFBO;
+			}
+			else
+			{
+				g_debug << "could not initialize TextureFBO for texture " << textureName << std::endl;
+				return;
+			}
+		}
+		m_textureFbos[hash]->bind();
+	}
+
 	void RenderTargetManager::bindTexture(const std::string& textureName)
 	{
 		//find if proper TextureFBO exist
@@ -262,23 +283,7 @@ namespace demorender
 		}
 		else
 		{
-			int hash = textureHash(pTexture);
-			if (m_textureFbos.find(hash) == m_textureFbos.end())
-			{
-				//framebuffer object does not exist, create a new one that matches this texture 
-				TextureFBO* TextureFBO = new RenderTargetManager::TextureFBO(pTexture);
-				if (TextureFBO->init())
-				{
-					g_debug << "created a new TextureFBO for texture " << textureName << std::endl;
-					m_textureFbos[hash] = TextureFBO;
-				}
-				else
-				{
-					g_debug << "could not initialize TextureFBO for texture " << textureName << std::endl;
-					return;
-				}
-			}
-			m_textureFbos[hash]->bind();
+			bindTexture(pTexture);
 		}
 	}
 

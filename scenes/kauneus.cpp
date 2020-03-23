@@ -1,4 +1,4 @@
-#include "Sauhu.h"
+#include "Kauneus.h"
 #include "../render/MeshBuilder.h"
 #include "../glm/gtx/transform.hpp"
 
@@ -19,7 +19,7 @@ namespace
 // KasvotParticles
 ////////////////////////////////////////////////////////////////1////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Sauhu::SauhuParticles::SauhuParticles() :
+Kauneus::KauneusParticles::KauneusParticles() :
 	GPUParticleSystem(1024 * 1024)
 {
 	addLogicShaderAttribute({ "particlePosition", 3 });
@@ -33,12 +33,12 @@ Sauhu::SauhuParticles::SauhuParticles() :
 	addRenderShaderAttribute({ "vertexMaxEnergy", 1 });
 }
 
-Sauhu::SauhuParticles::~SauhuParticles()
+Kauneus::KauneusParticles::~KauneusParticles()
 {
 
 }
 
-void Sauhu::SauhuParticles::setInitialData()
+void Kauneus::KauneusParticles::setInitialData()
 {
 	m_pInitialData = new float[m_particleCount * m_particleSize];
 
@@ -57,7 +57,7 @@ void Sauhu::SauhuParticles::setInitialData()
 }
 
 
-void Sauhu::init()
+void Kauneus::init()
 {
 	m_camera = new demorender::Camera(1.f, 1000.f, 45.f);
 
@@ -73,17 +73,17 @@ void Sauhu::init()
 		m_lines->addPoint(v, c);
 	}
 
-	m_particles = std::make_unique<SauhuParticles>();
-	m_particles->setShaders("effect_sauhu", "effect_sauhurender");
+	m_particles = std::make_unique<KauneusParticles>();
+	m_particles->setShaders("effect_kauneus", "effect_kauneusrender");
 	m_particles->setInitialData();
 	m_particles->createBuffers();
 }
 
 
 
-void Sauhu::update()
+void Kauneus::update()
 {
-	g_params->useNamespace("sauhu");
+	g_params->useNamespace("Kauneus");
 
 	m_cameraUp = glm::vec3(0.f, 1.f, 0.f);
 	m_cameraPosition = g_params->get<glm::vec3>("cameraposition");// ::vec3(0.f, 0.f, -20.f);
@@ -102,7 +102,7 @@ void Sauhu::update()
 
 
 	float focusDistance = g_params->get<float>("focusdistance");
-	focusDistance += focusDistance * sinf(m_pos * 150.f);
+	focusDistance += focusDistance * sinf(m_pos * 20.f);
 	m_particles->addRenderShaderUniform("focusDistance", focusDistance);
 	m_particles->addRenderShaderUniform("cameraPosition", m_cameraPosition);
 
@@ -110,13 +110,13 @@ void Sauhu::update()
 	m_particles->update();
 }
 
-void Sauhu::debug()
+void Kauneus::debug()
 {
 }
 
-void Sauhu::draw(RenderPass pass)
+void Kauneus::draw(RenderPass pass)
 {
-	g_params->useNamespace("Sauhu");
+	g_params->useNamespace("Kauneus");
 
 	if (pass == RenderPass::MAIN)
 	{
@@ -141,19 +141,8 @@ void Sauhu::draw(RenderPass pass)
 	}
 	if (pass == RenderPass::POST)
 	{
-		float fadevalue = g_sync->event("startfadein").getValue() * (1.f - g_sync->event("startfadeout").getValue());
+		float fadevalue = 1.f;// g_sync->event("startfadein").getValue() * (1.f - g_sync->event("startfadeout").getValue());
 		glEnable(GL_BLEND);
-
-		glm::vec3 grouppos = g_params->get<glm::vec3>("grouppos");
-		glm::vec3 titlepos = g_params->get<glm::vec3>("titlepos");
-
-		float grouptitle = sinf(g_sync->event("grouptitle").getValue() * 3.141592f);
-		float demotitle = sinf(g_sync->event("demotitle").getValue() * 3.141592f);
-
-		if (grouptitle > 0.001f)
-			g_renderUtils->orthoImage("grouptitle", glm::vec2(grouppos.x, grouppos.y), 0.5f, grouptitle);
-		if (demotitle > 0.001f)
-			g_renderUtils->orthoImage("demotitle", glm::vec2(titlepos.x, titlepos.y), 0.5f, demotitle);
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		g_renderUtils->fullscreenFade(glm::vec4(0.f, 0.f, 0.f, 1.f - fadevalue));

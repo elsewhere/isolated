@@ -181,6 +181,7 @@
     <ClInclude Include="core\Trigger.h" />
     <ClInclude Include="fx\Cloth.h" />
     <ClInclude Include="fx\CPUParticleSystem.h" />
+    <ClInclude Include="fx\Feedback.h" />
     <ClInclude Include="fx\GPUParticleSystem.h" />
     <ClInclude Include="fx_test\computetest.h" />
     <ClInclude Include="fx_test\computetest2.h" />
@@ -225,6 +226,7 @@
     <ClInclude Include="scenes\dynamiccubetest.h" />
     <ClInclude Include="scenes\kalpeus.h" />
     <ClInclude Include="scenes\kasvot.h" />
+    <ClInclude Include="scenes\kauneus.h" />
     <ClInclude Include="scenes\korona.h" />
     <ClInclude Include="scenes\maailma.h" />
     <ClInclude Include="scenes\sauhu.h" />
@@ -265,6 +267,7 @@
     <ClCompile Include="core\Trigger.cpp" />
     <ClCompile Include="fx\Cloth.cpp" />
     <ClCompile Include="fx\CPUParticleSystem.cpp" />
+    <ClCompile Include="fx\Feedback.cpp" />
     <ClCompile Include="fx\GPUParticleSystem.cpp" />
     <ClCompile Include="fx_test\computetest.cpp" />
     <ClCompile Include="fx_test\computetest2.cpp" />
@@ -307,6 +310,7 @@
     <ClCompile Include="scenes\dynamiccubetest.cpp" />
     <ClCompile Include="scenes\kalpeus.cpp" />
     <ClCompile Include="scenes\kasvot.cpp" />
+    <ClCompile Include="scenes\kauneus.cpp" />
     <ClCompile Include="scenes\korona.cpp" />
     <ClCompile Include="scenes\maailma.cpp" />
     <ClCompile Include="scenes\sauhu.cpp" />

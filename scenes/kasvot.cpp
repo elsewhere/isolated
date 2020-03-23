@@ -105,9 +105,14 @@ void Kasvot::update()
 {
 	g_params->useNamespace("Kasvot");
 
+	glm::vec3 camstart = g_params->get<glm::vec3>("camerapositionstart");
+	glm::vec3 camend = g_params->get<glm::vec3>("camerapositionend");
+	glm::vec3 targetstart = g_params->get<glm::vec3>("cameratargetstart");
+	glm::vec3 targetend = g_params->get<glm::vec3>("cameratargetend");
+
+	m_cameraPosition = Math::lerp<glm::vec3>(camstart, camend, m_pos);
+	m_cameraTarget = Math::lerp<glm::vec3>(targetstart, targetend, m_pos);
 	m_cameraUp = glm::vec3(0.f, 1.f, 0.f);
-	m_cameraPosition = g_params->get<glm::vec3>("cameraposition");// ::vec3(0.f, 0.f, -20.f);
-	m_cameraTarget = glm::vec3(0.f);
 
 	glm::mat4 modelMatrix = glm::mat4(1.f);// glm::rotate(m_pos * -70.f, glm::vec3(0.3f, 1.0f, 0.2f)) * glm::scale(vec3(1.f));
 
@@ -163,13 +168,23 @@ void Kasvot::draw(RenderPass pass)
 //		drawBackground();
 		m_particles->draw(m_camera);
 
-		const float focus = 0.1f;
+		const float glow = std::min<float>(1.f, m_pos * 2.f);
+		int iterations = g_params->get<int>("glowiterations");
+		float spreadx = g_params->get<float>("glowspreadx");
+		float spready = g_params->get<float>("glowspready");
+		float exponent = g_params->get<float>("glowexponent");
+		float alpha = g_params->get<float>("glowalpha") * glow;
+
+		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha);
+
+		//const float focus = 0.1f;
 
 		//	g_postProcess->addRadialGlow( g_params->get<int>("glowiterations"), 
 		//								  g_params->get<float>("glowspread"),
 		//								  g_params->get<float>("glowexponent"),
 		//								  g_params->get<float>("glowalpha"));
 
+//		g_postProcess->addSobel();
 			//	g_postProcess->addRadial();
 			//	g_postProcess->addLens(focus, m_camera);
 			//	g_renderDebug->drawDepthTexture(g_renderTargets->getDepthTextureId("main"), m_camera, 512 + 256, 256, 512.f);

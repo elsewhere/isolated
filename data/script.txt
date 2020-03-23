@@ -11,7 +11,7 @@ democonfig
 	developermode = true;
 	song = Blear_Moon_-_03_-_Ongoing_cases.mp3
 	endtime = 341000
-	jumptime = 200000
+	jumptime = 250000
 }
 
 timeline
@@ -31,6 +31,7 @@ timeline
 	korona 100000 150000 666
 	maailma 150000 200000 666
 	kasvot 200000 250000 666
+	kauneus 250000 300000 666
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -120,11 +121,30 @@ namespace sauhu
 	float cameraradius = 10
 	float focusdistance = 5.0
 
-	int glowiterations = 10
-	float glowspread = 0.007
+	int glowiterations = 20
+	float glowspreadx = 5.001	
+	float glowspready = 5.001
 	float glowexponent = 1.0
 	float glowalpha = 1.0
+	
+}
+namespace kauneus
+{
+	vec3 cameraposition = 0 0 -10
+	vec3 cameratarget = 0 0 0 
+	vec3 cameraup = 0 1 0 	
 
+	vec3 grouppos = 0.15 0.15 0
+	vec3 titlepos = 0.15 0.15 0
+
+	float cameraradius = 10
+	float focusdistance = 5.0
+
+	int glowiterations = 40
+	float glowspreadx = 7.001	
+	float glowspready = 7.001
+	float glowexponent = 0.4
+	float glowalpha = 3.0
 	
 }
 
@@ -197,8 +217,11 @@ namespace korona
 
 namespace kasvot
 {
-	vec3 cameraposition = 0 0 -6
-	vec3 cameratarget = 0 0 0 
+	vec3 camerapositionstart = -1 0 -6
+	vec3 camerapositionend = 1 0 -9
+	vec3 cameratargetstart = -0.5 0 0 
+	vec3 cameratargetend  = 0.5 0 0 
+
 	vec3 cameraup = 0 1 0 	
 
 	vec3 lightpos = 0 20 0
@@ -209,10 +232,11 @@ namespace kasvot
 	float focusdistancespeed = 20.0;
 	float focusdistancerange = 3.0;
 
-	int glowiterations = 10
-	float glowspread = 0.007
-	float glowexponent = 1.0
-	float glowalpha = 1.0
+	int glowiterations = 20
+	float glowspreadx = 5.1	
+	float glowspready = 0.4
+	float glowexponent = -0.1
+	float glowalpha = 2.1
 
 	
 }

@@ -6,6 +6,8 @@
 
 namespace demorender
 {
+	class Texture;
+
 	class RenderTargetManager
 	{
 	public:
@@ -13,6 +15,7 @@ namespace demorender
 
 		void bindMain();
 		void bindTexture(const std::string& textureName);
+		void bindTexture(Texture* pTexture, const std::string& textureName = "not specified");
 		void bindCubemapSide(const std::string& cubemapName, int side);
 		GLuint getDepthTextureId(const std::string& textureName);
 		void unbind();
@@ -22,7 +25,7 @@ namespace demorender
 		class TextureFBO
 		{
 		public:
-			TextureFBO(class Texture *pTexture);
+			TextureFBO(Texture *pTexture);
 			~TextureFBO();
 			bool init();
 			void bind();

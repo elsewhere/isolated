@@ -108,7 +108,8 @@ void Maailma::update()
 
 	//	m_particles->addLogicShaderUniform("tex", 0);
 
-	m_particles->addLogicShaderUniform("effecttime", m_pos);
+	float effecttime = 0.3f + 0.7f * m_pos;
+	m_particles->addLogicShaderUniform("effecttime", effecttime);
 
 	m_particles->addRenderShaderUniform("tex", 0);
 	m_particles->addRenderShaderUniform("viewMatrix", m_camera->getViewMatrix());

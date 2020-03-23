@@ -21,7 +21,7 @@ VERTEX_SHADER
 	out float particleEnergyOut;
 	out float particleMaxEnergyOut;
 
-	uniform sampler2D tex;
+//	uniform sampler2D tex;
 
 	float randhash(uint seed, float b)
 	{
@@ -35,13 +35,16 @@ VERTEX_SHADER
 	vec3 getDirection(vec3 position)
 	{
 		float s = time * 0.4;
-		position *= 2.3;
+		position *= 1.3;
+		position.x *= 0.5;
 		float x = sin(position.x * 1.2 + 1.2 * s) + cos(position.y * 0.5 + 1.1 * s);
-		float y = cos(position.x * 2.5 + 0.7 * s) + cos(position.z * 2.1 - 1.4 * s);
-		float z = sin(position.y * 1.0 + 1.1 * s) + cos(position.z * 3.3 + 0.5 * s)  - 3.0;
+		float y = cos(position.x * 1.5 + 0.7 * s) + cos(position.z * 2.1 - 1.4 * s);
+		float z = sin(position.y * 1.0 + 1.1 * s) + cos(position.z * 3.3 + 0.5 * s);
 
-		return vec3(x, y, z) * 0.0007;
+		return vec3(x, y, z) * 0.01;
 	}
+
+	#include "simplexnoise.fragment"
 
 	void main() 
 	{
@@ -56,26 +59,25 @@ VERTEX_SHADER
 		   float a = randhash(seed++, 2*3.141592);
 		   float b = randhash(seed++, 2*3.141592);
 
-		   float u = randhash(seed++, 1.0);
-		   float v = randhash(seed++, 1.0);
-
-		   vec3 generatedPos = vec3((u - 0.5), (v - 0.5), 0.0) * 2 * 5;
-//		   vec3 generatedPos = vec3(sin(a) * sin(b), sin(a) * cos(b), cos(a));
-		   particlePositionOut = generatedPos;
+//		   vec3 generatedPos = vec3((u - 0.5), (v - 0.5), 0.0) * 2 * 5;
+		   vec3 pos = vec3(sin(a) * sin(b), sin(a) * cos(b), cos(a));
+		   particlePositionOut = pos * 4.0;
 
 		   float c = randhash(seed++, 2*3.141592);
 		   float d = randhash(seed++, 2*3.141592);
 
-		   float energy = 0.5 + randhash(seed++, 1.4);
+		   float energy = 0.5 + randhash(seed++, 8.4);
 		   particleEnergyOut = energy;
 		   particleMaxEnergyOut = energy;
 
-		   particleColorOut = texture2D(tex, vec2(u, 1.0 - v));
+		   particleColorOut = vec4(1.0, 1.0, 1.0, 0.0);//texture2D(tex, vec2(u, 1.0 - v));
 		}
 		else
 		{
 			particlePositionOut = particlePosition + getDirection(particlePosition);
-			particleColorOut = particleColor;
+
+			float t = particleEnergy / particleMaxEnergy;
+			particleColorOut = vec4(particleColor.xyz, sin(t * 3.141592));
 
 		}
 	}
