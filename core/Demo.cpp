@@ -278,13 +278,14 @@ namespace democore
 		{
 			demorender::g_postProcess->startFrame();
 
-			//TODO: is hardcoding these a good idea? 
 			e->m_scene->draw(Scene::RenderPass::SHADOW);
 			e->m_scene->draw(Scene::RenderPass::REFLECTION);
 			e->m_scene->draw(Scene::RenderPass::MAIN);
-			e->m_scene->draw(Scene::RenderPass::POST);
+			e->m_scene->draw(Scene::RenderPass::BEFORE_POST);
 
 			demorender::g_postProcess->commit();
+			e->m_scene->draw(Scene::RenderPass::AFTER_POST);
+
 			if (g_system->isDebug())
 			{
 				e->m_scene->debug();

@@ -235,6 +235,7 @@
     <ClInclude Include="scenes\tuli.h" />
     <ClInclude Include="scenes\tunne.h" />
     <ClInclude Include="scenes\tyhjyys.h" />
+    <ClInclude Include="scenes\viimeiset.h" />
     <ClInclude Include="util\StringUtils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -319,6 +320,7 @@
     <ClCompile Include="scenes\tuli.cpp" />
     <ClCompile Include="scenes\tunne.cpp" />
     <ClCompile Include="scenes\tyhjyys.cpp" />
+    <ClCompile Include="scenes\viimeiset.cpp" />
     <ClCompile Include="util\StringUtils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

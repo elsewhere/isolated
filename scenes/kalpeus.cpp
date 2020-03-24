@@ -469,7 +469,7 @@ void Kalpeus::draw(RenderPass pass)
 		//	g_postProcess->addLens(focus, m_camera);
 		//	g_renderDebug->drawDepthTexture(g_renderTargets->getDepthTextureId("main"), m_camera, 512 + 256, 256, 512.f);
 	}
-	if (pass == RenderPass::POST)
+	if (pass == RenderPass::BEFORE_POST)
 	{
 		//	m_shadowMap->debugDraw();
 

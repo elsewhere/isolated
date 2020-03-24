@@ -42,18 +42,7 @@ void Kauneus::KauneusParticles::setInitialData()
 {
 	m_pInitialData = new float[m_particleCount * m_particleSize];
 
-	float* dataptr = m_pInitialData;
-	for (int i = 0; i < m_particleCount; i++)
-	{
-		glm::vec3 position = Math::randVectSphere() * 5.f;
-		glm::vec4 color = glm::vec4(1.f);
-		float energy = Math::randFloat(0.5f, 1.5f);
-
-		writeData<glm::vec3>(&dataptr, position);
-		writeData<glm::vec4>(&dataptr, color);
-		writeData<float>(&dataptr, energy);
-		writeData<float>(&dataptr, energy);
-	}
+	memset(m_pInitialData, 0, m_particleCount * m_particleSize * sizeof(float));
 }
 
 
@@ -137,11 +126,14 @@ void Kauneus::draw(RenderPass pass)
 		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha * m_pos);
 
 //		g_postProcess->addSobel();
-//		g_postProcess->addRadialGlow(5, 0.001f);
+//		g_postProcess->addRadialGlow();
 	}
-	if (pass == RenderPass::POST)
+	if (pass == RenderPass::AFTER_POST)
 	{
-		float fadevalue = 1.f;// g_sync->event("startfadein").getValue() * (1.f - g_sync->event("startfadeout").getValue());
+		float f1 = g_sync->event("kauneusfadein").getValue();
+		float f2 = 1.f - g_sync->event("kauneusfadeout").getValue();
+
+		float fadevalue = f1 * f2;
 		glEnable(GL_BLEND);
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

@@ -158,7 +158,7 @@ void Maailma::draw(RenderPass pass)
 
 		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha);
 	}
-	if (pass == RenderPass::POST)
+	if (pass == RenderPass::AFTER_POST)
 	{
 		float fadevalue = g_sync->event("maailmafadein").getValue() * (1.f - g_sync->event("maailmafadeout").getValue());
 		glEnable(GL_BLEND);

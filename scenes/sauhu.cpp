@@ -139,7 +139,7 @@ void Sauhu::draw(RenderPass pass)
 //		g_postProcess->addSobel();
 //		g_postProcess->addRadialGlow(5, 0.001f);
 	}
-	if (pass == RenderPass::POST)
+	if (pass == RenderPass::AFTER_POST)
 	{
 		float fadevalue = g_sync->event("startfadein").getValue() * (1.f - g_sync->event("startfadeout").getValue());
 		glEnable(GL_BLEND);

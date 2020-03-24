@@ -232,7 +232,7 @@ void Korona::draw(RenderPass pass)
 //		drawLines();
 		g_postProcess->addGlow(iterations, spread, spread, exponent, alpha);
 	}
-	if (pass == RenderPass::POST)
+	if (pass == RenderPass::AFTER_POST)
 	{
 		float fadevalue = g_sync->event("koronafadein").getValue() * (1.f - g_sync->event("koronafadeout").getValue());
 		glEnable(GL_BLEND);

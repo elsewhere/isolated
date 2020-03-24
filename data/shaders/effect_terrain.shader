@@ -2,8 +2,8 @@ VERTEX_SHADER
 {
 	#version 330
 
-	uniform mat4 camera;
-	uniform mat4 model;
+	uniform mat4 cameraMatrix;
+	uniform mat4 modelMatrix;
 
 	in vec3 vertexPosition;
 	in vec2 vertexTextureCoordinate;
@@ -51,7 +51,7 @@ VERTEX_SHADER
 //	    vertex.xz *= 2.0;
 	    
 	    // Apply all matrix transformations to vert
-	    gl_Position = camera * model * vec4(vertex, 1);
+	    gl_Position = cameraMatrix * modelMatrix * vec4(vertex, 1);
 	}
 }
 

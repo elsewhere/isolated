@@ -149,7 +149,7 @@ void Tuli::draw(RenderPass pass)
 		float alpha = g_params->get<float>("glowalpha") * glow;
 		g_postProcess->addRadialGlow(iterations, spread, exponent, alpha);
 	}
-	if (pass == RenderPass::POST)
+	if (pass == RenderPass::AFTER_POST)
 	{
 		float fadevalue = g_sync->event("tulifadein").getValue() * (1.f - g_sync->event("tulifadeout").getValue());
 		glEnable(GL_BLEND);
