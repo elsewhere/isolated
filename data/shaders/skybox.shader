@@ -24,11 +24,12 @@ FRAGMENT_SHADER
 	#version 330
 
 	uniform samplerCube tex;
+	uniform float brightness;
 	out vec4 finalColor;
 	in vec3 textureCoordinate;
 
 	void main() 
 	{
-	    finalColor = texture(tex, textureCoordinate);//vec4(1.0, 1.0, 1.0, 1.0);
+	    finalColor = texture(tex, textureCoordinate) * brightness;
 	}
 }

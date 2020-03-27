@@ -37,7 +37,7 @@ FRAGMENT_SHADER
 	{
 		vec4 res = vec4(texture(tex, pos).xyz, 1.0);
 
-		float discRadius = coc * 1.7;
+		float discRadius = coc * 1.3;
 
 		int rings = 6;
 		for (int j =1 ; j <= rings; j++)
@@ -51,7 +51,7 @@ FRAGMENT_SHADER
 				vec2 offs = pos + vec2(sin(t * 6.28), cos(t * 6.28)) * radius;
 
 				vec4 tap = texture(tex, offs);
-				tap.w = (tap.w >= centerDepth*0.99) ? 1.0 : pow(abs(tap.w * 2.0 - 1.0),4.0); 
+				tap.w = (tap.w >= centerDepth*0.99) ? 1.0 : pow(abs(tap.w * 2.0 - 1.0), 2.0); 
 
 				res.xyz += pow(tap.xyz,vec3(fADOF_BokehCurve)) * tap.w;
 				res.w += tap.w;

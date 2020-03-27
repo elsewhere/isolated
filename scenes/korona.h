@@ -31,9 +31,9 @@ private:
 	void drawLines();
 	void drawMoon();
 
-	glm::vec3 m_cameraPosition;
-	glm::vec3 m_cameraTarget;
-	glm::vec3 m_cameraUp;
+	glm::vec3 m_moonCameraPosition;
+	glm::vec3 m_moonCameraTarget;
+	glm::vec3 m_moonCameraUp;
 
 	demorender::Camera *m_camera;
 

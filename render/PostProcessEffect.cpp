@@ -414,8 +414,8 @@ namespace demorender
 	{
 
 	}
-
 	void Lens::apply(const std::string& source, const std::string& target, PostProcessParameters& params)
+
 	{
 		GLuint depthTextureId = g_renderTargets->getDepthTextureId("main");
 /*

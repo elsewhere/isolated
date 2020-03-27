@@ -19,6 +19,7 @@ public:
 	
 private:
 
+	void drawBackground();
 	void drawGround();
 
 	glm::vec3 m_cameraPosition;
@@ -28,6 +29,6 @@ private:
 	demorender::Camera *m_camera;
 
 	demorender::Mesh *m_pMesh;
-//	demorender::Model *m_pSkybox;
+	demorender::Model *m_pSkybox;
 
 };

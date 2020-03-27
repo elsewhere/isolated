@@ -20,7 +20,6 @@ VERTEX_SHADER
 
 	void main() 
 	{
-	    // Pass the tex coord straight through to the fragment shader
 	    textureCoordinate = vertexTextureCoordinate;
 
 	    textureCoordinate *= terrainScale;
@@ -30,27 +29,9 @@ VERTEX_SHADER
 
 	    vec3 vertex = vertexPosition;
 
-/*
-	float base = texture(heightmap, textureCoordinate).r;
-	float octave1 = texture(heightmap2, textureCoordinate * 2.0).r;
-	float octave2 = texture(heightmap3, textureCoordinate * 4.0).r;
-
-	vertex.y = base * 24.0 + octave1 * 4.0 + octave2 * 2.0;
-
-
-*/
-/*
-	    const float freq = 3.0;
-	    float plasma = sin(textureCoordinate.x * 5.6 * freq + time * 51.4) * cos(textureCoordinate.y * 4.4 * freq - time * 43.4) + 
-	    			   cos(textureCoordinate.x * 3.0 * freq + time * 33.5) - sin(textureCoordinate.y * 6.2 * freq - time * 22.3);
-	    vertex.y = heightVal * 24.0 + plasma * 6.0;
-*/
 		height = heightVal * terrainHeightScale;
 	    vertex.y = height;
 
-//	    vertex.xz *= 2.0;
-	    
-	    // Apply all matrix transformations to vert
 	    gl_Position = cameraMatrix * modelMatrix * vec4(vertex, 1);
 	}
 }
@@ -103,17 +84,18 @@ FRAGMENT_SHADER
 
 		vec3 normal = getNormal(textureCoordinate);
 
-		vec3 lightDir = normalize(vec3(0.2, -0.0, 0.4));
+		vec3 lightDir = normalize(vec3(0.2, -0.0, 0.4)) ;
 
 		float light = max(0.0, dot(normal, lightDir));
 
-		float dim = max(0.0, pow(1.0 - heightValue.r, 15.0)) * 0.2;
+		float dim = max(0.0, pow(1.0 - heightValue.r, 15.0));
 //		if (dim > 0.0)
 //		{
 			col.xyz -= vec3(dim);
+//			col.xyz += vec3(0.7f, 0.3f, 0.2f) * dim * 6.2;
 //		}
 
-		finalColor = vec4(col.xyz * light, 1.0);
+		finalColor = vec4(col.xyz * light, 1.0) * 0.7;
 
 //		finalColor = vec4(getNormal(textureCoordinate), 1.0);
 //		finalColor = vec4(col.xyz, 1.0);//vec4(textureCoordinate.x, textureCoordinate.y, 0.f, 1.f);//clamp(texel, 0.0, 1.0);

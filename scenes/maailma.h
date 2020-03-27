@@ -26,20 +26,19 @@ private:
 		~MaailmaParticles();
 
 		void setInitialData() override;
-
-
-
 	};
 
 	glm::vec3 m_cameraPosition;
 	glm::vec3 m_cameraTarget;
 	glm::vec3 m_cameraUp;
 
+
+	void drawBackground();
 	demorender::Camera *m_camera;
 
 	demorender::Mesh *m_pMesh;
 	int m_numParticles;
-//	demorender::Model *m_pSkybox;
+	demorender::Model *m_pSkybox;
 
 	std::unique_ptr<MaailmaParticles> m_particles;
 	std::unique_ptr<demorender::LineRenderer> m_lines;

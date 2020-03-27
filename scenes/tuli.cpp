@@ -42,19 +42,7 @@ Tuli::TuliParticles::~TuliParticles()
 void Tuli::TuliParticles::setInitialData()
 {
 	m_pInitialData = new float[m_particleCount * m_particleSize];
-
-	float* dataptr = m_pInitialData;
-	for (int i = 0; i < m_particleCount; i++)
-	{
-		glm::vec3 position = Math::randVectSphere() * 5.f;
-		glm::vec4 color = glm::vec4(1.f);
-		float energy = Math::randFloat(0.5f, 1.5f);
-
-		writeData<glm::vec3>(&dataptr, position);
-		writeData<glm::vec4>(&dataptr, color);
-		writeData<float>(&dataptr, energy);
-		writeData<float>(&dataptr, energy);
-	}
+	memset(m_pInitialData, 0, sizeof(float) * m_particleCount * m_particleSize);
 }
 
 

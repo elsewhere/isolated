@@ -190,5 +190,16 @@ void Kasvot::draw(RenderPass pass)
 			//	g_renderDebug->drawDepthTexture(g_renderTargets->getDepthTextureId("main"), m_camera, 512 + 256, 256, 512.f);
 
 	}
+	if (pass == RenderPass::AFTER_POST)
+	{
+
+		float fadevalue = g_sync->event("kasvotfadein").getValue() * (1.f - g_sync->event("kasvotfadeout").getValue());
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		g_renderUtils->fullscreenFade(glm::vec4(0.f, 0.f, 0.f, 1.f - fadevalue));
+		glDisable(GL_BLEND);
+
+	}
+
 
 }

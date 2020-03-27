@@ -80,6 +80,10 @@ void Maailma::init()
 	m_particles->setShaders("effect_maailma", "effect_maailmarender");
 	m_particles->setInitialData();
 	m_particles->createBuffers();
+
+	m_pSkybox = new demorender::Model();
+	m_pSkybox->setMesh("cube");
+
 }
 
 
@@ -130,6 +134,23 @@ void Maailma::debug()
 {
 }
 
+void Maailma::drawBackground()
+{
+	Shader &s = g_shaders->getShader("skybox");
+	s.bind();
+	m_pSkybox->getMesh()->setStreamFlags(Mesh::VERTEX_STREAM);
+	m_pSkybox->bind(&s);
+
+	g_textures->bindCubemap(skyboxTexture, GL_TEXTURE0); GL_DEBUG;
+	s.setUniform1i("tex", 0); GL_DEBUG;
+	s.setUniform1f("brightness", 0.07f); GL_DEBUG;
+	s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_camera->getCameraMatrix()); GL_DEBUG;
+
+	glm::mat4 skyboxTrans = glm::scale(glm::vec3(390.f));// *glm::rotate(m_pos * 2.f, glm::normalize(glm::vec3(0.4f, -0.7f, 0.2f)));
+	s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&skyboxTrans); GL_DEBUG;
+	glDrawArrays(GL_TRIANGLES, 0, 36); GL_DEBUG;
+}
+
 void Maailma::draw(RenderPass pass)
 {
 	g_params->useNamespace("Maailma");
@@ -143,13 +164,14 @@ void Maailma::draw(RenderPass pass)
 			m_cameraUp);
 
 
+		drawBackground();
 		float fade = std::min(1.f, m_pos * 2.f);
 		int particles = (int)(m_numParticles * fade);
 		m_particles->draw(m_camera, particles);
 
 //		g_postProcess->addSobel();
 
-		const float glow = std::min<float>(1.f, m_pos * 2.f);
+		const float glow = std::min<float>(1.f, 0.2f + m_pos * 2.f);
 		int iterations = g_params->get<int>("glowiterations");
 		float spreadx = g_params->get<float>("glowspreadx");
 		float spready = g_params->get<float>("glowspready");

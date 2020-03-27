@@ -158,18 +158,20 @@ void Korona::update()
 {
 	g_params->useNamespace("Korona");
 
-	m_cameraUp = glm::vec3(0.f, 1.f, 0.f);
+	m_moonCameraUp = glm::vec3(0.f, 1.f, 0.f);
 
 	const float rotation = Math::smoothStep(std::min<float>(m_pos * 3.f, 1.f), 0.f, 1.f);
 	glm::mat4 cameraRotation = glm::rotate(sinf(m_pos * g_params->get<float>("camerarotationfreq")) * g_params->get<float>("camerarotationamount"), glm::vec3(0.f, 0.f, 1.f)) * rotation;
 
-	m_cameraUp = Math::transform(m_cameraUp, cameraRotation);
+	m_moonCameraUp = Math::transform(m_moonCameraUp, cameraRotation);
 
-	m_cameraPosition = g_params->get<glm::vec3>("cameraposition");// ::vec3(0.f, 0.f, -20.f);
-	glm::vec3 targetStart = g_params->get<glm::vec3>("cameratargetstart");
-	glm::vec3 targetEnd = g_params->get<glm::vec3>("cameratargetend");
+	glm::vec3 moonPositionStart = g_params->get<glm::vec3>("mooncamerapositionstart");
+	glm::vec3 moonPositionEnd = g_params->get<glm::vec3>("mooncamerapositionend");
+	glm::vec3 moonTargetStart = g_params->get<glm::vec3>("mooncameratargetstart");
+	glm::vec3 moonTargetEnd = g_params->get<glm::vec3>("mooncameratargetend");
 
-	m_cameraTarget = targetStart + (targetEnd - targetStart) * m_pos;
+	m_moonCameraPosition = Math::lerp<glm::vec3>(moonPositionStart, moonPositionEnd, m_pos);
+	m_moonCameraTarget = moonTargetStart + (moonTargetEnd - moonTargetStart) * m_pos;
 
 	glm::mat4 modelMatrix = glm::mat4(1.f);
 
@@ -190,7 +192,7 @@ void Korona::update()
 	float focus = Math::lerp<float>(focusstart, focusend, m_pos);
 
 	m_particles->addRenderShaderUniform("focusDistance", focus);
-	m_particles->addRenderShaderUniform("cameraPosition", m_cameraPosition);
+	m_particles->addRenderShaderUniform("cameraPosition", m_moonCameraPosition);
 
 
 	m_particles->update();
@@ -208,29 +210,24 @@ void Korona::draw(RenderPass pass)
 	{
 		g_renderTargets->bindMain();
 
-		m_camera->lookAt(m_cameraPosition,
-			m_cameraTarget,
-			m_cameraUp);
+		m_camera->lookAt(m_moonCameraPosition,
+			m_moonCameraTarget,
+			m_moonCameraUp);
 
 //		drawLines();
 		m_particles->draw(m_camera);
 		drawMoon();
 
-//		g_postProcess->addSobel();
+		g_postProcess->addSobel();
 
 		const float glow = std::min<float>(1.f, m_pos * 2.f);
 		int iterations = g_params->get<int>("glowiterations");
-		float spread = g_params->get<float>("glowspread");
+		float spreadx = g_params->get<float>("glowspreadx");
+		float spready = g_params->get<float>("glowspready");
 		float exponent = g_params->get<float>("glowexponent");
 		float alpha = g_params->get<float>("glowalpha");// *glow;
 
-		g_postProcess->addSobel();
-		m_camera->lookAt(m_cameraPosition,
-			m_cameraTarget,
-			m_cameraUp);
-
-//		drawLines();
-		g_postProcess->addGlow(iterations, spread, spread, exponent, alpha);
+		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha);
 	}
 	if (pass == RenderPass::AFTER_POST)
 	{

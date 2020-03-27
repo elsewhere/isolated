@@ -11,7 +11,7 @@ using namespace glm;
 
 namespace
 {
-	static const std::string skyboxTexture = "nebula";
+	static const std::string skyboxTexture = "fjaraenv";
 }
 
 
@@ -26,6 +26,10 @@ void Viimeiset::init()
 	MeshBuilder builder;
 	builder.generatePlane(xres, zres, scale);
 	m_pMesh = builder.getMesh(Mesh::Usage::STATIC);
+
+	m_pSkybox = new demorender::Model();
+	m_pSkybox->setMesh("cube");
+
 }
 
 
@@ -70,6 +74,23 @@ void Viimeiset::drawGround()
 	m_pMesh->draw();
 }
 
+void Viimeiset::drawBackground()
+{
+	Shader &s = g_shaders->getShader("skybox");
+	s.bind();
+	m_pSkybox->getMesh()->setStreamFlags(Mesh::VERTEX_STREAM);
+	m_pSkybox->bind(&s);
+
+	g_textures->bindCubemap(skyboxTexture, GL_TEXTURE0); GL_DEBUG;
+	s.setUniform1i("tex", 0); GL_DEBUG;
+	s.setUniform1f("brightness", 1.0); GL_DEBUG;
+	s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_camera->getCameraMatrix()); GL_DEBUG;
+
+	glm::mat4 skyboxTrans = glm::scale(glm::vec3(890.f));
+	s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&skyboxTrans); GL_DEBUG;
+	glDrawArrays(GL_TRIANGLES, 0, 36); GL_DEBUG;
+}
+
 void Viimeiset::draw(RenderPass pass)
 {
 	g_params->useNamespace("Viimeiset");
@@ -82,6 +103,7 @@ void Viimeiset::draw(RenderPass pass)
 			m_cameraTarget,
 			m_cameraUp);
 
+		drawBackground();
 		drawGround();
 
 		float focusDistance = g_params->get<float>("focusdistance");
@@ -103,7 +125,7 @@ void Viimeiset::draw(RenderPass pass)
 		glEnable(GL_BLEND);
 
 		glm::vec3 textpos = g_params->get<glm::vec3>("textpos");
-		float textscale = g_params->get<float>("textscale");
+		float textscale = Math::lerp<float>(g_params->get<float>("textscalestart"), g_params->get<float>("textscaleend"), m_pos);
 
 		float credits = sinf(g_sync->event("credits").getValue() * 3.141592f);
 

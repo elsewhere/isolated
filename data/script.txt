@@ -11,7 +11,7 @@ democonfig
 	developermode = true;
 	song = Blear_Moon_-_03_-_Ongoing_cases.mp3
 	endtime = 341000
-	jumptime = 300000
+	jumptime = 100000
 }
 
 timeline
@@ -190,17 +190,27 @@ namespace maailma
 
 namespace korona
 {
-	vec3 cameraposition = 0 0 -4
-	vec3 cameratargetstart = -0.9 0 0 
-	vec3 cameratargetend = 0.9 0 0 
+	vec3 mooncamerapositionstart = 0 -1.5 -6
+	vec3 mooncamerapositionend = 0 -1.5 -6
+	vec3 mooncameratargetstart = -0.9 -1.5 0 
+	vec3 mooncameratargetend = 0.9 -1.5 0 
+
+	vec3 camerapositionstart = 0 20 -100
+	vec3 camerapositionend = 0 15 0
+	vec3 cameratargetstart = 0 0 200 
+	vec3 cameratargetend  = 0 0 200
+
 	vec3 cameraup = 0 1 0
 
-	vec3 moonpos = 0 0 0
+	vec3 moonpos = 0 3 00
 	float moonsizestart = 1.7
 	float moonsizeend = 1.4
 
 	float focusdistancestart = 3.0
 	float focusdistanceend = 5.0
+
+	float terrainscale = 5.0;
+	float terrainheightscale = 5.0;
 
 	int linecount = 7
 	range linewidth = 0.3 0.3
@@ -208,9 +218,10 @@ namespace korona
 	float linedistance = 7.0
 
 	int glowiterations = 20
-	float glowspread = 0.5
-	float glowexponent = 1.0
-	float glowalpha = 2.2
+	float glowspreadx = 5.5
+	float glowspready = 0.2
+	float glowexponent = 1.1
+	float glowalpha = 3.2
 
 	
 }
@@ -253,7 +264,8 @@ namespace viimeiset
 	vec3 cameraup = 0 1 0 	
 
 	vec3 textpos = 0.50 0.1 0
-	float textscale = 0.5
+	float textscalestart = 0.5
+	float textscaleend = 0.5
 
 	float cameraradius = 10
 	float focusdistance = 0.05
@@ -343,6 +355,16 @@ event maailmafadeout
 	time = 196000
 	length = 4000	
 }
+event kasvotfadein
+{
+	time = 200000
+	length = 10000
+}
+event kasvotfadeout
+{
+	time = 246000
+	length = 4000	
+}
 event kauneusfadein
 {
 	time = 250000
@@ -361,13 +383,13 @@ event viimeisetfadein
 
 event viimeisetfadeout
 {
-	time = 330000
+	time = 333000
 	length = 7000
 }
 
 event credits
 {
-	time = 310000
+	time = 315000
 	length = 18000
 }
 
