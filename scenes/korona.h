@@ -30,13 +30,20 @@ private:
 
 	void drawLines();
 	void drawMoon();
+	void drawGround();
 
 	glm::vec3 m_moonCameraPosition;
 	glm::vec3 m_moonCameraTarget;
 	glm::vec3 m_moonCameraUp;
 
-	demorender::Camera *m_camera;
+	glm::vec3 m_groundCameraPosition;
+	glm::vec3 m_groundCameraTarget;
+	glm::vec3 m_groundCameraUp;
 
+	demorender::Camera *m_moonCamera;
+	demorender::Camera *m_groundCamera;
+
+	demorender::Mesh *m_pGround;
 	demorender::Mesh *m_pMoon;
 	demorender::Mesh *m_pLines;
 		//	demorender::Model *m_pSkybox;

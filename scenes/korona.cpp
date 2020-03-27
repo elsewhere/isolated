@@ -61,7 +61,8 @@ void Korona::init()
 {
 	g_params->useNamespace("korona");
 
-	m_camera = new demorender::Camera(1.f, 1000.f, 45.f);
+	m_moonCamera = new demorender::Camera(1.f, 1000.f, 45.f);
+	m_groundCamera = new demorender::Camera(1.f, 1000.f, 45.f);
 
 	m_lines = std::make_unique<demorender::LineRenderer>();
 
@@ -108,6 +109,14 @@ void Korona::init()
 		builder.addTriangleVertex(v1, v2, v3);
 	}
 	m_pLines = builder.getMesh(Mesh::Usage::STATIC);
+
+	const int zres = 100;
+	const int xres = 100;
+	const float scale = 250.f;
+
+	builder.generatePlane(xres, zres, scale);
+	m_pGround = builder.getMesh(Mesh::Usage::STATIC);
+
 }
 
 
@@ -125,12 +134,33 @@ void Korona::drawMoon()
 	glm::mat4 model = glm::scale(glm::vec3(size));
 
 	s.setUniform4f("color", 0.f, 0.f, 0.f, 1.f);
-	s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_camera->getCameraMatrix()); GL_DEBUG;
+	s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_moonCamera->getCameraMatrix()); GL_DEBUG;
 	s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&model);
 
 	m_pMoon->draw();
 }
 
+void Korona::drawGround()
+{
+	g_params->useNamespace("korona");
+	glm::mat4 model = glm::mat4(1.f);
+
+	Shader& s = g_shaders->getShader("effect_terrainkorona");
+	s.bind();
+
+	g_textures->bindTexture("heightmap2", GL_TEXTURE0);
+	g_textures->bindTexture("kivitesti", GL_TEXTURE1);
+	s.setUniform1f("time", m_pos);
+	s.setUniform1i("heightmap", 0);
+	s.setUniform1i("stone", 1);
+	s.setUniform1f("terrainScale", g_params->get<float>("terrainscale"));
+	s.setUniform1f("terrainHeightScale", g_params->get<float>("terrainheightscale"));
+	s.setUniformMatrix4fv("cameraMatrix", 1, false, (float *)&m_groundCamera->getCameraMatrix());
+	s.setUniformMatrix4fv("modelMatrix", 1, false, (float *)&model);
+
+	m_pGround->bind(&s);
+	m_pGround->draw();
+}
 void Korona::drawLines()
 {
 
@@ -142,7 +172,7 @@ void Korona::drawLines()
 	glm::mat4 model = glm::scale(glm::vec3(size));
 
 	s.setUniform4f("color", 1.f, 1.f, 1.f, 1.f);
-	s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_camera->getCameraMatrix()); GL_DEBUG;
+	s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_moonCamera->getCameraMatrix()); GL_DEBUG;
 	s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&model);
 
 	glDepthMask(0);
@@ -158,12 +188,9 @@ void Korona::update()
 {
 	g_params->useNamespace("Korona");
 
-	m_moonCameraUp = glm::vec3(0.f, 1.f, 0.f);
 
 	const float rotation = Math::smoothStep(std::min<float>(m_pos * 3.f, 1.f), 0.f, 1.f);
 	glm::mat4 cameraRotation = glm::rotate(sinf(m_pos * g_params->get<float>("camerarotationfreq")) * g_params->get<float>("camerarotationamount"), glm::vec3(0.f, 0.f, 1.f)) * rotation;
-
-	m_moonCameraUp = Math::transform(m_moonCameraUp, cameraRotation);
 
 	glm::vec3 moonPositionStart = g_params->get<glm::vec3>("mooncamerapositionstart");
 	glm::vec3 moonPositionEnd = g_params->get<glm::vec3>("mooncamerapositionend");
@@ -172,6 +199,16 @@ void Korona::update()
 
 	m_moonCameraPosition = Math::lerp<glm::vec3>(moonPositionStart, moonPositionEnd, m_pos);
 	m_moonCameraTarget = moonTargetStart + (moonTargetEnd - moonTargetStart) * m_pos;
+	m_moonCameraUp = glm::vec3(0.f, 1.f, 0.f);
+
+	glm::vec3 groundPositionStart = g_params->get<glm::vec3>("groundcamerapositionstart");
+	glm::vec3 groundPositionEnd = g_params->get<glm::vec3>("groundcamerapositionend");
+	glm::vec3 groundTargetStart = g_params->get<glm::vec3>("groundcameratargetstart");
+	glm::vec3 groundTargetEnd = g_params->get<glm::vec3>("groundcameratargetend");
+
+	m_groundCameraPosition = Math::lerp<glm::vec3>(groundPositionStart, groundPositionEnd, m_pos);
+	m_groundCameraTarget = Math::lerp<glm::vec3>(groundTargetStart, groundTargetEnd, m_pos);
+	m_groundCameraUp = glm::vec3(0.f, 1.f, 0.f);
 
 	glm::mat4 modelMatrix = glm::mat4(1.f);
 
@@ -180,8 +217,8 @@ void Korona::update()
 	//	m_particles->addLogicShaderUniform("tex", 0);
 
 	m_particles->addRenderShaderUniform("tex", 0);
-	m_particles->addRenderShaderUniform("viewMatrix", m_camera->getViewMatrix());
-	m_particles->addRenderShaderUniform("projectionMatrix", m_camera->getProjectionMatrix());
+	m_particles->addRenderShaderUniform("viewMatrix", m_moonCamera->getViewMatrix());
+	m_particles->addRenderShaderUniform("projectionMatrix", m_moonCamera->getProjectionMatrix());
 	m_particles->addRenderShaderUniform("modelMatrix", modelMatrix);
 
 
@@ -210,13 +247,21 @@ void Korona::draw(RenderPass pass)
 	{
 		g_renderTargets->bindMain();
 
-		m_camera->lookAt(m_moonCameraPosition,
+		m_moonCamera->lookAt(m_moonCameraPosition,
 			m_moonCameraTarget,
 			m_moonCameraUp);
 
+		m_groundCamera->lookAt(m_groundCameraPosition,
+			m_groundCameraTarget,
+			m_groundCameraUp);
+
 //		drawLines();
-		m_particles->draw(m_camera);
+		m_particles->draw(m_moonCamera);
 		drawMoon();
+
+
+
+		drawGround();
 
 		g_postProcess->addSobel();
 
