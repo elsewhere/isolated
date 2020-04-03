@@ -66,6 +66,17 @@ namespace demorender
 		std::string getName();
 	};
 
+
+	class EndOfTheWorld : public PostProcessEffect
+	{
+	public:
+		EndOfTheWorld();
+		virtual ~EndOfTheWorld();
+
+		virtual void apply(const std::string& source, const std::string& target, PostProcessParameters& params);
+		std::string getName();
+	};
+
 	class RadialGlow : public PostProcessEffect
 	{
 	public:

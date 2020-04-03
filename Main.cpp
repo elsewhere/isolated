@@ -40,6 +40,7 @@
 #include "scenes/sauhu.h"
 #include "scenes/tuli.h"
 #include "scenes/korona.h"
+#include "scenes/korona2.h"
 #include "scenes/maailma.h"
 #include "scenes/kauneus.h"
 #include "scenes/viimeiset.h"
@@ -107,6 +108,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		static_cast<Demo*>(context)->addScene("sauhu", new Sauhu());
 		static_cast<Demo*>(context)->addScene("tuli", new Tuli());
 		static_cast<Demo*>(context)->addScene("korona", new Korona());
+		static_cast<Demo*>(context)->addScene("korona2", new Korona2());
 		static_cast<Demo*>(context)->addScene("maailma", new Maailma());
 		static_cast<Demo*>(context)->addScene("kauneus", new Kauneus());
 		static_cast<Demo*>(context)->addScene("viimeiset", new Viimeiset());

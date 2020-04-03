@@ -148,7 +148,7 @@ void Korona::drawGround()
 	Shader& s = g_shaders->getShader("effect_terrainkorona");
 	s.bind();
 
-	g_textures->bindTexture("heightmap2", GL_TEXTURE0);
+	g_textures->bindTexture("heightmap1", GL_TEXTURE0);
 	g_textures->bindTexture("kivitesti", GL_TEXTURE1);
 	s.setUniform1f("time", m_pos);
 	s.setUniform1i("heightmap", 0);

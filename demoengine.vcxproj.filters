@@ -208,6 +208,7 @@
     <ClInclude Include="fx\Feedback.h" />
     <ClInclude Include="scenes\kauneus.h" />
     <ClInclude Include="scenes\viimeiset.h" />
+    <ClInclude Include="scenes\korona2.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\setupdialog.aps">
@@ -354,5 +355,6 @@
     <ClCompile Include="fx\Feedback.cpp" />
     <ClCompile Include="scenes\kauneus.cpp" />
     <ClCompile Include="scenes\viimeiset.cpp" />
+    <ClCompile Include="scenes\korona2.cpp" />
   </ItemGroup>
 </Project>

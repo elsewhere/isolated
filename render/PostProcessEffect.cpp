@@ -1,5 +1,6 @@
 #include "PostProcessEffect.h"
 #include "Shader.h"
+#include "../core/System.h"
 
 using namespace demomath;
 
@@ -399,6 +400,41 @@ namespace demorender
 	{
 		return "DOF";
 	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// EndOfTheWorld
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	EndOfTheWorld::EndOfTheWorld()
+	{
+
+	}
+
+	EndOfTheWorld::~EndOfTheWorld()
+	{
+
+	}
+
+	void EndOfTheWorld::apply(const std::string& source, const std::string& target, PostProcessParameters& params)
+	{
+		Shader& shader = g_shaders->getShader("postprocess_endoftheworld");
+		shader.bind();
+
+		shader.setUniform1i("tex", 0);
+		shader.setUniform1f("time", democore::g_system->getTime() * 0.001f);
+
+		GLuint depthTextureId = g_renderTargets->getDepthTextureId("main");
+		glActiveTexture(GL_TEXTURE0);
+
+		g_renderTargets->bindTexture(target);
+		g_renderUtils->fullscreenQuad(source, shader);
+	}
+
+	std::string EndOfTheWorld::getName()
+	{
+		return "EndOfTheWorld";
+	}
+
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

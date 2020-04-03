@@ -15,6 +15,83 @@ namespace
 }
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////77
+// Wind
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////77
+
+Viimeiset::WindParticles::WindParticles() :
+	GPUParticleSystem(128 * 1024)
+{
+	addLogicShaderAttribute({ "particlePosition", 3 });
+	addLogicShaderAttribute({ "particleColor", 4 });
+	addLogicShaderAttribute({ "particleEnergy", 1 });
+	addLogicShaderAttribute({ "particleMaxEnergy", 1 });
+
+	addRenderShaderAttribute({ "vertexPosition", 3 });
+	addRenderShaderAttribute({ "vertexColor", 4 });
+	addRenderShaderAttribute({ "vertexEnergy", 1 });
+	addRenderShaderAttribute({ "vertexMaxEnergy", 1 });
+}
+
+Viimeiset::WindParticles::~WindParticles()
+{
+
+}
+
+void Viimeiset::WindParticles::setInitialData()
+{
+	m_pInitialData = new float[m_particleCount * m_particleSize];
+
+	memset(m_pInitialData, 0, sizeof(float) * m_particleCount * m_particleSize);
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////77
+// Sun
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////77
+
+Viimeiset::Sun::Sun() :
+	CPUParticleSystem("particle_sun", "circle", 5)
+{
+
+}
+
+Viimeiset::Sun::~Sun()
+{
+
+}
+
+void Viimeiset::Sun::setInitialValues()
+{
+	g_params->useNamespace("viimeiset");
+	for (int i = 0; i < m_particleCount; i++)
+	{
+		m_pParticleData[i].position = Math::randVectSphere() * g_params->get<demomath::Range>("sunspread").getRandomValue() + g_params->get<glm::vec3>("sunposition");
+		m_pParticleData[i].direction = Math::randVectSphere() * g_params->get<demomath::Range>("sunmovement").getRandomValue();
+		m_pParticleData[i].size = g_params->get<demomath::Range>("sunsize").getRandomValue();
+		m_pParticleData[i].color = glm::vec4(1.f, 1.f, 1.f, g_params->get<demomath::Range>("sunalpha").getRandomValue());
+		m_pParticleData[i].energy = 1.f;
+		m_pParticleData[i].maxEnergy = 1.f;
+	}
+}
+
+void Viimeiset::Sun::update()
+{
+	const float speed = 0.01f;
+	for (int i = 0; i < m_particleCount; i++)
+	{
+//		m_pParticleData[i].position += m_pParticleData[i].direction * speed;
+	}
+	updateBuffers();
+}
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////77
+// Viimeiset
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////77
+
 void Viimeiset::init()
 {
 	m_camera = new demorender::Camera(1.f, 1000.f, 45.f);
@@ -30,8 +107,15 @@ void Viimeiset::init()
 	m_pSkybox = new demorender::Model();
 	m_pSkybox->setMesh("cube");
 
-}
+//	m_particles = std::make_unique<WindParticles>();
+//	m_particles->setShaders("effect_wind", "effect_windrender");
+//	m_particles->setInitialData();
+//	m_particles->createBuffers();
 
+	m_sun = std::make_unique<Sun>();
+	m_sun->setInitialValues();
+
+}
 
 
 void Viimeiset::update()
@@ -46,6 +130,24 @@ void Viimeiset::update()
 
 	m_cameraPosition = Math::lerp<glm::vec3>(camstart, camend, m_pos);
 	m_cameraTarget = Math::lerp<glm::vec3>(targetstart, targetend, m_pos);
+
+	glm::mat4 modelMatrix = glm::mat4(1.f);
+
+	m_sun->update();
+
+/*
+	m_particles->addRenderShaderUniform("tex", 0);
+	m_particles->addRenderShaderUniform("viewMatrix", m_camera->getViewMatrix());
+	m_particles->addRenderShaderUniform("projectionMatrix", m_camera->getProjectionMatrix());
+	m_particles->addRenderShaderUniform("modelMatrix", modelMatrix);
+
+//	float focusDistance = g_params->get<float>("focusdistance");
+//	focusDistance += focusDistance * sinf(m_pos * 150.f);
+	m_particles->addRenderShaderUniform("focusDistance", 1.0f);
+	m_particles->addRenderShaderUniform("cameraPosition", m_cameraPosition);
+	m_particles->addLogicShaderUniform("emitterPosition", m_cameraPosition);
+	m_particles->update();
+*/
 }
 
 void Viimeiset::debug()
@@ -105,7 +207,10 @@ void Viimeiset::draw(RenderPass pass)
 
 		drawBackground();
 		drawGround();
+//		m_particles->draw(m_camera);
 
+
+		m_sun->draw(m_camera);
 		float focusDistance = g_params->get<float>("focusdistance");
 		g_postProcess->addLens(focusDistance, m_camera);
 
@@ -121,6 +226,9 @@ void Viimeiset::draw(RenderPass pass)
 	}
 	if (pass == RenderPass::AFTER_POST)
 	{
+		m_sun->draw(m_camera);
+
+
 		float fadevalue = g_sync->event("viimeisetfadein").getValue() * (1.f - g_sync->event("viimeisetfadeout").getValue());
 		glEnable(GL_BLEND);
 

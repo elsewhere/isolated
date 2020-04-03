@@ -228,6 +228,7 @@
     <ClInclude Include="scenes\kasvot.h" />
     <ClInclude Include="scenes\kauneus.h" />
     <ClInclude Include="scenes\korona.h" />
+    <ClInclude Include="scenes\korona2.h" />
     <ClInclude Include="scenes\maailma.h" />
     <ClInclude Include="scenes\sauhu.h" />
     <ClInclude Include="scenes\shadowtest.h" />
@@ -313,6 +314,7 @@
     <ClCompile Include="scenes\kasvot.cpp" />
     <ClCompile Include="scenes\kauneus.cpp" />
     <ClCompile Include="scenes\korona.cpp" />
+    <ClCompile Include="scenes\korona2.cpp" />
     <ClCompile Include="scenes\maailma.cpp" />
     <ClCompile Include="scenes\sauhu.cpp" />
     <ClCompile Include="scenes\shadowtest.cpp" />

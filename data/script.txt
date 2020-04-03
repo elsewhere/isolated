@@ -9,9 +9,9 @@ democonfig
 {
 	sound = true;
 	developermode = true;
-	song = Blear_Moon_-_03_-_Ongoing_cases.mp3
+	song = ambient.mp3
 	endtime = 341000
-	jumptime = 100000
+	jumptime = 209500
 }
 
 timeline
@@ -23,15 +23,16 @@ timeline
 ;	shadowtest2 0 150000 666
 ;	shadowtest 0 150000 666
 ;	dynamiccubetest 0 150000 666
-;	sauhu 0 150000 666
+;	 0 150000 666
 ;	tuli 0 250000 666
 
 	sauhu 0 47000 666
 	tuli 47000 100000 666
-	korona 100000 150000 666
-	maailma 150000 200000 666
-	kasvot 200000 250000 666
-	kauneus 250000 300000 666
+	korona 100000 170000 666
+;	maailma 150000 200000 666
+	kasvot 170000 210000 666
+	korona2 210000 260000 666
+	kauneus 260000 300000 666
 	viimeiset 300000 340000 666
 }
 
@@ -217,10 +218,53 @@ namespace korona
 	float linelength = 30
 	float linedistance = 7.0
 
-	int glowiterations = 20
+	int glowiterations = 40
 	float glowspreadx = 5.5
 	float glowspready = 0.02
 	float glowexponent = 0.6
+	float glowalpha = 5.2
+
+	
+}
+
+namespace korona2
+{
+	vec3 mooncamerapositionstart = 0 -0.3 -5
+	vec3 mooncamerapositionend = 0 -0.7 -5
+	vec3 mooncameratargetstart = 0 0 0 
+	vec3 mooncameratargetend = 0 0 0 
+
+	vec3 groundcamerapositionstart = 0 20 -100
+	vec3 groundcamerapositionend = 0 15 -50
+	vec3 groundcameratargetstart = 0 40 200 
+	vec3 groundcameratargetend  = 0 40 200
+
+	vec3 cameraup = 0 1 0
+
+	vec3 moonpos = 0 3 0
+	float moonsizestart = 1.1
+	float moonsizeend = 1.4
+
+	float focusdistancestart = 3.0
+	float focusdistanceend = 5.0
+
+	float terrainscale = 5.0;
+	float terrainheightscale = 5.0;
+
+	int linecount = 7
+	range linewidth = 0.3 0.3
+	float linelength = 30
+	float linedistance = 7.0
+
+	int radialiterations = 50
+	float radialspread = 0.01
+	float radialexponent = 1.0
+	float radialalpha = 1.9
+
+	int glowiterations = 20
+	float glowspreadx = 7.5
+	float glowspready = 0.2
+	float glowexponent = 14.2
 	float glowalpha = 5.2
 
 	
@@ -261,6 +305,12 @@ namespace viimeiset
 	vec3 cameratargetstart = 0 0 200 
 	vec3 cameratargetend  = 0 0 200
 
+	vec3 sunposition = 200 150 600
+	range sunmovement = 0.1 0.4
+	range sunspread = 4.1 10.5
+	range sunsize = 35.0 40.0
+	range sunalpha = 0.01 0.02
+
 	vec3 cameraup = 0 1 0 	
 
 	vec3 textpos = 0.50 0.1 0
@@ -285,32 +335,26 @@ namespace viimeiset
 ;;     beat				                                                                        ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-bpm beatquarter
+bpm pulse
 {
-	bpm = 17.5
+	bpm = 126
 	offset = 0
 }
 
-bpm beathalf
+bpm pulsehalf
 {
-	bpm = 35
-	offset = 0
-}
-
-bpm basicbeat0
-{
-	bpm = 70
+	bpm = 63
 	offset = 0
 }
 
 event startfadein
 {
-	time = 4000
+	time = 2000
 	length = 15000
 }
 event startfadeout
 {
-	time = 41000
+	time = 42000
 	length = 5000
 }
 
@@ -327,7 +371,7 @@ event demotitle
 }
 event tulifadein
 {
-	time = 49000
+	time = 48000
 	length = 4000
 }
 event tulifadeout
@@ -342,13 +386,13 @@ event koronafadein
 }
 event koronafadeout
 {
-	time = 144000
-	length = 6000	
+	time = 169600
+	length = 400	
 }
 event maailmafadein
 {
-	time = 150000
-	length = 10000
+	time = 167000
+	length = 3000
 }
 event maailmafadeout
 {
@@ -357,18 +401,18 @@ event maailmafadeout
 }
 event kasvotfadein
 {
-	time = 200000
-	length = 10000
+	time = 170000
+	length = 3000
 }
 event kasvotfadeout
 {
-	time = 246000
+	time = 206000
 	length = 4000	
 }
 event kauneusfadein
 {
-	time = 250000
-	length = 10000
+	time = 260000
+	length = 5000
 }
 event kauneusfadeout
 {

@@ -130,7 +130,12 @@ void Tuli::draw(RenderPass pass)
 
 //		g_postProcess->addSobel();
 
-		const float glow = std::min<float>(1.f, m_pos * 2.f);
+		float glow = std::min<float>(1.f, m_pos * 2.f);
+
+		float pulse = sinf(g_sync->beat("pulsehalf").getValue()*3.141592f) * 0.2f;
+
+		glow += pulse;
+
 		int iterations = g_params->get<int>("glowiterations");
 		float spread = g_params->get<float>("glowspread");
 		float exponent = g_params->get<float>("glowexponent");

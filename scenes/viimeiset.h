@@ -3,6 +3,7 @@
 #include "../globals.h"
 #include "../render/LineRenderer.h"
 #include "../fx/GPUParticleSystem.h"
+#include "../fx/CPUParticleSystem.h"
 
 class Viimeiset : public democore::Scene
 {
@@ -18,6 +19,24 @@ public:
 	void debug() override;
 	
 private:
+	class WindParticles : public demofx::GPUParticleSystem
+	{
+	public:
+		WindParticles();
+		~WindParticles();
+
+		void setInitialData() override;
+	};
+
+	class Sun : public demofx::CPUParticleSystem
+	{
+	public:
+		Sun();
+		~Sun();
+
+		void setInitialValues() override;
+		void update() override;
+	};
 
 	void drawBackground();
 	void drawGround();
@@ -30,5 +49,9 @@ private:
 
 	demorender::Mesh *m_pMesh;
 	demorender::Model *m_pSkybox;
+
+	std::unique_ptr<WindParticles> m_particles;
+	std::unique_ptr<demofx::CPUParticleSystem> m_sun;
+
 
 };

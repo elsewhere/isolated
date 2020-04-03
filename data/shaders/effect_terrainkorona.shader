@@ -95,7 +95,7 @@ FRAGMENT_SHADER
 //			col.xyz += vec3(0.7f, 0.3f, 0.2f) * dim * 6.2;
 //		}
 
-		finalColor = vec4(col.xyz * light, 1.0) * 0.4;
+		finalColor = vec4(col.xyz * light, 1.0) * 0.3;
 
 //		finalColor = vec4(getNormal(textureCoordinate), 1.0);
 //		finalColor = vec4(col.xyz, 1.0);//vec4(textureCoordinate.x, textureCoordinate.y, 0.f, 1.f);//clamp(texel, 0.0, 1.0);

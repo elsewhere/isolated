@@ -55,6 +55,7 @@ namespace demorender
 		m_effects["lens"] = new Lens();
 		m_effects["oldschoolradialbur"] = new OldschoolRadialBlur();
 		m_effects["radialglow"] = new RadialGlow();
+		m_effects["endoftheworld"] = new EndOfTheWorld();
 		return true;
 	}
 
@@ -94,6 +95,16 @@ namespace demorender
 		m_stack.push_back(item);
 	}
 
+
+	void PostProcessManager::addEndOfTheWorld()
+	{
+		StackItem item;
+		item.first = m_effects["endoftheworld"];
+		item.second.clear();
+
+		m_stack.push_back(item);
+
+	}
 	void PostProcessManager::addGlow(int iterations, float spreadX, float spreadY, float exponent, float addAlpha)
 	{
 		StackItem item;

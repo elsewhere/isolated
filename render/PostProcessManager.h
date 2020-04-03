@@ -33,6 +33,10 @@ namespace demorender
 		void addOldschoolRadialBlur();
 		void addRadialGlow(int iterations = 10, float spread = 0.007f, float exponent = 1.f, float addAlpha = 1.0f);
 
+//		void addFeedback();
+
+		void addEndOfTheWorld();
+
 		void addLens(float focus, demorender::Camera* pCamera);
 		void addSSAO(float nearPlane, float farPlane); //TODO
 

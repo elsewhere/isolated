@@ -14,7 +14,9 @@ namespace demofx
 		void startFrame();
 		void endFrame();
 
+		void update();
 		void draw();
+
 
 	private:
 		struct FeedbackBuffer
@@ -27,6 +29,8 @@ namespace demofx
 
 		int m_textureWidth;
 		int m_textureHeight;
+		float m_timer;
+		bool m_update;
 
 		std::string m_shader = "no shader";
 		bool m_flip = false;
