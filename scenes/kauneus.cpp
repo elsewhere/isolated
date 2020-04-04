@@ -123,6 +123,8 @@ void Kauneus::draw(RenderPass pass)
 		float exponent = g_params->get<float>("glowexponent");
 		float alpha = g_params->get<float>("glowalpha");
 
+		float power = (1.f - m_pos) * 2.5f;
+		g_postProcess->addEndOfTheWorld(power);
 		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha * m_pos);
 
 //		g_postProcess->addSobel();

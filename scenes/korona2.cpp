@@ -292,17 +292,16 @@ void Korona2::draw(RenderPass pass)
 		
 		g_postProcess->addRadialGlow(10, 0.001f, 1.0f, 0.9f);
 		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha);
-		g_postProcess->addEndOfTheWorld();
+		g_postProcess->addEndOfTheWorld(1.0);
 	}
 	if (pass == RenderPass::AFTER_POST)
 	{
 //		m_feedback->draw();
-/*
-		float fadevalue = g_sync->event("Korona2fadein").getValue() * (1.f - g_sync->event("Korona2fadeout").getValue());
+
+		float fadevalue = g_sync->event("korona2fadein").getValue() * (1.f - g_sync->event("korona2fadeout").getValue());
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		g_renderUtils->fullscreenFade(glm::vec4(0.f, 0.f, 0.f, 1.f - fadevalue));
 		glDisable(GL_BLEND);
-*/
 	}
 }

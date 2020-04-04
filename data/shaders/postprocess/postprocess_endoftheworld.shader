@@ -33,6 +33,7 @@ FRAGMENT_SHADER
 	out vec4 finalColor;
 	in vec2 textureCoordinate;
 
+	uniform float power;
 	flat in uint seed;
 
 	float randhash(uint seed, float b)
@@ -48,7 +49,7 @@ FRAGMENT_SHADER
 	void main() 
 	{
 		uint s  = uint(seed + textureCoordinate.x * 510501.5 + textureCoordinate.y * 5419591.4);
-	   float r = 0.4 + randhash(s, 0.6);
+	    float r = mix(1.0, 0.4 + randhash(s, 0.6), power);
 
 		vec4 original = texture(tex, textureCoordinate);
 //		original.x += 0.3;

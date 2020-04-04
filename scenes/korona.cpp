@@ -270,7 +270,7 @@ void Korona::draw(RenderPass pass)
 		float spreadx = g_params->get<float>("glowspreadx");
 		float spready = g_params->get<float>("glowspready");
 		float exponent = g_params->get<float>("glowexponent");
-		float alpha = g_params->get<float>("glowalpha");// *glow;
+		float alpha = g_params->get<float>("glowalpha") + g_sync->event("koronareveal").getValue() * 4.5f;// *glow;
 
 		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha);
 	}

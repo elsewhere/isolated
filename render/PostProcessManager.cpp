@@ -96,11 +96,12 @@ namespace demorender
 	}
 
 
-	void PostProcessManager::addEndOfTheWorld()
+	void PostProcessManager::addEndOfTheWorld(float power)
 	{
 		StackItem item;
 		item.first = m_effects["endoftheworld"];
 		item.second.clear();
+		item.second["power"] = power;
 
 		m_stack.push_back(item);
 

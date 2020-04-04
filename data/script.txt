@@ -278,6 +278,10 @@ namespace kasvot
 	vec3 cameratargetstart = -0.5 0 0 
 	vec3 cameratargetend  = 0.5 0 0 
 
+
+	vec3 particle2position = -3.9 1.5 -2.5
+	vec3 particle3position = 5.0 -0.66 -1.0
+
 	vec3 cameraup = 0 1 0 	
 
 	vec3 lightpos = 0 20 0
@@ -347,6 +351,17 @@ bpm pulsehalf
 	offset = 0
 }
 
+bpm pulsequarter
+{
+	bpm = 31.5
+	offset = 0
+}
+bpm pulseeighth
+{
+	bpm = 15.75
+	offset = 0
+}
+
 event startfadein
 {
 	time = 2000
@@ -389,6 +404,12 @@ event koronafadeout
 	time = 169600
 	length = 400	
 }
+
+event koronareveal
+{
+	time = 122000
+	length = 10000
+}
 event maailmafadein
 {
 	time = 167000
@@ -404,15 +425,38 @@ event kasvotfadein
 	time = 170000
 	length = 3000
 }
+event kasvotchange
+{
+	time = 186800
+	length = 6000
+}
+event kasvotfadechange
+{
+	time = 180000
+	length = 15000
+}
+
 event kasvotfadeout
 {
 	time = 206000
 	length = 4000	
 }
+
+event korona2fadein
+{
+	time = 211000
+	length = 4000
+}
+event korona2fadeout
+{
+	time = 258000
+	length = 2000	
+}
+
 event kauneusfadein
 {
 	time = 260000
-	length = 5000
+	length = 15000
 }
 event kauneusfadeout
 {

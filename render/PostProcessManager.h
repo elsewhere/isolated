@@ -35,7 +35,7 @@ namespace demorender
 
 //		void addFeedback();
 
-		void addEndOfTheWorld();
+		void addEndOfTheWorld(float power);
 
 		void addLens(float focus, demorender::Camera* pCamera);
 		void addSSAO(float nearPlane, float farPlane); //TODO

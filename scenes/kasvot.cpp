@@ -20,8 +20,8 @@ namespace
 // KasvotParticles
 ////////////////////////////////////////////////////////////////1////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Kasvot::KasvotParticles::KasvotParticles() :
-	GPUParticleSystem(particleCount)
+Kasvot::KasvotParticles::KasvotParticles(int count) :
+	GPUParticleSystem(count)
 {
 	addLogicShaderAttribute({ "particlePosition", 3 });
 	addLogicShaderAttribute({ "particleColor", 4 });
@@ -95,10 +95,20 @@ void Kasvot::init()
 	m_pSkybox = new demorender::Model();
 	m_pSkybox->setMesh("cube");
 
-	m_particles = std::make_unique<KasvotParticles>();
+	m_particles = std::make_unique<KasvotParticles>(1024 * 512);
 	m_particles->setShaders("effect_kasvotparticle", "effect_kasvotparticlerender");
 	m_particles->setInitialData();
 	m_particles->createBuffers();
+
+	m_particles2 = std::make_unique<KasvotParticles>(1024 * 256);
+	m_particles2->setShaders("effect_kasvotparticle2", "effect_kasvotparticlerender2");
+	m_particles2->setInitialData();
+	m_particles2->createBuffers();
+
+	m_particles3 = std::make_unique<KasvotParticles>(1024 * 256);
+	m_particles3->setShaders("effect_kasvotparticle3", "effect_kasvotparticlerender3");
+	m_particles3->setInitialData();
+	m_particles3->createBuffers();
 }
 
 void Kasvot::update()
@@ -115,6 +125,8 @@ void Kasvot::update()
 	m_cameraUp = glm::vec3(0.f, 1.f, 0.f);
 
 	glm::mat4 modelMatrix = glm::mat4(1.f);// glm::rotate(m_pos * -70.f, glm::vec3(0.3f, 1.0f, 0.2f)) * glm::scale(vec3(1.f));
+	glm::mat4 modelMatrix2 = glm::translate(g_params->get<glm::vec3>("particle2position"));// glm::rotate(m_pos * -70.f, glm::vec3(0.3f, 1.0f, 0.2f)) * glm::scale(vec3(1.f));
+	glm::mat4 modelMatrix3 = glm::translate(g_params->get<glm::vec3>("particle3position"));// glm::rotate(m_pos * -70.f, glm::vec3(0.3f, 1.0f, 0.2f)) * glm::scale(vec3(1.f));
 
 	m_particles->startFrame();
 	m_particles->addRenderShaderUniform("tex", 0);
@@ -124,12 +136,38 @@ void Kasvot::update()
 
 	m_particles->addLogicShaderUniform("tex", 0);
 
+	float fade = g_sync->event("kasvotchange").getValue();
+
+	m_particles2->startFrame();
+	m_particles2->addRenderShaderUniform("tex", 0);
+	m_particles2->addRenderShaderUniform("fade", fade);
+	m_particles2->addRenderShaderUniform("viewMatrix", m_camera->getViewMatrix());
+	m_particles2->addRenderShaderUniform("projectionMatrix", m_camera->getProjectionMatrix());
+	m_particles2->addRenderShaderUniform("modelMatrix", modelMatrix2);
+
+	m_particles2->addLogicShaderUniform("tex", 0);
+
+	m_particles3->startFrame();
+	m_particles3->addRenderShaderUniform("tex", 0);
+	m_particles3->addRenderShaderUniform("fade", fade);
+	m_particles3->addRenderShaderUniform("viewMatrix", m_camera->getViewMatrix());
+	m_particles3->addRenderShaderUniform("projectionMatrix", m_camera->getProjectionMatrix());
+	m_particles3->addRenderShaderUniform("modelMatrix", modelMatrix3);
+
+	m_particles3->addLogicShaderUniform("tex", 0);
+
+	float t = g_sync->event("kasvotfadechange").getValue();
+
+	float a = Math::lerp<float>(g_sync->beat("pulsequarter").getValue(), g_sync->beat("pulseeighth").getValue(), t);
 	float focusDistance = g_params->get<float>("focusdistance");
-	focusDistance += sinf(m_pos * g_params->get<float>("focusdistancespeed")) * g_params->get<float>("focusdistancerange");
+//	focusDistance += sinf(m_pos * g_params->get<float>("focusdistancespeed")) * g_params->get<float>("focusdistancerange");
+	focusDistance += sinf(a * 3.141592f) * g_params->get<float>("focusdistancerange");
 	m_particles->addRenderShaderUniform("focusDistance", focusDistance);
 	m_particles->addRenderShaderUniform("cameraPosition", m_cameraPosition);
 
 	m_particles->update();
+	m_particles2->update();
+	m_particles3->update();
 }
 
 void Kasvot::drawBackground()
@@ -167,14 +205,22 @@ void Kasvot::draw(RenderPass pass)
 
 //		drawBackground();
 		m_particles->draw(m_camera);
+		if (g_sync->event("kasvotchange").hasPassed())
+		{
+			m_particles2->draw(m_camera);
+			m_particles3->draw(m_camera);
 
+		}
+
+		float change = g_sync->event("kasvotchange").getValue();
 		const float glow = std::min<float>(1.f, m_pos * 2.f);
 		int iterations = g_params->get<int>("glowiterations");
 		float spreadx = g_params->get<float>("glowspreadx");
 		float spready = g_params->get<float>("glowspready");
 		float exponent = g_params->get<float>("glowexponent");
-		float alpha = g_params->get<float>("glowalpha") * glow;
+		float alpha = g_params->get<float>("glowalpha") * glow + change * 1.5f;
 
+		g_postProcess->addEndOfTheWorld(change * 1.2f);
 		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha);
 
 		//const float focus = 0.1f;

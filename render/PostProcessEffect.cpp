@@ -422,6 +422,7 @@ namespace demorender
 
 		shader.setUniform1i("tex", 0);
 		shader.setUniform1f("time", democore::g_system->getTime() * 0.001f);
+		shader.setUniform1f("power", std::get<float>(params["power"]));
 
 		GLuint depthTextureId = g_renderTargets->getDepthTextureId("main");
 		glActiveTexture(GL_TEXTURE0);
