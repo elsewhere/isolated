@@ -17,7 +17,7 @@ VERTEX_SHADER
 	{
 	   gl_Position = vec4(vertexPosition, 1.0);
 	   gl_PointSize = vertexSize;
-	   vs_out.color = vertexColor;
+	   vs_out.color = vec4(1.0, 0.0, 0.0, 1.0);//vertexColor;
 	}
 }
 

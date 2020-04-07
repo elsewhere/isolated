@@ -56,6 +56,45 @@ void Korona::KoronaParticles::setInitialData()
 	}
 }
 
+Korona::Sun::Sun() :
+	CPUParticleSystem("particle_korona", "circle", 5),
+	m_pos(0.f)
+{
+
+}
+
+Korona::Sun::~Sun()
+{
+
+}
+
+void Korona::Sun::setInitialValues()
+{
+	g_params->useNamespace("korona");
+	for (int i = 0; i < m_particleCount; i++)
+	{
+		m_pParticleData[i].position = Math::randVectSphere() * g_params->get<demomath::Range>("sunspread").getRandomValue() + g_params->get<glm::vec3>("sunposition");
+		m_pParticleData[i].direction = Math::randVectSphere() * g_params->get<demomath::Range>("sunmovement").getRandomValue();
+		m_pParticleData[i].size = g_params->get<demomath::Range>("sunsize").getRandomValue();
+		m_pParticleData[i].color = glm::vec4(1.f, 1.f, 1.f, g_params->get<demomath::Range>("sunalpha").getRandomValue());
+		m_pParticleData[i].energy = 1.f;
+		m_pParticleData[i].maxEnergy = 1.f;
+	}
+}
+
+void Korona::Sun::update()
+{
+	g_params->useNamespace("korona");
+	const float speed = 0.01f;
+	for (int i = 0; i < m_particleCount; i++)
+	{
+
+		glm::vec3 pos = Math::lerp(g_params->get<glm::vec3>("sunposition"), g_params->get<glm::vec3>("sunposition2"), m_pos);
+		m_pParticleData[i].position = pos;
+	}
+	updateBuffers();
+}
+
 
 void Korona::init()
 {
@@ -63,18 +102,6 @@ void Korona::init()
 
 	m_moonCamera = new demorender::Camera(1.f, 1000.f, 45.f);
 	m_groundCamera = new demorender::Camera(1.f, 1000.f, 45.f);
-
-	m_lines = std::make_unique<demorender::LineRenderer>();
-
-	m_lines->startNewBatch();
-
-	for (int i = 0; i < 300; i++)
-	{
-		glm::vec3 v = Math::randVectSphere() * Math::randFloat(300.f);
-
-		glm::vec4 c = i < 150 ? glm::vec4(1.f) : glm::vec4(1.f, 0.f, 0.f, 1.f);
-		m_lines->addPoint(v, c);
-	}
 
 	m_particles = std::make_unique<KoronaParticles>();
 	m_particles->setShaders("effect_korona", "effect_koronarender");
@@ -116,6 +143,10 @@ void Korona::init()
 
 	builder.generatePlane(xres, zres, scale);
 	m_pGround = builder.getMesh(Mesh::Usage::STATIC);
+
+	m_sun = std::make_unique<Sun>();
+	m_sun->setInitialValues();
+
 
 }
 
@@ -233,6 +264,9 @@ void Korona::update()
 
 
 	m_particles->update();
+	m_sun->setPos(m_pos);
+	m_sun->update();
+
 }
 
 void Korona::debug()
@@ -257,6 +291,7 @@ void Korona::draw(RenderPass pass)
 
 //		drawLines();
 		m_particles->draw(m_moonCamera);
+//		m_sun->draw(m_moonCamera);
 		drawMoon();
 
 
@@ -272,10 +307,17 @@ void Korona::draw(RenderPass pass)
 		float exponent = g_params->get<float>("glowexponent");
 		float alpha = g_params->get<float>("glowalpha") + g_sync->event("koronareveal").getValue() * 4.5f;// *glow;
 
+		g_postProcess->addEndOfTheWorld(m_pos * g_params->get<float>("endoftheworld"));
 		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha);
 	}
 	if (pass == RenderPass::AFTER_POST)
 	{
+/*
+		m_sun->draw(m_moonCamera);
+		glDisable(GL_DEPTH_TEST);
+		drawMoon();
+		glEnable(GL_DEPTH_TEST);
+*/
 		float fadevalue = g_sync->event("koronafadein").getValue() * (1.f - g_sync->event("koronafadeout").getValue());
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

@@ -19,6 +19,8 @@ public:
 	
 private:
 
+
+
 	class KauneusParticles : public demofx::GPUParticleSystem
 	{
 	public:
@@ -37,8 +39,9 @@ private:
 
 	demorender::Camera *m_camera;
 
+	void drawBackground();
 	demorender::Mesh *m_pMesh;
-//	demorender::Model *m_pSkybox;
+	demorender::Model *m_pSkybox;
 
 	std::unique_ptr<KauneusParticles> m_particles;
 	std::unique_ptr<demorender::LineRenderer> m_lines;

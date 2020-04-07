@@ -282,17 +282,19 @@ void Korona2::draw(RenderPass pass)
 		float spreadx = g_params->get<float>("glowspreadx");
 		float spready = g_params->get<float>("glowspready");
 		float exponent = g_params->get<float>("glowexponent");
-		float alpha = g_params->get<float>("glowalpha");// *glow;
+		float alphastart = g_params->get<float>("glowalpha");// *glow;
+		float alphaend = g_params->get<float>("glowalphaend");
+
+		float alpha = Math::lerp(alphastart, alphaend, m_pos);
 
 		int radialiterations = g_params->get<int>("radialiterations");
-		float radialspread = g_params->get<float>("radialspreadx");
+		float radialspread = g_params->get<float>("radialspread");
 		float radialexponent = g_params->get<float>("radialexponent");
 		float radialalpha = g_params->get<float>("radialalpha");// *glow;
 
-		
-		g_postProcess->addRadialGlow(10, 0.001f, 1.0f, 0.9f);
+		g_postProcess->addRadialGlow(radialiterations, radialspread, radialexponent, radialalpha);
 		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha);
-		g_postProcess->addEndOfTheWorld(1.0);
+		g_postProcess->addEndOfTheWorld(1.0 + m_pos * 0.3f);
 	}
 	if (pass == RenderPass::AFTER_POST)
 	{

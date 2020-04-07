@@ -2,8 +2,6 @@
 #include "../render/MeshBuilder.h"
 #include "../glm/gtx/transform.hpp"
 
-#include "../render/LineRenderer.h"
-
 using namespace democore;
 using namespace demomath;
 using namespace demorender;
@@ -50,22 +48,14 @@ void Kauneus::init()
 {
 	m_camera = new demorender::Camera(1.f, 1000.f, 45.f);
 
-	m_lines = std::make_unique<demorender::LineRenderer>();
-
-	m_lines->startNewBatch();
-
-	for (int i = 0; i < 300; i++)
-	{
-		glm::vec3 v = Math::randVectSphere() * Math::randFloat(300.f);
-
-		glm::vec4 c = i < 150 ? glm::vec4(1.f) : glm::vec4(1.f, 0.f, 0.f, 1.f);
-		m_lines->addPoint(v, c);
-	}
-
 	m_particles = std::make_unique<KauneusParticles>();
 	m_particles->setShaders("effect_kauneus", "effect_kauneusrender");
 	m_particles->setInitialData();
 	m_particles->createBuffers();
+
+	m_pSkybox = new demorender::Model();
+	m_pSkybox->setMesh("cube");
+
 }
 
 
@@ -76,8 +66,13 @@ void Kauneus::update()
 
 	m_cameraUp = glm::vec3(0.f, 1.f, 0.f);
 	m_cameraPosition = g_params->get<glm::vec3>("cameraposition");// ::vec3(0.f, 0.f, -20.f);
-	m_cameraTarget = glm::vec3(0.f);
+	m_cameraTarget = g_params->get<glm::vec3>("cameratarget");
 
+
+	glm::mat4 rot = glm::rotate(m_pos * g_params->get<float>("camrotation"), glm::normalize(glm::vec3(0.1f, 1.f, 0.f)));
+
+
+	m_cameraPosition = Math::transform(m_cameraPosition, rot);
 	glm::mat4 modelMatrix = glm::mat4(1.f);
 
 	m_particles->startFrame();
@@ -103,6 +98,23 @@ void Kauneus::debug()
 {
 }
 
+void Kauneus::drawBackground()
+{
+	Shader &s = g_shaders->getShader("skybox");
+	s.bind();
+	m_pSkybox->getMesh()->setStreamFlags(Mesh::VERTEX_STREAM);
+	m_pSkybox->bind(&s);
+
+	g_textures->bindCubemap(skyboxTexture, GL_TEXTURE0); GL_DEBUG;
+	s.setUniform1i("tex", 0); GL_DEBUG;
+	s.setUniform1f("brightness", 0.2f + m_pos * g_params->get<float>("backgroundbrightness")); GL_DEBUG;
+	s.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_camera->getCameraMatrix()); GL_DEBUG;
+
+	glm::mat4 skyboxTrans = glm::scale(glm::vec3(590.f));
+	s.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&skyboxTrans); GL_DEBUG;
+	glDrawArrays(GL_TRIANGLES, 0, 36); GL_DEBUG;
+}
+
 void Kauneus::draw(RenderPass pass)
 {
 	g_params->useNamespace("Kauneus");
@@ -115,6 +127,7 @@ void Kauneus::draw(RenderPass pass)
 			m_cameraTarget,
 			m_cameraUp);
 
+		drawBackground();
 		m_particles->draw(m_camera);
 
 		int iterations = g_params->get<int>("glowiterations");

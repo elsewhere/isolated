@@ -29,7 +29,7 @@ VERTEX_SHADER
 
 	    vec3 vertex = vertexPosition;
 
-		height = heightVal * terrainHeightScale;
+		height = heightVal * terrainHeightScale * 3.0;
 	    vertex.y = height;
 
 	    gl_Position = cameraMatrix * modelMatrix * vec4(vertex, 1);
@@ -79,7 +79,7 @@ FRAGMENT_SHADER
 
 	void main() 
 	{
-		vec4 heightValue = texture(heightmap, textureCoordinate);
+		vec4 heightValue = texture(heightmap, textureCoordinate) * 0.5;
 		vec4 col = mix(heightValue, texture(stone, textureCoordinate2), 0.4);
 
 		vec3 normal = getNormal(textureCoordinate);

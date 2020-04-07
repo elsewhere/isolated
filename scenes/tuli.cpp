@@ -124,7 +124,7 @@ void Tuli::draw(RenderPass pass)
 			m_cameraUp);
 
 
-		float fade = std::min(1.f, m_pos * 2.f);
+		float fade = std::min(1.f, m_pos * 1.f);
 		int particles = (int)(m_numParticles * fade);
 		m_particles->draw(m_camera, particles);
 
@@ -132,7 +132,8 @@ void Tuli::draw(RenderPass pass)
 
 		float glow = std::min<float>(1.f, m_pos * 2.f);
 
-		float pulse = sinf(g_sync->beat("pulsehalf").getValue()*3.141592f) * 0.2f;
+		float pulse = sinf(g_sync->beat("pulsehalf").getValue()*3.141592f) * 0.2f * m_pos;
+		float pulsequarter = sinf(g_sync->beat("pulsequarter").getValue()*3.141592f) * g_sync->beat("pulse").getValue() * m_pos;
 
 		glow += pulse;
 
@@ -141,6 +142,7 @@ void Tuli::draw(RenderPass pass)
 		float exponent = g_params->get<float>("glowexponent");
 		float alpha = g_params->get<float>("glowalpha") * glow;
 		g_postProcess->addRadialGlow(iterations, spread, exponent, alpha);
+		g_postProcess->addGlow(8, 0.001f, 0.001f, 0.3f * pulsequarter * m_pos, 1.f);
 	}
 	if (pass == RenderPass::AFTER_POST)
 	{

@@ -12,7 +12,6 @@ using namespace glm;
 namespace
 {
 	static const std::string skyboxTexture = "fjaraenv";
-	constexpr int particleCount = 1024 * 512;
 }
 
 
@@ -136,7 +135,7 @@ void Kasvot::update()
 
 	m_particles->addLogicShaderUniform("tex", 0);
 
-	float fade = g_sync->event("kasvotchange").getValue();
+	float fade = g_sync->event("kasvotchange").getValue() * (0.9f + 0.1f * (0.5f + 0.5f * sinf(g_sync->beat("pulseeighth").getValue() * 3.141592f)));
 
 	m_particles2->startFrame();
 	m_particles2->addRenderShaderUniform("tex", 0);
@@ -230,7 +229,7 @@ void Kasvot::draw(RenderPass pass)
 		//								  g_params->get<float>("glowexponent"),
 		//								  g_params->get<float>("glowalpha"));
 
-//		g_postProcess->addSobel();
+		//g_postProcess->addSobel();
 			//	g_postProcess->addRadial();
 			//	g_postProcess->addLens(focus, m_camera);
 			//	g_renderDebug->drawDepthTexture(g_renderTargets->getDepthTextureId("main"), m_camera, 512 + 256, 256, 512.f);

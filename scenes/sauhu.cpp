@@ -147,11 +147,16 @@ void Sauhu::draw(RenderPass pass)
 		glm::vec3 grouppos = g_params->get<glm::vec3>("grouppos");
 		glm::vec3 titlepos = g_params->get<glm::vec3>("titlepos");
 
-		float grouptitle = sinf(g_sync->event("grouptitle").getValue() * 3.141592f);
-		float demotitle = sinf(g_sync->event("demotitle").getValue() * 3.141592f);
+
+		float fade = 0.8f + 0.2f * sinf(g_sync->beat("pulsequarter").getValue() * 3.141592f);
+		float grouptitle = sinf(g_sync->event("grouptitle").getValue() * 3.141592f) * fade;
+		float grouptitle2 = sinf(g_sync->event("grouptitle2").getValue() * 3.141592f) * fade;
+		float demotitle = sinf(g_sync->event("demotitle").getValue() * 3.141592f) * fade;
 
 		if (grouptitle > 0.001f)
 			g_renderUtils->orthoImage("grouptitle", glm::vec2(grouppos.x, grouppos.y), 0.5f, grouptitle);
+		if (grouptitle2 > 0.001f)
+			g_renderUtils->orthoImage("grouptitle2", glm::vec2(grouppos.x, grouppos.y), 0.5f, grouptitle2);
 		if (demotitle > 0.001f)
 			g_renderUtils->orthoImage("demotitle", glm::vec2(titlepos.x, titlepos.y), 0.5f, demotitle);
 

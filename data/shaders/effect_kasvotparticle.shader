@@ -40,7 +40,7 @@ VERTEX_SHADER
 		float y = cos(position.x * 2.5 + 0.7 * s) + cos(position.z * 2.1 - 1.4 * s);
 		float z = sin(position.y * 1.0 + 1.1 * s) + cos(position.z * 3.3 + 0.5 * s)  - 3.0;
 
-		return vec3(x, y, z) * 0.0007;
+		return vec3(x, y, z) * 0.0002;
 	}
 
 	void main() 

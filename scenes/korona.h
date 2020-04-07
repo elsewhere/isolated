@@ -3,6 +3,7 @@
 #include "../globals.h"
 #include "../render/LineRenderer.h"
 #include "../fx/GPUParticleSystem.h"
+#include "../fx/CPUParticleSystem.h"
 
 class Korona : public democore::Scene
 {
@@ -28,6 +29,20 @@ private:
 		void setInitialData() override;
 	};
 
+	class Sun : public demofx::CPUParticleSystem
+	{
+	public:
+		Sun();
+		~Sun();
+
+		void setInitialValues() override;
+		void update() override;
+		void setPos(float t) { m_pos = t;  }
+
+		float m_pos;
+	};
+
+
 	void drawLines();
 	void drawMoon();
 	void drawGround();
@@ -49,6 +64,7 @@ private:
 		//	demorender::Model *m_pSkybox;
 
 	std::unique_ptr<KoronaParticles> m_particles;
-	std::unique_ptr<demorender::LineRenderer> m_lines;
+	std::unique_ptr<Sun> m_sun;
+
 
 };

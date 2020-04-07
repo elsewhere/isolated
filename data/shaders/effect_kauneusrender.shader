@@ -59,7 +59,7 @@ GEOMETRY_SHADER
 
 	   float alpha = sin((gs_in[0].energy / gs_in[0].maxEnergy) * 3.1415);
 	   alpha -= bokeh * 0.9;
-	   alpha = max(0.0, alpha) * 0.2;;
+	   alpha = max(0.0, alpha) * 0.25;;
 
 	   if (alpha > 0.01)
 	   {

@@ -132,9 +132,11 @@ namespace sauhu
 }
 namespace kauneus
 {
-	vec3 cameraposition = 0 0 -10
-	vec3 cameratarget = 0 0 0 
+	vec3 cameraposition = 0 4 -13
+	vec3 cameratarget = 1 2 0 
 	vec3 cameraup = 0 1 0 	
+
+	float camrotation = 1.0
 
 	vec3 grouppos = 0.15 0.15 0
 	vec3 titlepos = 0.15 0.15 0
@@ -142,6 +144,7 @@ namespace kauneus
 	float cameraradius = 10
 	float focusdistance = 5.0
 
+	float backgroundbrightness = 0.1
 	int glowiterations = 40
 	float glowspreadx = 7.001	
 	float glowspready = 7.001
@@ -201,9 +204,17 @@ namespace korona
 	vec3 groundcameratargetstart = 0 40 200 
 	vec3 groundcameratargetend  = 0 40 200
 
+
+	vec3 sunposition = 0 7 20
+	vec3 sunposition2 = -4 7 20
+	range sunmovement = 0.1 0.4
+	range sunspread = 0.1 0.3
+	range sunsize = 1.0 2.0
+	range sunalpha = 0.01 0.02
+
 	vec3 cameraup = 0 1 0
 
-	vec3 moonpos = 0 3 00
+	vec3 moonpos = 0 3 0
 	float moonsizestart = 1.7
 	float moonsizeend = 1.4
 
@@ -212,6 +223,8 @@ namespace korona
 
 	float terrainscale = 5.0;
 	float terrainheightscale = 5.0;
+
+	float endoftheworld = 1.9;
 
 	int linecount = 7
 	range linewidth = 0.3 0.3
@@ -256,16 +269,17 @@ namespace korona2
 	float linelength = 30
 	float linedistance = 7.0
 
-	int radialiterations = 50
-	float radialspread = 0.01
+	int radialiterations = 12
+	float radialspread = 0.001
 	float radialexponent = 1.0
-	float radialalpha = 1.9
+	float radialalpha = 0.9
 
 	int glowiterations = 20
 	float glowspreadx = 7.5
 	float glowspready = 0.2
 	float glowexponent = 14.2
-	float glowalpha = 5.2
+	float glowalphastasrt = 2.2
+	float glowalphaend = 5.2
 
 	
 }
@@ -375,8 +389,13 @@ event startfadeout
 
 event grouptitle
 {
-	time = 15000
-	length = 10000
+	time = 14000
+	length = 6000
+}
+event grouptitle2
+{
+	time = 20000
+	length = 6000
 }
 
 event demotitle
@@ -544,24 +563,28 @@ texture main_downscale1
 	width = 512;
 	height = 512;
 	format = float16;
+	wrap = clamp;
 }
 texture main_downscale2
 {
 	width = 256;
 	height = 256;
 	format = float16;
+	wrap = clamp;
 }
 texture main_downscale3
 {
 	width = 256;
 	height = 256;
 	format = float16;
+	wrap = clamp;
 }
 texture main_downscale3_2
 {
 	width = 256;
 	height = 256;
 	format = float16;
+	wrap = clamp;
 }
 
 texture computetest
@@ -576,6 +599,7 @@ texture lens_coc
 	width = 1024;
 	height = 1024; 
 	format = float16;
+	wrap = clamp;
 }
 
 texture post1
@@ -583,36 +607,42 @@ texture post1
 	width = 1024;
 	height = 1024;
 	format = float16;
+	wrap = clamp;
 }
 texture post2
 {
 	width = 1024;
 	height = 1024;
 	format = float16;
+	wrap = clamp;
 }
 texture downscale1
 {
 	width = 512;
 	height = 512;
 	format = float16;
+	wrap = clamp;
 }
 texture downscale2
 {
 	width = 256;
 	height = 256;
 	format = float16;
+	wrap = clamp;
 }
 texture downscale3
 {
 	width = 256;
 	height = 256;
 	format = float16;
+	wrap = clamp;
 }
 texture downscale3_2
 {
 	width = 256;
 	height = 256;
 	format = float16;
+	wrap = clamp;
 }
 
 texture heightmap1
@@ -651,6 +681,10 @@ texture demotitle
 texture grouptitle
 {
 	filename = traction.png
+}
+texture grouptitle2
+{
+	filename = brainstorm.png
 }
 texture credits
 {
