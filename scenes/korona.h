@@ -4,6 +4,7 @@
 #include "../render/LineRenderer.h"
 #include "../fx/GPUParticleSystem.h"
 #include "../fx/CPUParticleSystem.h"
+#include "../core/Analyzer.h"
 
 class Korona : public democore::Scene
 {
@@ -65,6 +66,7 @@ private:
 
 	std::unique_ptr<KoronaParticles> m_particles;
 	std::unique_ptr<Sun> m_sun;
+	std::unique_ptr<democore::Analyzer> m_analyzer;
 
 
 };

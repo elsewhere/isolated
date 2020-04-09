@@ -1,6 +1,7 @@
 #include <algorithm>
 #include "Demo.h"
 #include "ScriptLoader.h"
+#include "../render/RenderDebug.h"
 
 namespace democore
 {
@@ -286,6 +287,7 @@ namespace democore
 			demorender::g_postProcess->commit();
 			e->m_scene->draw(Scene::RenderPass::AFTER_POST);
 
+			demorender::g_renderUtils->drawBugFix();
 			if (g_system->isDebug())
 			{
 				e->m_scene->debug();

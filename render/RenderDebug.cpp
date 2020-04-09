@@ -147,6 +147,19 @@ namespace demorender
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
+	void RenderDebug::drawBugFix()
+	{
+		Shader& shader = g_shaders->getShader("singlecolor");
+		shader.bind();
+		m_pSquare->bind(&shader);
+
+		glm::mat4 model1 = glm::scale(glm::vec3(0.5f, 0.5f, 1.f));
+		shader.setUniform4f("color", 1.f, 0.f, 0.f, 1.f);
+		shader.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_pOrtho->getCameraMatrix()); GL_DEBUG;
+		shader.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&model1);
+
+		m_pSquare->draw();
+	}
 	void RenderDebug::drawTexture(const std::string& name, int x, int y, float scale)
 	{
 		glm::mat4 testiTrans = glm::scale(glm::vec3(1.f));

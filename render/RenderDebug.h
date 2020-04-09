@@ -63,6 +63,8 @@ namespace demorender
 		void drawTexture(const GLuint textureId, int x, int y, float scale = 1.f);
 		void drawDepthTexture(GLuint textureId, class Camera *pCamera, int x, int y, float scale = 1.f);
 		void drawDepthTextureOrtho(GLuint textureId, int x, int y, float scale = 1.f);
+		
+		void drawBugFix();
 
 	private:
 		RenderDebug();

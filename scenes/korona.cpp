@@ -85,6 +85,7 @@ void Korona::Sun::setInitialValues()
 void Korona::Sun::update()
 {
 	g_params->useNamespace("korona");
+
 	const float speed = 0.01f;
 	for (int i = 0; i < m_particleCount; i++)
 	{
@@ -146,6 +147,8 @@ void Korona::init()
 
 	m_sun = std::make_unique<Sun>();
 	m_sun->setInitialValues();
+
+	m_analyzer = std::make_unique <democore::Analyzer>(512, 16);
 
 
 }
@@ -219,6 +222,7 @@ void Korona::update()
 {
 	g_params->useNamespace("Korona");
 
+	m_analyzer->update();
 
 	const float rotation = Math::smoothStep(std::min<float>(m_pos * 3.f, 1.f), 0.f, 1.f);
 	glm::mat4 cameraRotation = glm::rotate(sinf(m_pos * g_params->get<float>("camerarotationfreq")) * g_params->get<float>("camerarotationamount"), glm::vec3(0.f, 0.f, 1.f)) * rotation;
@@ -267,6 +271,8 @@ void Korona::update()
 	m_sun->setPos(m_pos);
 	m_sun->update();
 
+
+
 }
 
 void Korona::debug()
@@ -307,8 +313,12 @@ void Korona::draw(RenderPass pass)
 		float exponent = g_params->get<float>("glowexponent");
 		float alpha = g_params->get<float>("glowalpha") + g_sync->event("koronareveal").getValue() * 4.5f;// *glow;
 
+		float sum = m_analyzer->getSum(Analyzer::Mode::CURRENT);
+
+//		g_debug << "sum = " << sum << "\n";
+
 		g_postProcess->addEndOfTheWorld(m_pos * g_params->get<float>("endoftheworld"));
-		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha);
+		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha + sum * 1500.f);
 	}
 	if (pass == RenderPass::AFTER_POST)
 	{

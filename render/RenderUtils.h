@@ -19,6 +19,8 @@ namespace demorender
 
 		void orthoImage(const std::string& texture, glm::vec2 pos, float scale, float alpha);
 
+		void drawBugFix();
+
 	private:
 		RenderUtils();
 		~RenderUtils();

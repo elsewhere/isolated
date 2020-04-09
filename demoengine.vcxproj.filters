@@ -209,6 +209,7 @@
     <ClInclude Include="scenes\kauneus.h" />
     <ClInclude Include="scenes\viimeiset.h" />
     <ClInclude Include="scenes\korona2.h" />
+    <ClInclude Include="core\Analyzer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\setupdialog.aps">
@@ -356,5 +357,6 @@
     <ClCompile Include="scenes\kauneus.cpp" />
     <ClCompile Include="scenes\viimeiset.cpp" />
     <ClCompile Include="scenes\korona2.cpp" />
+    <ClCompile Include="core\Analyzer.cpp" />
   </ItemGroup>
 </Project>

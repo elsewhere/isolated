@@ -68,6 +68,34 @@ namespace demorender
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
+	void RenderUtils::drawBugFix()
+	{
+		glDisable(GL_DEPTH_TEST);
+
+		Shader& shader = g_shaders->getShader("singlecolor");
+		shader.bind();
+
+		m_pSquareOnlyVertices->bind(&shader);
+
+
+		glm::vec4 color = glm::vec4(0.f, 0.f, 0.f, 1.f);
+		shader.setUniformMatrix4fv("cameraMatrix", 1, GL_FALSE, (float *)&m_pOrtho->getCameraMatrix()); GL_DEBUG;
+		shader.setUniform4f("color", color.x, color.y, color.z, color.a);
+
+		const float margin = 0.002f;
+		glm::mat4 modelMatrix = glm::scale(1.f, margin, 1.f);// glm::mat4(1.f);
+		glm::mat4 modelMatrix2 = glm::translate(0.f, 1.f - margin, 0.f) * glm::scale(1.f, margin, 1.f);// glm::mat4(1.f);
+
+		shader.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&modelMatrix); GL_DEBUG;
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		shader.setUniformMatrix4fv("modelMatrix", 1, GL_FALSE, (float *)&modelMatrix2); GL_DEBUG;
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		glEnable(GL_DEPTH_TEST);
+	}
+
+
 	void RenderUtils::fullscreenFade(glm::vec4 color)
 	{
 		glDisable(GL_DEPTH_TEST);

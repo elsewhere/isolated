@@ -162,6 +162,7 @@
     <Image Include="resources\icon1.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="core\Analyzer.h" />
     <ClInclude Include="core\Bpm.h" />
     <ClInclude Include="core\Config.h" />
     <ClInclude Include="core\Debugger.h" />
@@ -250,6 +251,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="core\Analyzer.cpp" />
     <ClCompile Include="core\Bpm.cpp" />
     <ClCompile Include="core\Config.cpp" />
     <ClCompile Include="core\Debugger.cpp" />

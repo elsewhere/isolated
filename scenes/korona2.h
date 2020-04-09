@@ -4,6 +4,7 @@
 #include "../render/LineRenderer.h"
 #include "../fx/GPUParticleSystem.h"
 #include "../fx/Feedback.h"
+#include "../core/Analyzer.h"
 
 class Korona2 : public democore::Scene
 {
@@ -53,6 +54,8 @@ private:
 
 	std::unique_ptr<demofx::Feedback> m_feedback;
 	std::unique_ptr<Korona2Particles> m_particles;
-	std::unique_ptr<demorender::LineRenderer> m_lines;
+	std::unique_ptr<democore::Analyzer> m_analyzer;
 
+
+	float m_sum = 0.f;
 };

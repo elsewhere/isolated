@@ -64,18 +64,6 @@ void Korona2::init()
 	m_moonCamera = new demorender::Camera(1.f, 1000.f, 45.f);
 	m_groundCamera = new demorender::Camera(1.f, 1000.f, 45.f);
 
-	m_lines = std::make_unique<demorender::LineRenderer>();
-
-	m_lines->startNewBatch();
-
-	for (int i = 0; i < 300; i++)
-	{
-		glm::vec3 v = Math::randVectSphere() * Math::randFloat(300.f);
-
-		glm::vec4 c = i < 150 ? glm::vec4(1.f) : glm::vec4(1.f, 0.f, 0.f, 1.f);
-		m_lines->addPoint(v, c);
-	}
-
 	m_particles = std::make_unique<Korona2Particles>();
 	m_particles->setShaders("effect_korona", "effect_koronarender");
 	m_particles->setInitialData();
@@ -119,6 +107,7 @@ void Korona2::init()
 	builder.generatePlane(xres, zres, scale);
 	m_pGround = builder.getMesh(Mesh::Usage::STATIC);
 
+	m_analyzer = std::make_unique <democore::Analyzer>(512, 16);
 }
 
 
@@ -190,6 +179,9 @@ void Korona2::update()
 {
 	g_params->useNamespace("Korona2");
 
+	m_analyzer->update();
+
+	m_sum = m_analyzer->getSum(Analyzer::Mode::WEIGHTED);
 
 	const float rotation = Math::smoothStep(std::min<float>(m_pos * 3.f, 1.f), 0.f, 1.f);
 	glm::mat4 cameraRotation = glm::rotate(sinf(m_pos * g_params->get<float>("camerarotationfreq")) * g_params->get<float>("camerarotationamount"), glm::vec3(0.f, 0.f, 1.f)) * rotation;
@@ -199,8 +191,8 @@ void Korona2::update()
 	glm::vec3 moonTargetStart = g_params->get<glm::vec3>("mooncameratargetstart");
 	glm::vec3 moonTargetEnd = g_params->get<glm::vec3>("mooncameratargetend");
 
-	m_moonCameraPosition = Math::lerp<glm::vec3>(moonPositionStart, moonPositionEnd, m_pos);
-	m_moonCameraTarget = moonTargetStart + (moonTargetEnd - moonTargetStart) * m_pos;
+	m_moonCameraPosition = Math::lerp<glm::vec3>(moonPositionStart, moonPositionEnd, m_pos) + Math::randVectSphere() * 2.5f * m_sum * (1.f - m_pos); 
+	m_moonCameraTarget = moonTargetStart + (moonTargetEnd - moonTargetStart) * m_pos + Math::randVectSphere() * 1.5f * m_sum * (1.f - m_pos);
 	m_moonCameraUp = glm::vec3(0.f, 1.f, 0.f);
 
 	glm::vec3 groundPositionStart = g_params->get<glm::vec3>("groundcamerapositionstart");
@@ -285,6 +277,9 @@ void Korona2::draw(RenderPass pass)
 		float alphastart = g_params->get<float>("glowalpha");// *glow;
 		float alphaend = g_params->get<float>("glowalphaend");
 
+
+//		g_debug << "sum = " << sum << "\n";
+
 		float alpha = Math::lerp(alphastart, alphaend, m_pos);
 
 		int radialiterations = g_params->get<int>("radialiterations");
@@ -292,9 +287,9 @@ void Korona2::draw(RenderPass pass)
 		float radialexponent = g_params->get<float>("radialexponent");
 		float radialalpha = g_params->get<float>("radialalpha");// *glow;
 
-		g_postProcess->addRadialGlow(radialiterations, radialspread, radialexponent, radialalpha);
-		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha);
-		g_postProcess->addEndOfTheWorld(1.0 + m_pos * 0.3f);
+		g_postProcess->addRadialGlow(radialiterations, radialspread, radialexponent, radialalpha + m_sum * 10.f);
+		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha + (m_sum + m_sum * m_pos * 0.5f) * 100.f);
+		g_postProcess->addEndOfTheWorld(1.0f + m_pos * 0.3f + m_sum * 20.f * (1.f - m_pos));
 	}
 	if (pass == RenderPass::AFTER_POST)
 	{
