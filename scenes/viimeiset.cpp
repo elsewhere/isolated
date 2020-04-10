@@ -69,7 +69,7 @@ void Viimeiset::Sun::setInitialValues()
 		m_pParticleData[i].position = Math::randVectSphere() * g_params->get<demomath::Range>("sunspread").getRandomValue() + g_params->get<glm::vec3>("sunposition");
 		m_pParticleData[i].direction = Math::randVectSphere() * g_params->get<demomath::Range>("sunmovement").getRandomValue();
 		m_pParticleData[i].size = g_params->get<demomath::Range>("sunsize").getRandomValue();
-		m_pParticleData[i].color = glm::vec4(1.f, 1.f, 1.f, g_params->get<demomath::Range>("sunalpha").getRandomValue());
+		m_pParticleData[i].color = glm::vec4(1.f, 0.666f, 0.4f, g_params->get<demomath::Range>("sunalpha").getRandomValue());
 		m_pParticleData[i].energy = 1.f;
 		m_pParticleData[i].maxEnergy = 1.f;
 	}
@@ -115,12 +115,18 @@ void Viimeiset::init()
 	m_sun = std::make_unique<Sun>();
 	m_sun->setInitialValues();
 
+	m_analyzer = std::make_unique <democore::Analyzer>(512, 16);
+
+
 }
 
 
 void Viimeiset::update()
 {
 	g_params->useNamespace("Viimeiset");
+
+	m_analyzer->update();
+	m_sum = m_analyzer->getSum(democore::Analyzer::Mode::WEIGHTED);
 
 	m_cameraUp = glm::vec3(0.f, 1.f, 0.f);
 	glm::vec3 camstart = g_params->get<glm::vec3>("camerapositionstart");
@@ -214,7 +220,7 @@ void Viimeiset::draw(RenderPass pass)
 		float focusDistance = g_params->get<float>("focusdistance");
 		g_postProcess->addLens(focusDistance, m_camera);
 
-/*
+
 		int iterations = g_params->get<int>("glowiterations");
 		float spreadx = g_params->get<float>("glowspreadx");
 		float spready = g_params->get<float>("glowspready");
@@ -222,14 +228,13 @@ void Viimeiset::draw(RenderPass pass)
 		float alpha = g_params->get<float>("glowalpha");
 
 		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha * m_pos);
-*/
+		g_postProcess->addEndOfTheWorld(m_sum * g_params->get<float>("noisepower"));
 	}
 	if (pass == RenderPass::AFTER_POST)
 	{
 		m_sun->draw(m_camera);
+		float fadevalue = g_params->get<float>("constantfade") + g_sync->event("viimeisetfadein").getValue() * (1.f - g_sync->event("viimeisetfadeout").getValue());
 
-
-		float fadevalue = g_sync->event("viimeisetfadein").getValue() * (1.f - g_sync->event("viimeisetfadeout").getValue());
 		glEnable(GL_BLEND);
 
 		glm::vec3 textpos = g_params->get<glm::vec3>("textpos");
@@ -242,7 +247,7 @@ void Viimeiset::draw(RenderPass pass)
 			g_renderUtils->orthoImage("credits", glm::vec2(textpos.x, textpos.y), textscale, credits);
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		g_renderUtils->fullscreenFade(glm::vec4(0.f, 0.f, 0.f, 1.f - fadevalue));
+		g_renderUtils->fullscreenFade(glm::vec4(0.f, 0.f, 0.f, Math::clamp<float>(1.f - fadevalue, 0.f, 1.f)));
 		glDisable(GL_BLEND);
 	}
 }

@@ -3,6 +3,7 @@
 #include "../globals.h"
 #include "../render/LineRenderer.h"
 #include "../fx/GPUParticleSystem.h"
+#include "../core/Analyzer.h"
 
 class Kasvot : public democore::Scene
 {
@@ -45,6 +46,8 @@ private:
 	std::unique_ptr<KasvotParticles> m_particles;
 	std::unique_ptr<KasvotParticles> m_particles2;
 	std::unique_ptr<KasvotParticles> m_particles3;
-	std::unique_ptr<demorender::LineRenderer> m_lines;
+
+	std::unique_ptr<democore::Analyzer> m_analyzer;
+	float m_sum = 0.f;
 
 };

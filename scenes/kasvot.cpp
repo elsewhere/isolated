@@ -79,18 +79,6 @@ void Kasvot::init()
 
 	createMesh();
 
-	m_lines = std::make_unique<demorender::LineRenderer>();
-
-	m_lines->startNewBatch();
-
-	for (int i = 0; i < 300; i++)
-	{
-		glm::vec3 v = Math::randVectSphere() * Math::randFloat(300.f);
-
-		glm::vec4 c = i < 150 ? glm::vec4(1.f) : glm::vec4(1.f, 0.f, 0.f, 1.f);
-		m_lines->addPoint(v, c);
-	}
-
 	m_pSkybox = new demorender::Model();
 	m_pSkybox->setMesh("cube");
 
@@ -108,19 +96,26 @@ void Kasvot::init()
 	m_particles3->setShaders("effect_kasvotparticle3", "effect_kasvotparticlerender3");
 	m_particles3->setInitialData();
 	m_particles3->createBuffers();
+
+
+	m_analyzer = std::make_unique <democore::Analyzer>(512, 16);
 }
 
 void Kasvot::update()
 {
 	g_params->useNamespace("Kasvot");
 
+	m_analyzer->update();
+	m_sum = m_analyzer->getSum(Analyzer::Mode::WEIGHTED);
+
 	glm::vec3 camstart = g_params->get<glm::vec3>("camerapositionstart");
 	glm::vec3 camend = g_params->get<glm::vec3>("camerapositionend");
 	glm::vec3 targetstart = g_params->get<glm::vec3>("cameratargetstart");
 	glm::vec3 targetend = g_params->get<glm::vec3>("cameratargetend");
 
-	m_cameraPosition = Math::lerp<glm::vec3>(camstart, camend, m_pos);
-	m_cameraTarget = Math::lerp<glm::vec3>(targetstart, targetend, m_pos);
+	float shake = g_sync->event("kasvotshake").getValue();
+	m_cameraPosition = Math::lerp<glm::vec3>(camstart, camend, m_pos) + Math::randVectSphere() * 2.0f * m_sum * shake;
+	m_cameraTarget = Math::lerp<glm::vec3>(targetstart, targetend, m_pos) + Math::randVectSphere() * 1.3f * m_sum * shake;
 	m_cameraUp = glm::vec3(0.f, 1.f, 0.f);
 
 	glm::mat4 modelMatrix = glm::mat4(1.f);// glm::rotate(m_pos * -70.f, glm::vec3(0.3f, 1.0f, 0.2f)) * glm::scale(vec3(1.f));
@@ -157,7 +152,7 @@ void Kasvot::update()
 
 	float t = g_sync->event("kasvotfadechange").getValue();
 
-	float a = Math::lerp<float>(g_sync->beat("pulsequarter").getValue(), g_sync->beat("pulseeighth").getValue(), t);
+	float a = Math::lerp<float>(g_sync->beat("pulsequarter").getValue(), g_sync->beat("pulseeighth").getValue(), t);// *(1.f - g_sync->event("kasvotchange").getValue());
 	float focusDistance = g_params->get<float>("focusdistance");
 //	focusDistance += sinf(m_pos * g_params->get<float>("focusdistancespeed")) * g_params->get<float>("focusdistancerange");
 	focusDistance += sinf(a * 3.141592f) * g_params->get<float>("focusdistancerange");
@@ -220,6 +215,7 @@ void Kasvot::draw(RenderPass pass)
 		float alpha = g_params->get<float>("glowalpha") * glow + change * 1.5f;
 
 		g_postProcess->addEndOfTheWorld(change * 1.2f);
+		g_postProcess->addRadialGlow(20, 0.002f , 1.f, 0.23f * change * (m_sum * 160.f));
 		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha);
 
 		//const float focus = 0.1f;

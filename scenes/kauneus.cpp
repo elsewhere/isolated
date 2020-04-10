@@ -56,6 +56,8 @@ void Kauneus::init()
 	m_pSkybox = new demorender::Model();
 	m_pSkybox->setMesh("cube");
 
+	m_analyzer = std::make_unique<democore::Analyzer>(512, 16);
+
 }
 
 
@@ -64,10 +66,12 @@ void Kauneus::update()
 {
 	g_params->useNamespace("Kauneus");
 
+	m_analyzer->update();
+	m_sum = m_analyzer->getSum(democore::Analyzer::Mode::WEIGHTED);
+
 	m_cameraUp = glm::vec3(0.f, 1.f, 0.f);
 	m_cameraPosition = g_params->get<glm::vec3>("cameraposition");// ::vec3(0.f, 0.f, -20.f);
 	m_cameraTarget = g_params->get<glm::vec3>("cameratarget");
-
 
 	glm::mat4 rot = glm::rotate(m_pos * g_params->get<float>("camrotation"), glm::normalize(glm::vec3(0.1f, 1.f, 0.f)));
 
@@ -136,9 +140,9 @@ void Kauneus::draw(RenderPass pass)
 		float exponent = g_params->get<float>("glowexponent");
 		float alpha = g_params->get<float>("glowalpha");
 
-		float power = (1.f - m_pos) * 2.5f;
+		float power = (1.f - m_pos) * 2.5f + m_sum * 400 * (1.f - m_pos);
 		g_postProcess->addEndOfTheWorld(power);
-		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha * m_pos);
+		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha * m_pos + m_sum * 1200 * m_pos);
 
 //		g_postProcess->addSobel();
 //		g_postProcess->addRadialGlow();

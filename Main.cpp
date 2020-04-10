@@ -54,7 +54,7 @@ democore::ErrorLog g_screenText;
 
 glm::vec3 g_clearColor = glm::vec3(0, 0, 0);
 
-const std::string g_prodName = "isolation, in sunlight";
+const std::string g_prodName = "isolated, in sunlight";
 
 using namespace democore;
 using namespace demorender;

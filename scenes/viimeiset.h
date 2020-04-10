@@ -5,6 +5,8 @@
 #include "../fx/GPUParticleSystem.h"
 #include "../fx/CPUParticleSystem.h"
 
+#include "../core/Analyzer.h"
+
 class Viimeiset : public democore::Scene
 {
 
@@ -52,6 +54,8 @@ private:
 
 	std::unique_ptr<WindParticles> m_particles;
 	std::unique_ptr<demofx::CPUParticleSystem> m_sun;
+	std::unique_ptr<democore::Analyzer> m_analyzer;
 
+	float m_sum = 0.f;
 
 };

@@ -3,6 +3,7 @@
 #include "../globals.h"
 #include "../render/LineRenderer.h"
 #include "../fx/GPUParticleSystem.h"
+#include "../core/Analyzer.h"
 
 class Kauneus : public democore::Scene
 {
@@ -44,6 +45,7 @@ private:
 	demorender::Model *m_pSkybox;
 
 	std::unique_ptr<KauneusParticles> m_particles;
-	std::unique_ptr<demorender::LineRenderer> m_lines;
+	std::unique_ptr<democore::Analyzer> m_analyzer;
 
+	float m_sum = 0.f;
 };

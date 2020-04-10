@@ -10,6 +10,8 @@
     Debug class used for writing the log file. 
 
 */
+
+
 namespace democore
 {
 
@@ -27,18 +29,22 @@ namespace democore
 		template<class T>
 		std::ofstream& operator<<(const T &str)
 		{
+#ifdef _DEBUG
 			printDate();
 			m_debugFile << str;
 			
 			m_debugFile.flush();
+#endif
 			return m_debugFile;
 		}
 
 		template<class T>
 		std::ofstream& operator + (const T &str)
 		{
+#ifdef _DEBUG
 			m_debugFile << str << std::endl;
 			m_debugFile.flush();
+#endif
 			return m_debugFile;
 		}
 

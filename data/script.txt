@@ -11,7 +11,7 @@ democonfig
 	developermode = true;
 	song = ambient.mp3
 	endtime = 341000
-	jumptime = 209500
+	jumptime = 299500
 }
 
 timeline
@@ -29,7 +29,6 @@ timeline
 	sauhu 0 47000 666
 	tuli 47000 100000 666
 	korona 100000 170000 666
-;	maailma 150000 200000 666
 	kasvot 170000 210000 666
 	korona2 210000 260000 666
 	kauneus 260000 300000 666
@@ -318,7 +317,7 @@ namespace viimeiset
 	vec3 cameraposition = 0 20 -100
 	vec3 cameratarget = 0 0 0 
 
-	vec3 camerapositionstart = 0 20 -100
+	vec3 camerapositionstart = 0 20 -70
 	vec3 camerapositionend = 0 15 0
 	vec3 cameratargetstart = 0 0 200 
 	vec3 cameratargetend  = 0 0 200
@@ -326,8 +325,8 @@ namespace viimeiset
 	vec3 sunposition = 200 150 600
 	range sunmovement = 0.1 0.4
 	range sunspread = 4.1 10.5
-	range sunsize = 35.0 40.0
-	range sunalpha = 0.01 0.02
+	range sunsize = 45.0 60.0
+	range sunalpha = 0.01 0.012
 
 	vec3 cameraup = 0 1 0 	
 
@@ -341,11 +340,14 @@ namespace viimeiset
 	float terrainscale = 1.5;
 	float terrainheightscale = 5.0;
 
-	int glowiterations = 20
+	int glowiterations = 10
 	float glowspreadx = 5.001	
 	float glowspready = 5.001
-	float glowexponent = 1.0
-	float glowalpha = 1.0
+	float glowexponent = 2.0
+	float glowalpha = 4.0
+
+	float constantfade = -0.2
+	float noisepower = 500
 	
 }
 
@@ -420,8 +422,8 @@ event koronafadein
 }
 event koronafadeout
 {
-	time = 169600
-	length = 400	
+	time = 169800
+	length = 200	
 }
 
 event koronareveal
@@ -446,8 +448,13 @@ event kasvotfadein
 }
 event kasvotchange
 {
-	time = 186800
+	time = 184800
 	length = 6000
+}
+event kasvotshake
+{
+	time = 187000
+	length = 10000
 }
 event kasvotfadechange
 {
@@ -457,8 +464,8 @@ event kasvotfadechange
 
 event kasvotfadeout
 {
-	time = 206000
-	length = 4000	
+	time = 209000
+	length = 1000	
 }
 
 event korona2fadein

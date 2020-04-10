@@ -202,6 +202,7 @@ namespace democore
 		}
 		glfwMakeContextCurrent(m_pWindow);
 		glfwSetKeyCallback(m_pWindow, glfw_key_callback);
+		glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 		g_debug << "GLFW started, starting up GLEW" << std::endl;
 		//init GLEW

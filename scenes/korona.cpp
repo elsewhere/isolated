@@ -317,8 +317,9 @@ void Korona::draw(RenderPass pass)
 
 //		g_debug << "sum = " << sum << "\n";
 
+		float sum2 = sum * sum;
 		g_postProcess->addEndOfTheWorld(m_pos * g_params->get<float>("endoftheworld"));
-		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha + sum * 1500.f);
+		g_postProcess->addGlow(iterations, spreadx, spready, exponent, alpha + sum * 1500.f + sum2 * 3000.f);
 	}
 	if (pass == RenderPass::AFTER_POST)
 	{
